@@ -1,0 +1,50 @@
+# AGENTS.md
+
+Instructions for AI coding agents (and humans) that work in this repository. This file is model-agnostic.
+
+## Project
+
+VSA Design is the design system of VSA apps. It is a fork of Web Awesome (MIT) from the `v3.14.0` release. Our style is the base, and each app is a theme over it. See `vsa/decisions/0005-fork-web-awesome.md`.
+
+| Path | Content | Owner |
+|---|---|---|
+| `packages/webawesome/` | The Web Awesome source: components, themes, build, tests. Read `packages/webawesome/CLAUDE.md` before you change it | Upstream, changed by us |
+| `vsa/` | Our work: the theme, the looks, `vsa-*` components, the docs site, decisions. See `vsa/README.md` | Us |
+| `vsa/DESIGN.md` | The design brief: the vocabulary, the conventions, the don'ts | Us |
+| `.claude/skills/` | The Web Awesome agent skills, `webawesome` and `webawesome-design` | Upstream, copied |
+
+## Read first
+
+1. `vsa/DESIGN.md`. It has priority over the skills. The design skill also says that the project brief comes first.
+2. The skill for the task:
+   - `webawesome`: the API of one component, for example its attributes, slots, events and parts.
+   - `webawesome-design`: layout, theming, tokens and composition.
+3. `packages/webawesome/CLAUDE.md`, if you change a Web Awesome component.
+
+An agent that does not load skills by itself can read the files: `.claude/skills/<skill>/SKILL.md`, then the files in its `references/` folder.
+
+## Rules
+
+- Set `--wa-*` tokens only in `vsa/theme/vsa.css`. Use the three scopes that the file has.
+- Make a `--vsa-*` token only for an idea that Web Awesome has no token for.
+- An own component uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
+- Use the sizes `s`, `m` and `l`. Do not use `::part(base)`.
+- Use only the MIT core. Do not copy Pro components or Pro themes.
+- Keep `LICENSE.md` and the Web Awesome copyright notice.
+
+## Upstream
+
+`origin` is this fork. `upstream` is `shoelace-style/webawesome`. The default branch is `vsa`.
+
+1. Run `git fetch upstream --tags`.
+2. Merge only the fixes or the release that we want into `vsa`.
+3. Update the skills to the same version, as described in the next section.
+
+## Update the skills
+
+The skills must have the same version as the Web Awesome code in this repo.
+
+- **Before the first build:** copy `dist-cdn/skills/` of the release from the CDN, for example `https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/skills/`.
+- **After the build works:** run `npm run build` in `packages/webawesome/`, then copy `packages/webawesome/dist/skills/webawesome/` and `packages/webawesome/dist/skills/webawesome-design/` to `.claude/skills/`. Then the `webawesome` skill describes our components, not the upstream ones.
+
+Do not edit the files in `.claude/skills/` by hand. The next update writes over them. Put our rules in `vsa/DESIGN.md`.
