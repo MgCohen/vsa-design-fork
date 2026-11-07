@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VSA Design System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="../tokens/fonts.css">
+<link rel="stylesheet" href="../tokens/global.css">
+<link rel="stylesheet" href="../tokens/alias.css">
+<link rel="stylesheet" href="../tokens/component.css">
+<script type="module" src="../components/vsa-button.js"></script>
+<script type="module" src="../components/vsa-toggle.js"></script>
+<script type="module" src="../components/vsa-field.js"></script>
+<script type="module" src="../components/vsa-search-bar.js"></script>
+<script type="module" src="../components/vsa-settings-panel.js"></script>
+<style>
+/* The gallery page uses only alias tokens, so it shows the tokens in use. */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { background: var(--vsa-color-canvas); }
+body { margin: 0; min-height: 100vh; background: var(--vsa-gradient-canvas); color: var(--vsa-color-text); font: var(--vsa-font-size-body)/var(--vsa-line-height-body) var(--vsa-font-body); }
+.shell { max-width: 1200px; margin: 0 auto; padding-block: 24px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 18px 28px; align-items: start; }
+header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font: var(--vsa-font-weight-display) 40px/1 var(--vsa-font-display); letter-spacing: var(--vsa-letter-spacing-display); }
+.lede { margin: 6px 0 0; color: var(--vsa-color-canvas-text); max-width: 64ch; font-size: var(--vsa-font-size-lead); }
+h2 { margin: 0; font-size: var(--vsa-font-size-title); font-weight: var(--vsa-font-weight-strong); }
+h3 { margin: 8px 0 0; font-size: var(--vsa-font-size-caption); font-weight: var(--vsa-font-weight-strong); text-transform: uppercase; letter-spacing: var(--vsa-letter-spacing-caps); color: var(--vsa-color-muted); }
+.menu { position: sticky; top: 16px; display: grid; gap: 2px; }
+.menu .group { margin: 14px 10px 4px; font-size: var(--vsa-font-size-caption); font-weight: var(--vsa-font-weight-strong); text-transform: uppercase; letter-spacing: var(--vsa-letter-spacing-caps); color: var(--vsa-color-canvas-text); }
+.menu .group:first-child { margin-top: 0; }
+.menu a { display: block; padding: 7px 10px; border-radius: var(--vsa-radius-control); color: var(--vsa-color-canvas-text); text-decoration: none; font-weight: var(--vsa-font-weight-medium); white-space: nowrap; }
+.menu a:hover { color: var(--vsa-color-text); }
+.menu a[aria-current="page"] { background: var(--vsa-gradient-surface); color: var(--vsa-color-text); box-shadow: var(--vsa-shadow-raise-sm); }
+.menu a[aria-current="page"]::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: var(--vsa-color-accent); box-shadow: var(--vsa-shadow-glow); vertical-align: middle; }
+a:focus-visible, button:focus-visible { outline: var(--vsa-focus-width) solid var(--vsa-color-accent); outline-offset: var(--vsa-focus-offset); }
+main { min-width: 0; }
+.page { display: grid; gap: 18px; }
+.page[hidden] { display: none; }
+.card { background: var(--vsa-gradient-surface); color: var(--vsa-color-text); border-radius: var(--vsa-radius-card); box-shadow: var(--vsa-shadow-raise); padding: 18px 20px; display: grid; gap: 12px; min-width: 0; }
+.note { margin: 0; color: var(--vsa-color-muted); font-size: var(--vsa-font-size-label); max-width: 80ch; }
+code, .mono { font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-small); }
+.seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--vsa-radius-control); background: var(--vsa-color-sunken); box-shadow: var(--vsa-shadow-carve); }
+.seg button { font: inherit; font-weight: var(--vsa-font-weight-medium); border: 0; border-radius: calc(var(--vsa-radius-control) - 3px); padding: 6px 14px; background: none; color: var(--vsa-color-sunken-muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--vsa-gradient-surface); color: var(--vsa-color-text); box-shadow: var(--vsa-shadow-raise-sm); }
+.levels { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: var(--vsa-font-size-label); }
+.levels span { padding: 4px 10px; border-radius: var(--vsa-radius-pill); background: var(--vsa-color-sunken); box-shadow: var(--vsa-shadow-carve); color: var(--vsa-color-sunken-muted); }
+.levels span.on { background: var(--vsa-color-accent); color: var(--vsa-color-on-accent); box-shadow: var(--vsa-shadow-glow); font-weight: var(--vsa-font-weight-strong); }
+.levels i { color: var(--vsa-color-muted); font-style: normal; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--vsa-font-size-label); }
+th { text-align: left; font-size: var(--vsa-font-size-caption); text-transform: uppercase; letter-spacing: var(--vsa-letter-spacing-caps); color: var(--vsa-color-muted); font-weight: var(--vsa-font-weight-strong); padding: 6px 8px; border-bottom: 1px solid var(--vsa-color-line); white-space: nowrap; }
+td { padding: 7px 8px; border-bottom: 1px solid var(--vsa-color-line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.name { font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-small); white-space: nowrap; width: 1%; }
+td.v { font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); color: var(--vsa-color-text-secondary); word-break: break-word; }
+td[data-theme] { background: var(--vsa-color-canvas); color: var(--vsa-color-canvas-text); min-width: 150px; }
+td .val { display: flex; gap: 8px; align-items: flex-start; }
+.sw { width: 28px; height: 18px; flex: none; border-radius: 5px; border: 1px solid var(--vsa-color-line); }
+tr.flash td { animation: flash 1.4s ease-out; }
+@keyframes flash { from { box-shadow: inset 0 0 0 100vmax var(--vsa-color-accent-glow); } }
+.tok { display: inline-block; font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); line-height: 1.5; padding: 0 6px; border-radius: var(--vsa-radius-pill); color: var(--vsa-color-text-secondary); text-decoration: none; white-space: nowrap; }
+a.tok:hover { color: var(--vsa-color-text); box-shadow: inset 0 0 0 1px currentColor; }
+.tok-global { background: var(--vsa-color-head-tint); }
+.tok-alias { background: color-mix(in srgb, var(--vsa-color-accent) 20%, transparent); }
+.tok-component { background: color-mix(in srgb, var(--vsa-color-state-new) 22%, transparent); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: var(--vsa-font-size-label); color: var(--vsa-color-muted); }
+.used { display: flex; flex-wrap: wrap; gap: 4px; }
+details.card { display: block; }
+details.card > summary { list-style: none; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::before { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--vsa-color-muted); border-bottom: 2px solid var(--vsa-color-muted); transform: rotate(45deg); margin: 0 4px 4px 2px; }
+details.card:not([open]) > summary::before { transform: rotate(-45deg); margin-bottom: 0; }
+details.card > summary:focus-visible { outline: var(--vsa-focus-width) solid var(--vsa-color-accent); outline-offset: var(--vsa-focus-offset); border-radius: var(--vsa-radius-control); }
+.fold-body { display: grid; gap: 12px; margin-top: 12px; min-width: 0; }
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); color: var(--vsa-color-muted); }
+.chain a { color: var(--vsa-color-text-secondary); }
+.stage { padding: 14px; background: var(--vsa-gradient-canvas); border-radius: var(--vsa-radius-control); border: 1px solid var(--vsa-color-line); display: grid; gap: 10px; min-width: 0; }
+.demo { background: var(--vsa-gradient-surface); color: var(--vsa-color-text); border-radius: var(--vsa-radius-card); box-shadow: var(--vsa-shadow-raise); padding: 14px; display: grid; gap: 12px; }
+.atom-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.atom-row .tag { font-size: var(--vsa-font-size-caption); color: var(--vsa-color-muted); }
+td.cell { vertical-align: middle; background: var(--vsa-gradient-canvas); min-width: 180px; }
+td.cell.wide { width: 100%; }
+pre.code { margin: 0; padding: 12px 14px; overflow-x: auto; border-radius: var(--vsa-radius-control); background: var(--vsa-color-sunken); box-shadow: var(--vsa-shadow-carve); color: var(--vsa-color-sunken-text); font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-small); }
+.log { font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); color: var(--vsa-color-muted); min-height: 1.4em; }
+.specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.spec { display: grid; grid-template-rows: 88px auto; border: 1px solid var(--vsa-color-line); border-radius: var(--vsa-radius-control); overflow: hidden; min-width: 0; background: var(--vsa-color-surface); }
+.spec-preview { display: grid; place-items: center; padding: 12px; background: var(--vsa-gradient-canvas); border-bottom: 1px solid var(--vsa-color-line); overflow: hidden; min-width: 0; }
+.spec-info { display: grid; align-content: start; gap: 4px; padding: 10px 12px 12px; min-width: 0; }
+.spec-line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); color: var(--vsa-color-text-secondary); }
+.spec-name .tok { font-size: var(--vsa-font-size-small); font-weight: var(--vsa-font-weight-strong); color: var(--vsa-color-text); }
+.arrow { color: var(--vsa-color-muted); }
+.val { overflow-wrap: anywhere; }
+.spec-more { flex-basis: 100%; }
+.spec-more summary { cursor: pointer; width: max-content; color: var(--vsa-color-muted); }
+.spec-more summary:hover { color: var(--vsa-color-text); }
+.spec-value { display: grid; gap: 2px; margin-top: 6px; font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-caption); color: var(--vsa-color-text-secondary); }
+.spec-value span { overflow-wrap: anywhere; }
+td.pv { width: 160px; vertical-align: middle; }
+tr.spec-row td { vertical-align: middle; }
+.pv-cell { display: flex; align-items: center; min-height: 32px; max-width: 160px; overflow: hidden; color: var(--vsa-color-text); }
+.pv-cell .pv-sample { color: var(--vsa-color-text); }
+.pv-cell .pv-text { font-size: var(--vsa-font-size-label); color: var(--vsa-color-text); }
+.pv-cell .track { width: 140px; }
+.pv-chip { display: block; width: 44px; height: 24px; border-radius: 6px; background: var(--vsa-color-surface); border: 1px solid var(--vsa-color-line); }
+.pv-chip.accent { background: var(--vsa-color-accent); border: 0; }
+.pv-chip.sunk { background: var(--vsa-color-sunken); }
+.pv-fill { width: 100%; height: 100%; border-radius: var(--vsa-radius-control); border: 1px solid var(--vsa-color-line); }
+.pv-tile { width: 96px; height: 52px; border-radius: var(--vsa-radius-control); background: var(--vsa-color-surface); }
+.pv-tile.sunk { background: var(--vsa-color-sunken); }
+.pv-tile.accent { background: var(--vsa-color-accent); }
+.pv-tile.radius { background: var(--vsa-color-sunken); box-shadow: var(--vsa-shadow-carve); }
+.pv-sample { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--vsa-color-canvas-text); }
+.pv-text { font-family: var(--vsa-font-mono); font-size: var(--vsa-font-size-title); color: var(--vsa-color-canvas-text); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar { display: block; height: 12px; max-width: 100%; background: var(--vsa-color-accent); border-radius: 3px; justify-self: start; }
+.track { position: relative; width: 100%; height: 32px; border-radius: var(--vsa-radius-pill); background: var(--vsa-color-sunken); box-shadow: var(--vsa-shadow-carve); }
+.track i { position: absolute; top: 5px; left: 5px; width: 22px; height: 22px; border-radius: 50%; background: var(--vsa-color-accent); box-shadow: var(--vsa-shadow-glow); }
+.track.on i { left: calc(100% - 27px); }
+@media (prefers-reduced-motion: no-preference) {
+  .seg button { transition: background var(--vsa-motion-fast), color var(--vsa-motion-fast); }
+  .track i { transition: left var(--d, 0ms); }
+}
+@media (max-width: 760px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .menu { position: static; display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .menu .group { display: none; }
+  table { min-width: 560px; }
+  h1 { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div>
+      <h1>VSA Design System</h1>
+      <p class="lede">Foundations, atoms and tokens of the default theme. Screens use only these parts.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Theme">
+      <button type="button" data-set="system" aria-pressed="true">System</button>
+      <button type="button" data-set="light" aria-pressed="false">Light</button>
+      <button type="button" data-set="dark" aria-pressed="false">Dark</button>
+    </div>
+  </header>
+
+  <nav class="menu" aria-label="Gallery">
+    <a href="#overview" data-page="overview">Overview</a>
+    <div class="group">Foundations</div>
+    <a href="#color" data-page="color">Color</a>
+    <a href="#typography" data-page="typography">Typography</a>
+    <a href="#spacing" data-page="spacing">Spacing and radius</a>
+    <a href="#elevation" data-page="elevation">Elevation</a>
+    <a href="#motion" data-page="motion">Motion</a>
+    <div class="group">Components</div>
+    <a href="#comp-button" data-page="comp-button">Button</a>
+    <a href="#comp-search-bar" data-page="comp-search-bar">Search bar</a>
+    <a href="#comp-settings-panel" data-page="comp-settings-panel">Settings panel</a>
+    <div class="group">Tokens</div>
+    <a href="#tokens-global" data-page="tokens-global">Global</a>
+    <a href="#tokens-alias" data-page="tokens-alias">Alias</a>
+    <a href="#tokens-component" data-page="tokens-component">Component</a>
+  </nav>
+
+  <main>
+    <section class="page" id="page-overview">
+      <div class="card">
+        <h2>Overview</h2>
+        <p class="note">All atoms on one page. Each atom is a web component in <code>components/</code>. Use the mouse or the keyboard: Tab moves the focus, Space changes a toggle. The log shows the last event.</p>
+        <div class="stage" id="atoms"></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-color" hidden></section>
+    <section class="page" id="page-typography" hidden></section>
+    <section class="page" id="page-spacing" hidden></section>
+    <section class="page" id="page-elevation" hidden></section>
+    <section class="page" id="page-motion" hidden></section>
+    <section class="page" id="page-tokens-global" hidden></section>
+    <section class="page" id="page-tokens-alias" hidden></section>
+    <section class="page" id="page-tokens-component" hidden></section>
+    <section class="page" id="page-comp-button" hidden></section>
+    <section class="page" id="page-comp-search-bar" hidden></section>
+    <section class="page" id="page-comp-settings-panel" hidden></section>
+  </main>
+</div>
+
+<script>
+const root = document.documentElement;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const short = n => n.replace('--vsa-', '');
+const readVar = (name, scope = root) => getComputedStyle(scope).getPropertyValue(name).trim();
+
+const LEVEL = { global: 'tokens-global', alias: 'tokens-alias', component: 'tokens-component' };
+const T = { global: new Map(), shared: new Map(), light: new Map(), dark: new Map(), component: new Map() };
+
+function readTokens() {
+  for (const sheet of document.styleSheets) {
+    const node = sheet.ownerNode;
+    const file = (node.dataset && node.dataset.file) || (node.getAttribute('href') || '').split('/').pop();
+    let rules;
+    try { rules = sheet.cssRules; } catch (e) { continue; }
+    for (const rule of rules) {
+      if (!rule.style) continue;
+      const sel = rule.selectorText;
+      let target = null;
+      if (file === 'global.css') target = T.global;
+      if (file === 'component.css') target = T.component;
+      if (file === 'alias.css') target = sel === ':root' ? T.shared : sel.includes('[data-theme="light"]') ? T.light : sel === '[data-theme="dark"]' ? T.dark : null;
+      if (!target) continue;
+      for (const prop of rule.style) if (prop.startsWith('--vsa-')) target.set(prop, rule.style.getPropertyValue(prop).trim().replace(/\s+/g, ' '));
+    }
+  }
+}
+
+const levelOf = n => T.component.has(n) ? 'component' : T.global.has(n) ? 'global' : 'alias';
+const aliasNames = () => [...new Set([...T.shared.keys(), ...T.light.keys()])];
+const theme = () => root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+function raw(n, t = theme()) {
+  if (T.component.has(n)) return T.component.get(n);
+  if (T.global.has(n)) return T.global.get(n);
+  if (T.shared.has(n)) return T.shared.get(n);
+  return (t === 'dark' ? T.dark : T.light).get(n) || '';
+}
+const refs = v => [...v.matchAll(/var\((--vsa-[\w-]+)\)/g)].map(m => m[1]);
+
+const usedBy = new Map();
+function indexUse() {
+  const add = (n, v) => refs(v).forEach(r => { if (!usedBy.has(r)) usedBy.set(r, new Set()); usedBy.get(r).add(n); });
+  for (const map of [T.shared, T.light, T.dark, T.component]) for (const [n, v] of map) add(n, v);
+}
+
+const tokLink = (n, label = n) => `<a class="tok tok-${levelOf(n)}" href="#${LEVEL[levelOf(n)]}" data-token="${n}">${esc(label)}</a>`;
+const tokName = n => `<span class="tok tok-${levelOf(n)}">${short(n)}</span>`;
+const legend = `<div class="legend">Token color by level: <span class="tok tok-global">global</span><span class="tok tok-alias">alias</span><span class="tok tok-component">component</span></div>`;
+const mixShort = v => v.replace(/color-mix\(in srgb, (var\(--vsa-[\w-]+\)) ([\d.]+%), transparent\)/g, '$1 · $2');
+const linkValue = v => esc(mixShort(v)).replace(/var\((--vsa-[\w-]+)\)/g, (m, n) => tokLink(n, short(n)));
+function chain(n, withName = true) {
+  const steps = withName ? [tokLink(n, short(n))] : [];
+  let v = raw(n);
+  let m;
+  while ((m = /^var\((--vsa-[\w-]+)\)$/.exec(v))) { steps.push(tokLink(m[1], short(m[1]))); v = raw(m[1]); }
+  steps.push(`<span>${linkValue(v)}</span>`);
+  return `<span class="chain">${steps.join('<span>→</span>')}</span>`;
+}
+const usedCell = n => `<div class="used">${[...(usedBy.get(n) || [])].map(u => tokLink(u, short(u))).join('')}</div>`;
+const levels = on => `<div class="levels">${['Global', 'Alias', 'Component', 'Atom'].map(l => `<span class="${l === on ? 'on' : ''}">${l}</span>`).join('<i>→</i>')}</div>${legend}`;
+
+function card(title, note, body) {
+  return `<details class="card" open><summary><h2>${title}</h2></summary><div class="fold-body">${note ? `<p class="note">${note}</p>` : ''}${body}</div></details>`;
+}
+function pageHead(title, note, body) {
+  return `<div class="card"><h2>${title}</h2><p class="note">${note}</p>${body}</div>`;
+}
+function layers(v) {
+  const out = [];
+  let depth = 0, cur = '';
+  for (const ch of v) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) { out.push(cur.trim()); cur = ''; continue; }
+    cur += ch;
+  }
+  out.push(cur.trim());
+  return out;
+}
+function resolve(n) {
+  const hops = [];
+  let v = raw(n), m;
+  while ((m = /^var\((--vsa-[\w-]+)\)$/.exec(v))) { hops.push(m[1]); v = raw(m[1]); }
+  return { hops, value: v };
+}
+const arrow = '<span class="arrow">→</span>';
+const hopLinks = hops => hops.map(h => tokLink(h, short(h))).join(arrow);
+function valueView(n, value) {
+  const parts = layers(value);
+  if (parts.length > 1 && /^--vsa-shadow-/.test(n))
+    return `<details class="spec-more"><summary>${parts.length} layers</summary><div class="spec-value">${parts.map(l => `<span>${linkValue(l)}</span>`).join('')}</div></details>`;
+  return `<span class="val">${linkValue(value)}</span>`;
+}
+function spec(n, preview) {
+  const { hops, value } = resolve(n);
+  const path = hops.length ? arrow + hopLinks(hops) : '';
+  return `<div class="spec"><div class="spec-preview">${preview}</div><div class="spec-info"><div class="spec-line"><span class="spec-name">${tokLink(n, short(n))}</span>${path}${/^--vsa-shadow-/.test(n) && layers(value).length > 1 ? '' : arrow}${valueView(n, value)}</div></div></div>`;
+}
+const specs = items => `<div class="specs">${items.join('')}</div>`;
+function specRow(n, preview, lead = '') {
+  const { hops, value } = resolve(n);
+  return `<tr class="spec-row">${lead}<td class="pv"><div class="pv-cell">${preview}</div></td><td class="name">${tokLink(n, short(n))}</td><td><span class="chain">${hops.length ? hopLinks(hops) : '—'}</span></td><td class="v">${valueView(n, value)}</td></tr>`;
+}
+const specRows = (rows, lead = []) => tokenTable([...lead, 'Preview', 'Token', 'Path', 'Value'], rows);
+const pvText = n => `<span class="pv-text">${esc(mixShort(layers(resolve(n).value)[0]))}</span>`;
+const pvSample = (text, style) => `<span class="pv-sample" style="${style}">${text}</span>`;
+const pvTile = (style, cls = '') => `<i class="pv-tile ${cls}" style="${style}"></i>`;
+const colorName = n => `--vsa-color-${n}`;
+const swatch = n => spec(n, `<i class="pv-fill" style="background:var(${n})"></i>`);
+const COLOR_GROUPS = [
+  ['Canvas and surface', ['canvas', 'canvas-text', 'surface', 'text', 'text-secondary', 'muted', 'line']],
+  ['Sunken', ['sunken', 'sunken-text', 'sunken-muted']],
+  ['Accent', ['accent', 'on-accent', 'accent-glow']],
+  ['Data', ['head-tint', 'track', 'dim']],
+  ['State', ['state-done', 'state-pending', 'state-failed', 'state-new']],
+];
+function renderColor() {
+  document.getElementById('page-color').innerHTML =
+    card('Color', 'The alias colors in the current theme. Use the theme switch to see the other theme. Each color shows its path to the global token.',
+      COLOR_GROUPS.map(([g, list]) => `<h3>${g}</h3>${specs(list.map(c => swatch(colorName(c))))}`).join('')) +
+    card('Gradients', 'Fills for the canvas, the surfaces, the ring center and the toggle knob.',
+      specs(['canvas', 'surface', 'hole', 'knob'].map(g => swatch(`--vsa-gradient-${g}`))));
+}
+
+function renderTypography() {
+  const fam = [['--vsa-font-display', 'Runner 133', 'font-weight:var(--vsa-font-weight-display);letter-spacing:var(--vsa-letter-spacing-display)'], ['--vsa-font-body', 'Search sources', ''], ['--vsa-font-mono', 'page.updated', '']];
+  const sizes = ['hero', 'metric', 'title', 'lead', 'body', 'label', 'small', 'caption'];
+  const weights = ['regular', 'medium', 'strong', 'display'];
+  document.getElementById('page-typography').innerHTML =
+    card('Families', 'Display is only for big numbers and titles. Body is for all other text. Mono is for ids, types and times.',
+      specs(fam.map(([n, t, s]) => spec(n, pvSample(t, `font-family:var(${n});font-size:24px;${s}`))))) +
+    card('Sizes', '', specRows(sizes.map(s => specRow(`--vsa-font-size-${s}`, pvSample('Aa 133', `font-size:var(--vsa-font-size-${s});line-height:1`))))) +
+    card('Weights', '', specRows(weights.map(w => specRow(`--vsa-font-weight-${w}`, pvSample('Listener', `font-size:17px;font-weight:var(--vsa-font-weight-${w})`))))) +
+    card('Line height and letter spacing', '', specRows([
+      ...['tight', 'snug', 'body'].map(l => specRow(`--vsa-line-height-${l}`, pvSample('Two lines<br>in one block', `white-space:normal;line-height:var(--vsa-line-height-${l})`))),
+      specRow('--vsa-letter-spacing-display', pvSample('Runner 133', 'font-family:var(--vsa-font-display);font-size:20px;letter-spacing:var(--vsa-letter-spacing-display)')),
+      specRow('--vsa-letter-spacing-caps', pvSample('AT START', 'font-size:var(--vsa-font-size-caption);letter-spacing:var(--vsa-letter-spacing-caps)')),
+    ]));
+}
+
+function renderSpacing() {
+  const space = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'];
+  const focus = 'outline:var(--vsa-focus-width) solid var(--vsa-color-accent);outline-offset:var(--vsa-focus-offset)';
+  document.getElementById('page-spacing').innerHTML =
+    card('Spacing', 'Gaps and padding. The bar is four times the value.',
+      specRows(space.map(s => specRow(`--vsa-space-${s}`, `<i class="bar" style="width:calc(var(--vsa-space-${s}) * 4)"></i>`)))) +
+    card('Radius', '', specs(['card', 'control', 'pill'].map(r => spec(`--vsa-radius-${r}`, pvTile(`border-radius:var(--vsa-radius-${r})`, 'radius'))))) +
+    card('Icon and focus', '', specRows([
+      specRow('--vsa-icon-size', `<svg style="width:var(--vsa-icon-size);height:var(--vsa-icon-size)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`),
+      specRow('--vsa-icon-stroke', `<svg style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="var(--vsa-icon-stroke)" stroke-linecap="round" aria-hidden="true"><path d="M4 12h16"/></svg>`),
+      specRow('--vsa-focus-width', `<i class="pv-chip" style="${focus}"></i>`),
+      specRow('--vsa-focus-offset', `<i class="pv-chip" style="${focus}"></i>`),
+    ]));
+}
+
+function renderElevation() {
+  const shadow = (n, cls = '') => spec(n, pvTile(`box-shadow:var(${n})`, cls));
+  document.getElementById('page-elevation').innerHTML =
+    card('Raised', 'Surfaces that stand above the canvas: cards, buttons, the ring center.',
+      specs(['raise', 'raise-sm', 'hole'].map(s => shadow(`--vsa-shadow-${s}`)))) +
+    card('Carved', 'Holes in a surface: fields, tracks, wells, the dial, the fill of a bar, a pressed button.',
+      specs(['carve', 'dial', 'fill', 'press'].map(s => shadow(`--vsa-shadow-${s}`, 'sunk')))) +
+    card('Glow and knob', '', specs([shadow('--vsa-shadow-glow', 'accent'), shadow('--vsa-shadow-knob')])) +
+    card('Effects', '', specRows([
+      specRow('--vsa-effect-glow-strength', `<i class="pv-chip accent" style="box-shadow:var(--vsa-shadow-glow)"></i>`),
+      specRow('--vsa-effect-blur', pvText('--vsa-effect-blur')),
+      specRow('--vsa-border-sunken', `<i class="pv-chip sunk" style="border:var(--vsa-border-sunken)"></i>`),
+      specRow('--vsa-opacity-disabled', `<i class="pv-chip accent" style="opacity:var(--vsa-opacity-disabled)"></i>`),
+    ]));
+}
+
+function renderMotion() {
+  const motion = aliasNames().filter(n => n.startsWith('--vsa-motion-'));
+  const users = motion.flatMap(n => [...(usedBy.get(n) || [])]);
+  const atom = n => `<td class="name">${tagLink(componentOf(n))}</td>`;
+  document.getElementById('page-motion').innerHTML =
+    card('Timing', 'One duration controls all motion today. Change <code>--vsa-motion-fast</code> to change each atom that uses it. Press Play to move each knob with its duration.',
+      specRows(users.map(n => specRow(n, `<div class="track" style="--d:var(${n})"><i></i></div>`, atom(n))), ['Atom']) + `<div><vsa-button id="play">Play</vsa-button></div>`) +
+    card('Rules', '', `<ul class="note">
+      <li>Atoms add a transition only if <code>prefers-reduced-motion</code> is <code>no-preference</code>.</li>
+      <li>Atoms use the CSS default easing. There is no easing token yet.</li>
+      <li>Open question: on a phone the pressed state of the button shows late. The browser waits before <code>:active</code>, and the transition adds its duration.</li>
+    </ul>`);
+  document.getElementById('play').addEventListener('click', () => document.querySelectorAll('#page-motion .track').forEach(t => t.classList.toggle('on')));
+}
+
+function tokenTable(cols, rows) {
+  return `<div class="scroll"><table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+}
+const isColor = n => /^--vsa-(color|gradient|gray|warm|cool|orange|green|amber|red|blue)-/.test(n);
+const valueCell = (n, v, t) => `<td class="v"${t ? ` data-theme="${t}"` : ''}><div class="val">${isColor(n) ? `<i class="sw" style="background:var(${n})"></i>` : ''}<span>${linkValue(v)}</span></div></td>`;
+const GLOBAL_GROUPS = [['Colors', /^--vsa-(gray|warm|cool|orange|green|amber|red|blue)-/], ['Sizes', /^--vsa-size-/], ['Font families', /^--vsa-family-/], ['Font weights', /^--vsa-weight-/], ['Durations', /^--vsa-duration-/]];
+function renderGlobal() {
+  const names = [...T.global.keys()];
+  document.getElementById('page-tokens-global').innerHTML =
+    pageHead('Global tokens', 'Raw values with no meaning, in <code>tokens/global.css</code>. Only alias tokens read them. Color name rule: <code>&lt;family&gt;-&lt;n&gt;</code>, n = 1000 − 10 × L*, rounded to the nearest 5. "Used by" shows the alias tokens that read each value.', levels('Global')) +
+    GLOBAL_GROUPS.map(([g, re]) => card(g, '', tokenTable(['Token', 'Value', 'Used by'],
+      names.filter(n => re.test(n)).map(n => `<tr id="tok-${n}"><td class="name">${tokName(n)}</td>${valueCell(n, raw(n))}<td>${usedCell(n)}</td></tr>`)))).join('');
+}
+const ALIAS_GROUPS = [['Color', /^--vsa-color-/], ['Gradient', /^--vsa-gradient-/], ['Shadow', /^--vsa-shadow-/], ['Type', /^--vsa-(font|letter|line)-/], ['Space and size', /^--vsa-(space|radius|icon|focus)-/], ['Motion', /^--vsa-motion-/], ['Effect', /^--vsa-(effect|border|opacity)-/]];
+function renderAlias() {
+  const names = aliasNames();
+  const rowOf = n => {
+    const l = T.shared.get(n) ?? T.light.get(n), d = T.shared.has(n) ? null : T.dark.get(n);
+    const cells = d === null || d === l
+      ? `<td class="v" colspan="2"><div class="val">${isColor(n) ? `<i class="sw" style="background:var(${n})"></i>` : ''}<span>${linkValue(l)}</span></div></td>`
+      : valueCell(n, l, 'light') + valueCell(n, d, 'dark');
+    return `<tr id="tok-${n}"><td class="name">${tokName(n)}</td>${cells}<td>${usedCell(n)}</td></tr>`;
+  };
+  document.getElementById('page-tokens-alias').innerHTML =
+    pageHead('Alias tokens', 'Tokens with a meaning, in <code>tokens/alias.css</code>. Each value reads global tokens. A token with one value is the same in light and dark. "Used by" shows the component tokens that read it.', levels('Alias')) +
+    ALIAS_GROUPS.map(([g, re]) => card(g, '', tokenTable(['Token', 'Light', 'Dark', 'Used by'], names.filter(n => re.test(n)).map(rowOf)))).join('');
+}
+const COMPONENTS = [
+  {
+    tag: 'button', level: 'Atom',
+    summary: 'A raised button with the API of the HTML <code>&lt;button&gt;</code>. Use <code>primary</code> for the one main action of an area.',
+    make: (attrs, label = 'Save') => `<vsa-button ${attrs}>${label}</vsa-button>`,
+    variants: [['default', ''], ['primary', 'variant="primary"'], ['small', 'size="small"'], ['primary small', 'variant="primary" size="small"']],
+    states: [['Rest', ''], ['Disabled', 'disabled']],
+    api: [['variant', 'default · primary', 'default', 'Variant'], ['size', 'default · small', 'default', 'Variant'], ['disabled', 'on · off', 'off', 'State'], ['type', 'button · submit · reset', 'button', 'Form'], ['name, value', 'text', '—', 'Form']],
+    slots: [['(default)', 'The text'], ['start', 'An icon before the text']],
+    events: [['click', 'The user presses the button. A disabled button sends no event']],
+    parts: [],
+    usage: '<vsa-button variant="primary" size="small">Save</vsa-button>',
+  },
+  {
+    tag: 'search-bar', level: 'Molecule',
+    summary: 'A field and a button that do one job: search. It holds no data and does not search by itself. The page reads <code>value</code> on the <code>search</code> event.',
+    make: attrs => `<vsa-search-bar ${attrs} placeholder="Search sources and handlers"></vsa-search-bar>`,
+    variants: [['default', '']],
+    states: [['Rest', ''], ['Disabled', 'disabled']],
+    api: [['placeholder', 'text', '—', 'Content'], ['value', 'text', '—', 'State'], ['label', 'text', 'Search', 'Content'], ['button', 'text', 'Search', 'Content'], ['disabled', 'on · off', 'off', 'State']],
+    slots: [],
+    events: [['input', 'The text changes'], ['search', 'The user presses Enter or the button']],
+    parts: [['field', 'field'], ['button', 'button']],
+    usage: '<vsa-search-bar placeholder="Search sources" button="Find"></vsa-search-bar>',
+  },
+  {
+    tag: 'settings-panel', level: 'Organism',
+    summary: 'A section of a screen: a heading, a Reset button, a search bar that filters the rows, and one row for each toggle. The toggles stay in the page, so a form can read them.',
+    demo: () => `<vsa-settings-panel heading="Listener">
+      <vsa-toggle name="start" checked aria-label="Listen at start" data-description="Start the listener when Windows starts"></vsa-toggle>
+      <vsa-toggle name="log" aria-label="Log everything" data-description="Write each event to the log file"></vsa-toggle>
+      <vsa-toggle name="pin" checked aria-label="Pin the window" data-description="Keep Runner above the other windows"></vsa-toggle>
+      <vsa-toggle name="sound" aria-label="Play a sound" data-description="Play a short sound for each failed event"></vsa-toggle>
+    </vsa-settings-panel>`,
+    api: [['heading', 'text', '—', 'Content']],
+    slots: [['(default)', 'The <code>&lt;vsa-toggle&gt;</code> elements. Each <code>aria-label</code> is the row text, and <code>data-description</code> is the second line']],
+    events: [['change', 'From a toggle, when the user changes it or presses Reset'], ['input', 'From the search bar, when the filter changes']],
+    parts: [['heading', 'text'], ['reset', 'button'], ['search', 'search-bar'], ['rows', 'toggle']],
+    usage: '<vsa-settings-panel heading="Listener">\n  <vsa-toggle name="log" aria-label="Log everything"\n    data-description="Write each event to the log file"></vsa-toggle>\n</vsa-settings-panel>',
+  },
+];
+const TAGS = ['settings-panel', 'search-bar', 'button', 'toggle', 'field'];
+const componentOf = n => TAGS.find(t => n.startsWith(`--vsa-${t}-`)) || short(n).split('-')[0];
+const kinds = on => `<div class="levels">${['Atom', 'Molecule', 'Organism'].map(l => `<span class="${l === on ? 'on' : ''}">${l}</span>`).join('<i>→</i>')}</div>`;
+const tagLink = t => COMPONENTS.some(c => c.tag === t) ? `<a class="tok tok-component" href="#comp-${t}" data-page="comp-${t}">&lt;vsa-${t}&gt;</a>` : `<code>&lt;vsa-${t}&gt;</code>`;
+const simpleTable = (cols, rows) => tokenTable(cols, rows.map(r => `<tr>${r.map((c, i) => `<td${i === 0 ? ' class="name"' : ''}>${c}</td>`).join('')}</tr>`));
+function renderComponentPage(c) {
+  const tokens = [...T.component.keys()].filter(n => componentOf(n) === c.tag);
+  const matrix = c.variants && c.variants.length > 1
+    ? card('Variants and states', 'Each row is one variant. Each column is one state. Focus and pressed show when you use the component.',
+        tokenTable(['Variant', 'Attributes', ...c.states.map(s => s[0])], c.variants.map(([v, attrs]) =>
+          `<tr><td class="name">${v}</td><td class="v">${attrs ? `<code>${esc(attrs)}</code>` : '—'}</td>${c.states.map(([, s]) => `<td class="cell">${c.make([attrs, s].filter(Boolean).join(' '))}</td>`).join('')}</tr>`)))
+    : c.variants
+    ? card('States', 'This component has one variant. Each row is one state. Focus and pressed show when you use the component.',
+        tokenTable(['State', 'Attributes', 'Look'], c.states.map(([state, attrs]) =>
+          `<tr><td class="name">${state}</td><td class="v">${attrs ? `<code>${esc(attrs)}</code>` : '—'}</td><td class="cell wide">${c.make(attrs)}</td></tr>`)))
+    : card('Demo', 'Use it: type in the filter, change a toggle, press Reset. The log shows the last event.', `<div class="stage comp-demo">${c.demo()}<div class="log" aria-live="polite">No event yet</div></div>`);
+  document.getElementById(`page-comp-${c.tag}`).innerHTML =
+    pageHead(`&lt;vsa-${c.tag}&gt;`, c.summary, kinds(c.level) + `<p class="note">File: <code>components/vsa-${c.tag}.js</code></p>`) +
+    matrix +
+    (c.parts.length ? card('Made of', 'The parts inside the shadow DOM. A change to a part changes this component.', simpleTable(['Part', 'Component'], c.parts.map(([p, t]) => [p, t === 'text' ? 'Plain text' : tagLink(t)]))) : '') +
+    card('API', '"Variant" changes the look. "State" comes from the user or the data. "Content" is text that you give.', simpleTable(['Attribute', 'Values', 'Default', 'Kind'], c.api)) +
+    card('Slots and events', '', (c.slots.length ? simpleTable(['Slot', 'Content'], c.slots) : '') + simpleTable(['Event', 'When'], c.events)) +
+    card('Tokens', tokens.length ? 'The component tokens of this component, with the path in the current theme.' : 'This component has no tokens of its own. Its parts use their tokens.',
+      tokens.length ? tokenTable(['Token', 'Value', 'Path to the global value'], tokens.map(n => `<tr><td class="name">${tokLink(n, short(n))}</td><td class="v">${linkValue(raw(n))}</td><td>${chain(n, false)}</td></tr>`)) : '') +
+    card('Usage', '', `<pre class="code"><code>${esc(c.usage)}</code></pre>`);
+  const demo = document.querySelector(`#page-comp-${c.tag} .comp-demo`);
+  if (!demo) return;
+  const log = demo.querySelector('.log');
+  demo.addEventListener('change', e => { if (e.target.localName === 'vsa-toggle') log.textContent = `change · <vsa-toggle name="${e.target.name}"> checked=${e.target.checked}`; });
+  demo.addEventListener('search', e => { log.textContent = `search · value="${e.target.value}"`; });
+}
+const renderComponents = () => COMPONENTS.forEach(renderComponentPage);
+
+function renderComponentTokens() {
+  const byComponent = new Map();
+  for (const n of T.component.keys()) {
+    const c = componentOf(n);
+    if (!byComponent.has(c)) byComponent.set(c, []);
+    byComponent.get(c).push(n);
+  }
+  document.getElementById('page-tokens-component').innerHTML =
+    pageHead('Component tokens', 'One part of one atom, in <code>tokens/component.css</code>. Each value reads alias tokens. The path follows the current theme. Change one line to change that part in each place that uses the atom.', levels('Component')) +
+    [...byComponent].map(([c, list]) => card(`&lt;vsa-${c}&gt;`, '', tokenTable(['Token', 'Value', 'Path to the global value'],
+      list.map(n => `<tr id="tok-${n}"><td class="name">${tokName(n)}</td><td class="v">${linkValue(raw(n))}</td><td>${chain(n, false)}</td></tr>`)))).join('');
+}
+
+const SEARCH_ICON = '<svg slot="start" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+const PLAY_ICON = '<svg slot="start" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>';
+function renderAtoms() {
+  const atoms = document.getElementById('atoms');
+  atoms.innerHTML = `<div class="demo">
+    <h3>Button</h3>
+    <div class="atom-row"><vsa-button>Cancel</vsa-button><vsa-button variant="primary">Save</vsa-button><vsa-button variant="primary">${PLAY_ICON}Start</vsa-button><vsa-button disabled>Disabled</vsa-button><vsa-button size="small">Small</vsa-button><vsa-button variant="primary" size="small">Small primary</vsa-button></div>
+    <h3>Toggle</h3>
+    <div class="atom-row"><vsa-toggle checked aria-label="Listener"></vsa-toggle><vsa-toggle aria-label="Pin"></vsa-toggle><vsa-toggle size="small" checked aria-label="Handler on"></vsa-toggle><vsa-toggle size="small" aria-label="Handler off"></vsa-toggle><vsa-toggle disabled aria-label="Start with Windows"></vsa-toggle><span class="tag">on · off · small · disabled</span></div>
+    <h3>Field</h3>
+    <vsa-field placeholder="Search sources and handlers" aria-label="Search">${SEARCH_ICON}</vsa-field>
+    <vsa-field value="LogEverything" aria-label="Handler name"></vsa-field>
+    <vsa-field placeholder="Disabled" disabled aria-label="Disabled field"></vsa-field>
+    <div class="log" aria-live="polite">No event yet</div>
+  </div>`;
+  const log = atoms.querySelector('.log');
+  atoms.addEventListener('change', e => {
+    const t = e.target;
+    log.textContent = `change · <${t.localName}> ${t.localName === 'vsa-toggle' ? 'checked=' + t.checked : 'value="' + t.value + '"'}`;
+  });
+  atoms.addEventListener('click', e => {
+    const t = e.target.closest('vsa-button');
+    if (t && !t.disabled) log.textContent = `click · <vsa-button> "${t.textContent.trim()}"`;
+  });
+}
+
+const PAGES = [...document.querySelectorAll('.menu a')].map(a => a.dataset.page);
+function show(page, token) {
+  if (!PAGES.includes(page)) page = 'overview';
+  document.querySelectorAll('.page').forEach(p => { p.hidden = p.id !== 'page-' + page; });
+  document.querySelectorAll('.menu a').forEach(a => {
+    if (a.dataset.page !== page) { a.removeAttribute('aria-current'); return; }
+    a.setAttribute('aria-current', 'page');
+    a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+  try { localStorage.setItem('vsa-gallery-page', page); } catch (e) {}
+  const row = token && document.getElementById('tok-' + token);
+  const fold = row && row.closest('details');
+  if (fold) fold.open = true;
+  if (row) { row.scrollIntoView({ block: 'center' }); row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
+  else window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  e.preventDefault();
+  const page = a.dataset.page || a.getAttribute('href').slice(1);
+  try { history.replaceState(null, '', '#' + page); } catch (err) {}
+  show(page, a.dataset.token);
+});
+
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+function renderThemed() {
+  renderColor();
+  renderTypography();
+  renderSpacing();
+  renderElevation();
+  renderMotion();
+  renderComponentTokens();
+  renderComponents();
+}
+function setTheme(t) {
+  if (t === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.set === t)));
+  try { localStorage.setItem('vsa-gallery-theme', t); } catch (e) {}
+  renderThemed();
+}
+document.querySelector('.seg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTheme(b.dataset.set); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderThemed);
+
+readTokens();
+indexUse();
+renderAtoms();
+renderGlobal();
+renderAlias();
+let savedTheme = 'system';
+try { savedTheme = localStorage.getItem('vsa-gallery-theme') || 'system'; } catch (e) {}
+setTheme(savedTheme);
+let start = location.hash.slice(1);
+if (!start) { try { start = localStorage.getItem('vsa-gallery-page') || 'overview'; } catch (e) { start = 'overview'; } }
+show(start);
+</script>
+</body>
+</html>
