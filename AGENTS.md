@@ -55,10 +55,11 @@ Do not edit the files in `.claude/skills/` by hand. The next update writes over 
 
 Check each visible change on mobile and on desktop, in light and in dark. A change that looks correct on one screen size can break the other.
 
-1. Run `node vsa/scripts/build-artifact.mjs`.
-2. Run `node vsa/scripts/screenshots.mjs`. Add hash routes to check other pages, for example `node vsa/scripts/screenshots.mjs /components/table`.
-3. Look at the screenshots in `vsa/dist/screenshots/`: mobile (390 px) and desktop (1440 px), light and dark, for each page.
-4. If the script reports a problem, fix it. It reports console errors, page errors and a page that is wider than the screen.
+1. Run `node vsa/scripts/check.mjs`. It checks the Web Awesome design rules and our rules: hex colors only in the palette, `--wa-*` tokens only in the theme, no px, no `::part(base)`, no visual host rules, no hand-written flex or grid, no outside links. Fix each finding.
+2. Run `node vsa/scripts/build-artifact.mjs`.
+3. Run `node vsa/scripts/screenshots.mjs`. Add hash routes to check other pages, for example `node vsa/scripts/screenshots.mjs /components/table`.
+4. Look at the screenshots in `vsa/dist/screenshots/`: mobile (390 px) and desktop (1440 px), light and dark, for each page.
+5. If the script reports a problem, fix it. It reports console errors, page errors, a page that is wider than the screen, a wrong screen size, and each request to an outside host except Google Fonts.
 
 The script puts the page in the same frame that the claude.ai artifact host adds, so the screenshots show the published page. The first run needs `npx playwright install chromium`.
 

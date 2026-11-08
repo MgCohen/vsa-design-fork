@@ -17,16 +17,11 @@
   .wa-light .wa-theme-vsa,
   .wa-dark .wa-theme-vsa.wa-invert,
   .wa-dark .wa-theme-vsa .wa-invert {
-    --vsa-gradient-canvas: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--wa-color-neutral-90), white 35%),
-      var(--wa-color-neutral-90)
-    );
-    --vsa-gradient-surface: var(--wa-color-surface-default);
+    --vsa-gradient-surface: var(--wa-color-surface-raised);
     --vsa-gradient-hole: radial-gradient(
       circle at 35% 30%,
-      color-mix(in oklab, var(--wa-color-surface-default), white 50%),
-      var(--wa-color-surface-default) 70%
+      color-mix(in oklab, var(--wa-color-surface-raised), white 50%),
+      var(--wa-color-surface-raised) 70%
     );
     --vsa-gradient-knob: white;
     --vsa-shadow-carve:
@@ -51,21 +46,20 @@
   .wa-dark .wa-theme-vsa,
   .wa-light .wa-theme-vsa.wa-invert,
   .wa-light .wa-theme-vsa .wa-invert {
-    --vsa-gradient-canvas: color-mix(in oklab, var(--wa-color-neutral-05), var(--wa-color-neutral-10));
     --vsa-gradient-surface: linear-gradient(
       180deg,
-      color-mix(in oklab, var(--wa-color-surface-default), white 7%),
-      color-mix(in oklab, var(--wa-color-surface-default), black 30%)
+      color-mix(in oklab, var(--wa-color-surface-raised), white 7%),
+      color-mix(in oklab, var(--wa-color-surface-raised), black 30%)
     );
     --vsa-gradient-hole: radial-gradient(
       circle at 35% 30%,
-      color-mix(in oklab, var(--wa-color-surface-default), white 10%),
-      var(--wa-color-surface-default) 70%
+      color-mix(in oklab, var(--wa-color-surface-raised), white 10%),
+      var(--wa-color-surface-raised) 70%
     );
     --vsa-gradient-knob: radial-gradient(
       circle at 35% 30%,
-      color-mix(in oklab, var(--wa-color-surface-default), white 18%),
-      var(--wa-color-surface-default) 75%
+      color-mix(in oklab, var(--wa-color-surface-raised), white 18%),
+      var(--wa-color-surface-raised) 75%
     );
     --vsa-shadow-carve:
       inset 0.2375rem 0.2375rem 0.5rem color-mix(in oklab, black 54%, transparent),

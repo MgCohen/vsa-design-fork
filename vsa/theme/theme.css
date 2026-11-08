@@ -19,8 +19,9 @@
     color-scheme: light;
     color: var(--wa-color-text-normal);
 
+    /* default = the page (the canvas), raised = cards and popups over it, lowered = carved channels. */
     --wa-color-surface-raised: var(--wa-color-neutral-95);
-    --wa-color-surface-default: var(--wa-color-neutral-95);
+    --wa-color-surface-default: var(--wa-color-neutral-90);
     --wa-color-surface-lowered: var(--wa-color-neutral-80);
     --wa-color-surface-border: color-mix(in oklab, var(--wa-color-neutral-10) 9%, transparent);
 
@@ -119,7 +120,7 @@
     color: var(--wa-color-text-normal);
 
     --wa-color-surface-raised: var(--wa-color-neutral-20);
-    --wa-color-surface-default: var(--wa-color-neutral-20);
+    --wa-color-surface-default: color-mix(in oklab, var(--wa-color-neutral-05), var(--wa-color-neutral-10));
     --wa-color-surface-lowered: var(--wa-color-neutral-05);
     --wa-color-surface-border: color-mix(in oklab, var(--wa-color-neutral-95) 9%, transparent);
 

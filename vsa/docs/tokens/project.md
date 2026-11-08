@@ -5,7 +5,7 @@ A project token, `--vsa-*`, is only for an idea that Web Awesome has no token fo
 | Group | Use |
 |---|---|
 | Shadows | The carved looks: `carve`, `press`, `knob`, `glow`, `dial`, `hole`. The raised look uses `--wa-shadow-m` and `--wa-shadow-s` |
-| Gradients | The canvas, the raised surface, the knob and the dial center |
+| Gradients | The raised surface, the knob and the dial center. The page uses `--wa-color-surface-default` |
 | Type | The letter spacing of the display font and of the small capitals. Web Awesome has no letter spacing token |
 | Code | The colors of a code block and the smallest size of its text, in `theme/code.css` |
 
