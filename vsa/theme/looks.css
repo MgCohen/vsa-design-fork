@@ -187,11 +187,13 @@
 
     /* House class: a dial is wa-progress-ring.vsa-dial, a deep carved channel with a raised center and a glow.
        Only documented parts and properties of wa-progress-ring. Its track is SVG, so the channel is drawn on the
-       progress-ring part behind it. The SVG viewport clips a filter, so this dial has no glow.
+       progress-ring part behind it. The SVG viewport clips a filter at its edge, so the transparent track is wider
+       than the indicator: the indicator sits 3 % inside the edge, and its glow fits in the viewport.
        Size: --size. Color: a Web Awesome variant class (wa-success, wa-warning, wa-danger). */
     wa-progress-ring.vsa-dial {
       --size: 8.5em;
-      --track-width: calc(var(--size) * 0.1);
+      --track-width: calc(var(--size) * 0.16);
+      --indicator-width: calc(var(--size) * 0.1);
       --track-color: transparent;
       --indicator-color: var(--wa-color-brand-fill-loud);
       /* The hole starts after the track (10 %) and a gap (5 %). A percent, so the label font size has no effect. */
@@ -204,6 +206,9 @@
       border-radius: var(--wa-border-radius-circle);
       background: var(--wa-color-surface-lowered);
       box-shadow: var(--vsa-shadow-dial);
+    }
+    wa-progress-ring.vsa-dial::part(indicator) {
+      filter: drop-shadow(0 0 calc(var(--size) * 0.03) color-mix(in oklab, var(--indicator-color) 55%, transparent));
     }
     wa-progress-ring.vsa-dial::part(label) {
       inset: var(--vsa-dial-hole-inset);
@@ -219,10 +224,14 @@
     wa-progress-ring.vsa-dial.vsa-dial-s {
       --size: 2.5em;
       --track-width: calc(var(--size) * 0.14);
+      --indicator-width: var(--track-width);
       --vsa-dial-hole-inset: 17%;
     }
     wa-progress-ring.vsa-dial.vsa-dial-s::part(progress-ring) {
       box-shadow: var(--vsa-shadow-carve);
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(indicator) {
+      filter: none;
     }
     wa-progress-ring.vsa-dial.vsa-dial-s::part(label) {
       box-shadow: var(--wa-shadow-s);

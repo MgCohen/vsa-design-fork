@@ -10,7 +10,7 @@
 | Raised center | Yes | Yes, on `::part(label)` |
 | Status colors | `variant` attribute | Web Awesome variant classes: `wa-success`, `wa-warning`, `wa-danger` |
 | Small size | `size="s"` | Class `vsa-dial-s` |
-| Glow on the indicator | Yes | No. The SVG viewport clips a filter, and the ring has no other hook |
+| Glow on the indicator | Yes | Yes. The transparent track is wider than the indicator, so the indicator sits 3 % inside the SVG edge and its glow is not clipped |
 | Ends of the indicator | Flat | Round (`stroke-linecap: round` in Web Awesome) |
 
 ## Reason
@@ -19,5 +19,5 @@ The Web Awesome design skill: make a new element only for new behavior. The dial
 
 ## Cost
 
-- No glow, and round ends, unless we accept a change to the component source.
+- Round ends on the indicator (Web Awesome's own look).
 - Every page that uses `<vsa-dial>` changes to the new markup.

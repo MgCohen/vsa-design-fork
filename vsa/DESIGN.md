@@ -43,7 +43,7 @@
 | Name | Built from | Use for | Defined in |
 |---|---|---|---|
 | `<vsa-dial>` | Own element | One value of a whole, the main number of a card | `components/vsa-dial.js` |
-| `wa-progress-ring.vsa-dial` | House class on `wa-progress-ring` (proposed in decision `0008`: it can replace `<vsa-dial>`) | The same as `<vsa-dial>`, without the glow | `theme/looks.css` |
+| `wa-progress-ring.vsa-dial` | House class on `wa-progress-ring` (proposed in decision `0008`: it can replace `<vsa-dial>`) | The same as `<vsa-dial>` | `theme/looks.css` |
 | `<vsa-table>` | Own element around a native `<table>`: Web Awesome has no narrow table layout | Each data table. In a narrow container, each row shows as a block | `components/vsa-table.js` |
 | `pre.vsa-code` | `<pre>` | A code sample, dark in both schemes | `theme/code.css` |
 
