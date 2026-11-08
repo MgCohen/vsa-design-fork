@@ -1,7 +1,7 @@
 /*
   The theme layer: the only place for --wa-* overrides, scoped as Web Awesome recommends.
   It also declares the project tokens (--vsa-*), only for ideas that Web Awesome has no token for:
-  the raised and carved shadows, the surface gradients and the display type.
+  the raised and carved shadows, the surface gradients and the letter spacing of the display type.
   Load order: Web Awesome themes/default.css, then this file. This file is not in a cascade layer, so it wins.
 */
 
@@ -10,8 +10,6 @@
 .wa-light,
 .wa-dark,
 .wa-invert {
-  --wa-color-text-link: #ff6a1a;
-  --wa-color-focus: #ff6a1a;
   --wa-color-brand-fill-quiet: color-mix(in srgb, #ff6a1a 10%, transparent);
   --wa-color-brand-fill-normal: color-mix(in srgb, #ff6a1a 22%, transparent);
   --wa-color-brand-fill-loud: #ff6a1a;
@@ -19,19 +17,21 @@
   --wa-color-brand-border-normal: color-mix(in srgb, #ff6a1a 45%, transparent);
   --wa-color-brand-border-loud: #ff6a1a;
   --wa-font-family-body: Inter, system-ui, sans-serif;
-  --wa-font-family-heading: Doto, "Cascadia Mono", monospace;
-  --wa-font-family-code: "JetBrains Mono", "Cascadia Mono", monospace;
+  --wa-font-family-heading: Doto, 'Cascadia Mono', monospace;
+  --wa-font-family-code: 'JetBrains Mono', 'Cascadia Mono', monospace;
   --wa-font-weight-body: 400;
   --wa-font-weight-action: 500;
   --wa-font-weight-semibold: 600;
-  --wa-font-size-2xs: 11px;
-  --wa-font-size-xs: 12px;
-  --wa-font-size-s: 13px;
-  --wa-font-size-m: 13px;
-  --wa-font-size-l: 15px;
-  --wa-font-size-xl: 17px;
-  --wa-font-size-2xl: 20px;
-  --wa-font-size-3xl: 30px;
+  --wa-font-weight-heading: 800;
+  /* Smaller than the Web Awesome sizes. rem and the scale keep the user's font size setting. 14 px body. */
+  --wa-font-size-2xs: calc(0.6875rem * var(--wa-font-size-scale));
+  --wa-font-size-xs: calc(0.75rem * var(--wa-font-size-scale));
+  --wa-font-size-s: calc(0.8125rem * var(--wa-font-size-scale));
+  --wa-font-size-m: calc(0.875rem * var(--wa-font-size-scale));
+  --wa-font-size-l: calc(1rem * var(--wa-font-size-scale));
+  --wa-font-size-xl: calc(1.125rem * var(--wa-font-size-scale));
+  --wa-font-size-2xl: calc(1.375rem * var(--wa-font-size-scale));
+  --wa-font-size-3xl: calc(1.875rem * var(--wa-font-size-scale));
   --wa-line-height-condensed: 1.1;
   --wa-line-height-normal: 1.35;
   --wa-border-radius-s: 8px;
@@ -42,24 +42,22 @@
   --wa-focus-ring-offset: 2px;
   --wa-transition-fast: 150ms;
   --wa-transition-easing: ease-out;
-  --wa-shadow-l: var(--vsa-shadow-raise);
+  --wa-shadow-l: var(--wa-shadow-m);
   --wa-form-control-border-color: transparent;
-  --wa-form-control-border-radius: 12px;
-  --wa-form-control-activated-color: #ff6a1a;
+  --wa-form-control-border-radius: var(--wa-border-radius-m);
+  --wa-form-control-activated-color: var(--wa-color-brand-fill-loud);
   --wa-form-control-padding-block: 11px;
   --wa-form-control-padding-inline: 14px;
   --wa-panel-border-width: 0px;
-  --wa-panel-border-radius: 22px;
+  --wa-panel-border-radius: var(--wa-border-radius-l);
   --wa-button-transform-active: translateY(1px);
 
-  --vsa-color-accent-glow: color-mix(in srgb, #ff6a1a 18.8%, transparent);
   --vsa-shadow-press: inset 2px 2px 4px color-mix(in srgb, #000000 30%, transparent);
-  --vsa-shadow-knob: 0 2px 4px color-mix(in srgb, #000000 35%, transparent), inset 0 1px 0 color-mix(in srgb, #ffffff 25%, transparent);
+  --vsa-shadow-knob:
+    0 2px 4px color-mix(in srgb, #000000 35%, transparent), inset 0 1px 0 color-mix(in srgb, #ffffff 25%, transparent);
   --vsa-shadow-glow: 0 0 4px color-mix(in srgb, #ff6a1a 15%, transparent);
-  --vsa-border-sunken: none;
-  --vsa-letter-spacing-display: .02em;
-  --vsa-letter-spacing-caps: .07em;
-  --vsa-font-weight-display: 800;
+  --vsa-letter-spacing-display: 0.02em;
+  --vsa-letter-spacing-caps: 0.07em;
 }
 
 /* Light scheme */
@@ -72,7 +70,10 @@
   --wa-color-surface-border: color-mix(in srgb, #1b1a18 9%, transparent);
   --wa-color-text-normal: #1b1a18;
   --wa-color-text-quiet: #5f5b55;
-  --wa-color-brand-on-quiet: color-mix(in srgb, #ff6a1a 70%, #1b1a18);
+  /* #ff6a1a has less than 3:1 contrast on the light surfaces. Links and focus use the darker brand tone (about 5.7:1). */
+  --wa-color-text-link: var(--wa-color-brand-on-normal);
+  --wa-color-focus: var(--wa-color-brand-on-normal);
+  --wa-color-brand-on-quiet: color-mix(in srgb, #ff6a1a 60%, #1b1a18);
   --wa-color-brand-on-normal: color-mix(in srgb, #ff6a1a 60%, #1b1a18);
   --wa-color-brand-on-loud: #1b1a18;
   --wa-color-neutral-fill-quiet: color-mix(in srgb, #1b1a18 5%, transparent);
@@ -111,24 +112,35 @@
   --wa-color-danger-on-quiet: #b3261e;
   --wa-color-danger-on-normal: #b3261e;
   --wa-color-danger-on-loud: #fbfbfa;
-  --wa-shadow-s: inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), 0 2px 6px color-mix(in srgb, #3c3228 11.3%, transparent);
-  --wa-shadow-m: inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), inset 0 -3px 7px color-mix(in srgb, #3c3228 4.9%, transparent), -6px -6px 14px color-mix(in srgb, #ffffff 36%, transparent), 0 2px 3px color-mix(in srgb, #3c3228 5.4%, transparent), 0 11px 21px -8px color-mix(in srgb, #3c3228 23.4%, transparent);
+  --wa-shadow-s:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), 0 2px 6px color-mix(in srgb, #3c3228 11.3%, transparent);
+  --wa-shadow-m:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent),
+    inset 0 -3px 7px color-mix(in srgb, #3c3228 4.9%, transparent),
+    -6px -6px 14px color-mix(in srgb, #ffffff 36%, transparent),
+    0 2px 3px color-mix(in srgb, #3c3228 5.4%, transparent),
+    0 11px 21px -8px color-mix(in srgb, #3c3228 23.4%, transparent);
   --wa-form-control-background-color: #e4e2de;
   --wa-form-control-value-color: #1b1a18;
   --wa-form-control-placeholder-color: #5b5a57;
   --wa-form-control-label-color: #484745;
   --wa-form-control-hint-color: #5f5b55;
 
-  --vsa-color-canvas: #eceae6;
   --vsa-gradient-canvas: linear-gradient(180deg, #f1efec, #eceae6);
   --vsa-gradient-surface: #fbfbfa;
   --vsa-gradient-hole: radial-gradient(circle at 35% 30%, #fdfdfd, #fbfbfa 70%);
   --vsa-gradient-knob: #ffffff;
-  --vsa-shadow-raise: inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), inset 0 -3px 7px color-mix(in srgb, #3c3228 4.9%, transparent), -6px -6px 14px color-mix(in srgb, #ffffff 36%, transparent), 0 2px 3px color-mix(in srgb, #3c3228 5.4%, transparent), 0 11px 21px -8px color-mix(in srgb, #3c3228 23.4%, transparent);
-  --vsa-shadow-raise-sm: inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), 0 2px 6px color-mix(in srgb, #3c3228 11.3%, transparent);
-  --vsa-shadow-carve: inset 3.8px 3.8px 8px color-mix(in srgb, #3c3228 18%, transparent), inset -2px -2px 4px color-mix(in srgb, #ffffff 57%, transparent);
-  --vsa-shadow-dial: inset 5.4px 5.4px 11px color-mix(in srgb, #3c3228 21%, transparent), inset -3px -3px 8px color-mix(in srgb, #ffffff 57%, transparent), 0 1px 0 color-mix(in srgb, #ffffff 36%, transparent);
-  --vsa-shadow-hole: 0 7px 14px color-mix(in srgb, #3c3228 11.3%, transparent), 0 2px 3px color-mix(in srgb, #3c3228 6.8%, transparent), inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent), inset 0 -3px 6px color-mix(in srgb, #3c3228 4.2%, transparent);
+  --vsa-shadow-carve:
+    inset 3.8px 3.8px 8px color-mix(in srgb, #3c3228 18%, transparent),
+    inset -2px -2px 4px color-mix(in srgb, #ffffff 57%, transparent);
+  --vsa-shadow-dial:
+    inset 5.4px 5.4px 11px color-mix(in srgb, #3c3228 21%, transparent),
+    inset -3px -3px 8px color-mix(in srgb, #ffffff 57%, transparent),
+    0 1px 0 color-mix(in srgb, #ffffff 36%, transparent);
+  --vsa-shadow-hole:
+    0 7px 14px color-mix(in srgb, #3c3228 11.3%, transparent), 0 2px 3px color-mix(in srgb, #3c3228 6.8%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 63%, transparent),
+    inset 0 -3px 6px color-mix(in srgb, #3c3228 4.2%, transparent);
 }
 
 /* Dark scheme */
@@ -140,6 +152,8 @@
   --wa-color-surface-border: color-mix(in srgb, #f4f3f1 9%, transparent);
   --wa-color-text-normal: #f4f3f1;
   --wa-color-text-quiet: #a8a49d;
+  --wa-color-text-link: #ff6a1a;
+  --wa-color-focus: #ff6a1a;
   --wa-color-brand-on-quiet: color-mix(in srgb, #ff6a1a 70%, #f4f3f1);
   --wa-color-brand-on-normal: color-mix(in srgb, #ff6a1a 60%, #f4f3f1);
   --wa-color-brand-on-loud: #111111;
@@ -179,52 +193,64 @@
   --wa-color-danger-on-quiet: #f59a9a;
   --wa-color-danger-on-normal: #f59a9a;
   --wa-color-danger-on-loud: #26262a;
-  --wa-shadow-s: inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent), 0 2px 6px color-mix(in srgb, #000000 27%, transparent);
-  --wa-shadow-m: inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent), inset 0 -3px 7px color-mix(in srgb, #000000 35%, transparent), 0 2px 3px color-mix(in srgb, #000000 18%, transparent), 0 11px 21px -8px color-mix(in srgb, #000000 41%, transparent);
+  --wa-shadow-s:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent), 0 2px 6px color-mix(in srgb, #000000 27%, transparent);
+  --wa-shadow-m:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent),
+    inset 0 -3px 7px color-mix(in srgb, #000000 35%, transparent),
+    0 2px 3px color-mix(in srgb, #000000 18%, transparent),
+    0 11px 21px -8px color-mix(in srgb, #000000 41%, transparent);
   --wa-form-control-background-color: #151517;
   --wa-form-control-value-color: #f4f3f1;
   --wa-form-control-placeholder-color: #adacab;
   --wa-form-control-label-color: #cbcac9;
   --wa-form-control-hint-color: #a8a49d;
 
-  --vsa-color-canvas: #18181a;
   --vsa-gradient-canvas: #18181a;
   --vsa-gradient-surface: linear-gradient(180deg, #313135, #1b1b1d);
   --vsa-gradient-hole: radial-gradient(circle at 35% 30%, #3c3c3f, #26262a 70%);
   --vsa-gradient-knob: radial-gradient(circle at 35% 30%, #4d4d50, #26262a 75%);
-  --vsa-shadow-raise: inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent), inset 0 -3px 7px color-mix(in srgb, #000000 35%, transparent), 0 2px 3px color-mix(in srgb, #000000 18%, transparent), 0 11px 21px -8px color-mix(in srgb, #000000 41%, transparent);
-  --vsa-shadow-raise-sm: inset 0 1px 0 color-mix(in srgb, #ffffff 7%, transparent), 0 2px 6px color-mix(in srgb, #000000 27%, transparent);
-  --vsa-shadow-carve: inset 3.8px 3.8px 8px color-mix(in srgb, #000000 54%, transparent), inset -2px -2px 4px color-mix(in srgb, #ffffff 4.8%, transparent);
-  --vsa-shadow-dial: inset 5.4px 5.4px 11px color-mix(in srgb, #000000 57%, transparent), inset -3px -3px 8px color-mix(in srgb, #ffffff 6.6%, transparent), 0 1px 0 color-mix(in srgb, #ffffff 4.8%, transparent);
-  --vsa-shadow-hole: 0 7px 14px color-mix(in srgb, #000000 38.3%, transparent), 0 2px 3px color-mix(in srgb, #000000 27%, transparent), inset 0 1px 0 color-mix(in srgb, #ffffff 9.8%, transparent), inset 0 -3px 6px color-mix(in srgb, #000000 31.5%, transparent);
+  --vsa-shadow-carve:
+    inset 3.8px 3.8px 8px color-mix(in srgb, #000000 54%, transparent),
+    inset -2px -2px 4px color-mix(in srgb, #ffffff 4.8%, transparent);
+  --vsa-shadow-dial:
+    inset 5.4px 5.4px 11px color-mix(in srgb, #000000 57%, transparent),
+    inset -3px -3px 8px color-mix(in srgb, #ffffff 6.6%, transparent),
+    0 1px 0 color-mix(in srgb, #ffffff 4.8%, transparent);
+  --vsa-shadow-hole:
+    0 7px 14px color-mix(in srgb, #000000 38.3%, transparent), 0 2px 3px color-mix(in srgb, #000000 27%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 9.8%, transparent),
+    inset 0 -3px 6px color-mix(in srgb, #000000 31.5%, transparent);
 }
 
 /* Looks: raised and carved, on documented parts. Tokens cannot give these looks. Raised = a surface over the canvas. Carved = a channel cut into the surface. */
 
-/* Raised: buttons */
-wa-button:not([appearance="plain"], [appearance="outlined"])::part(button) {
+/* Raised: buttons. Each button that is not plain or outlined is raised. The variant keeps its Web Awesome colors. */
+wa-button:not([appearance='plain'], [appearance*='outlined'])::part(button) {
+  box-shadow: var(--wa-shadow-m);
+}
+/* The neutral accent button (the default button) is the raised surface. */
+wa-button:is(:not([variant]), [variant='neutral']):is(:not([appearance]), [appearance='accent'])::part(button) {
   background: var(--vsa-gradient-surface);
   color: var(--wa-color-text-normal);
-  box-shadow: var(--vsa-shadow-raise);
   border-color: transparent;
 }
-wa-button[variant="brand"]:not([appearance="plain"], [appearance="outlined"])::part(button) {
-  background: var(--wa-color-brand-fill-loud);
-  color: var(--wa-color-brand-on-loud);
-  box-shadow: var(--vsa-shadow-raise), var(--vsa-shadow-glow);
+wa-button[variant='brand']:is(:not([appearance]), [appearance='accent'])::part(button) {
+  box-shadow: var(--wa-shadow-m), var(--vsa-shadow-glow);
 }
-wa-button:not(:state(disabled), [appearance="plain"]):active::part(button) {
+wa-button:not(:state(disabled), [appearance='plain']):active::part(button) {
   box-shadow: var(--vsa-shadow-press);
 }
-wa-button[variant="brand"]:not(:state(disabled), [appearance="plain"]):active::part(button) {
+wa-button[variant='brand']:not(:state(disabled), [appearance='plain']):active::part(button) {
   box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
 }
 
-/* Raised: panels */
-wa-card,
-wa-details:not([appearance='plain'])::part(details) {
+/* Raised: panels. Only the default appearance (outlined). The other appearances keep their Web Awesome look.
+   The card has no part for its surface, so this rule is on the host. */
+wa-card:is(:not([appearance]), [appearance='outlined']),
+wa-details:is(:not([appearance]), [appearance='outlined'])::part(details) {
   background: var(--vsa-gradient-surface);
-  box-shadow: var(--vsa-shadow-raise);
+  box-shadow: var(--wa-shadow-m);
 }
 
 wa-details::part(icon) {
@@ -236,15 +262,14 @@ wa-input::part(input-wrapper),
 wa-textarea::part(textarea-wrapper),
 wa-select::part(combobox) {
   box-shadow: var(--vsa-shadow-carve);
-  outline: var(--vsa-border-sunken);
 }
 
 /* Carved: switch track, raised knob */
 wa-switch {
-  /* 40, 24 and 18 px at the 13 px body size. em keeps the size attribute working. */
-  --width: calc(40em / 13);
-  --height: calc(24em / 13);
-  --thumb-size: calc(18em / 13);
+  /* 40, 24 and 18 px at the 14 px body size. em keeps the size attribute working. */
+  --width: calc(40em / 14);
+  --height: calc(24em / 14);
+  --thumb-size: calc(18em / 14);
 }
 wa-switch::part(control) {
   background: var(--wa-color-surface-lowered);
@@ -293,4 +318,3 @@ wa-slider::part(thumb) {
   box-shadow: var(--vsa-shadow-knob);
   border: none;
 }
-

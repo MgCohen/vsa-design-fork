@@ -41,7 +41,7 @@ Set `variant` for a state color. The default is the accent color.
 
 ### Sizes
 
-The small dial, `size="s"`, is 36 px, with a shallow carve. Use it in lists and table rows. For another size, set `--size` and `--track-width`, as on `wa-progress-ring`.
+Use `size="s"`, `"m"` (the default) or `"l"`. The small dial has a shallow carve: use it in lists and table rows. The large dial is for the main number of a page. All sizes follow the font size. For another size, set `--size`, as on `wa-progress-ring`. The track follows `--size`.
 
 ```html preview
 <vsa-dial size="s" value="60" label="Sync">
@@ -49,13 +49,13 @@ The small dial, `size="s"`, is 36 px, with a shallow carve. Use it in lists and 
 </vsa-dial>
 <vsa-dial size="s" value="100" variant="success"
   label="Build"></vsa-dial>
-<vsa-dial value="72" label="Tests"
-  style="--size: 180px; --track-width: 16px"></vsa-dial>
+<vsa-dial value="72" label="Tests"></vsa-dial>
+<vsa-dial size="l" value="72" label="Tests"></vsa-dial>
 ```
 
 ## Accessibility
 
-The dial has the role `progressbar`, with its value, its minimum and its maximum. Always set `label`: screen readers read it with the value.
+The dial has the role `progressbar`, with its value, its minimum and its maximum. Always set `label`: screen readers read it with the value. Without `label`, the dial uses its center text, or "Progress", and shows a warning in the console.
 
 ## Change the value
 
@@ -77,7 +77,7 @@ The dial is a VSA component: `components/vsa-dial.js`. Web Awesome has no dial, 
 |---|---|
 | Channel | `--track-color` (default `--wa-color-surface-lowered`), and the deep carve `--vsa-shadow-dial`. The small dial uses `--vsa-shadow-carve` |
 | Indicator | `--indicator-color` (default `--wa-color-brand-fill-loud`). `variant` sets it to `--wa-color-success-fill-loud`, `--wa-color-warning-fill-loud` or `--wa-color-danger-fill-loud`. The glow is the same color |
-| Center | `--vsa-gradient-hole` and `--vsa-shadow-hole`. The small dial uses `--vsa-shadow-raise-sm` |
+| Center | `--vsa-gradient-hole` and `--vsa-shadow-hole`. The small dial uses `--wa-shadow-s` |
 | Text | `--wa-font-family-body`, `--wa-color-text-normal` |
 
 ## Open question

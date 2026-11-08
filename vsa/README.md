@@ -12,7 +12,7 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 | `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-dial` and `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
 | `theme/code.css` | The code block: project tokens for code colors, and the dark IDE look of `pre.vsa-code` |
-| `site/index.html` | The docs site: side menu, foundations, one page for each component, light and dark |
+| `site/index.html` | The docs site, made from the system: `<wa-page>` with the menu in a drawer on mobile, foundations, one page for each component, light and dark |
 | `scripts/build-artifact.mjs` | Makes the docs site into one HTML file for the live artifact. See "Publish the docs site" in the root `AGENTS.md` |
 | `docs/index.json` | The menu: the foundations pages and the components that have a usage page |
 | `decisions/` | Design decisions. `0005` is the fork |
@@ -33,7 +33,7 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 ## How the site loads
 
 1. `theme/fonts.css`: the font files.
-2. Web Awesome `styles/themes/default.css` and `styles/utilities.css` from jsDelivr: their default tokens and the utilities, in cascade layers.
+2. Web Awesome `styles/themes/default.css`, `styles/utilities.css` and `styles/native.css` from jsDelivr: their default tokens, the utilities and the native element styles, in cascade layers.
 3. `theme/vsa.css`: not in a layer, so it wins over all Web Awesome layers.
 4. `theme/code.css`: the code block.
 5. `components/vsa-dial.js` and `components/vsa-table.js`: they define `<vsa-dial>` and `<vsa-table>`.

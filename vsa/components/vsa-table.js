@@ -15,6 +15,7 @@ const hostStyles = `
 // The selectors start with vsa-table:state(stacked), so they win over page rules for one class, for example a column width.
 const documentStyles = `
 vsa-table:state(stacked) :is(table, tbody, tr, td) { display: block; width: auto; min-width: 0; }
+/* The visually hidden pattern: screen readers still read the header row. 1 px is part of the pattern. */
 vsa-table:state(stacked) thead {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }

@@ -4,7 +4,7 @@ The VSA look has two shapes. Tokens give the shadow values. The theme file appli
 
 | Look | Shadow | Components |
 |---|---|---|
-| Raised: a surface over the canvas | `--vsa-shadow-raise` | Button, card, details |
+| Raised: a surface over the canvas | `--wa-shadow-m` | Button, card, details |
 | Carved: a channel cut into the surface | `--vsa-shadow-carve` | Input, select, textarea, switch track, checkbox, radio, slider track, progress bar |
 | Deep carve: a wide round channel | `--vsa-shadow-dial` | Dial channel |
 | Hole: a raised center in a channel | `--vsa-shadow-hole` | Dial center |
@@ -13,15 +13,14 @@ The VSA look has two shapes. Tokens give the shadow values. The theme file appli
 
 ```html preview
 <wa-button>Raised</wa-button>
-<wa-input placeholder="Carved" style="width: 200px"></wa-input>
+<wa-input placeholder="Carved" style="width: 12rem"></wa-input>
 <wa-switch checked aria-label="Knob"></wa-switch>
-<vsa-dial value="72" label="Deep carve"
-  style="--size: 72px; --track-width: 8px"></vsa-dial>
+<vsa-dial value="72" label="Deep carve"></vsa-dial>
 ```
 
 ## Web Awesome shadows
 
-Popups, dialogs and drawers use these tokens.
+The raised look uses the Web Awesome shadows: `--wa-shadow-m` for a surface, and `--wa-shadow-s` for a small part, for example the center of the small dial. Popups, dialogs and drawers use `--wa-shadow-l`, which has the value of `--wa-shadow-m`.
 
 ```tokens ^--wa-shadow-[sml]$
 ```

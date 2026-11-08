@@ -4,22 +4,57 @@ The VSA Design System gives VSA apps one look. It uses the Web Awesome 3.14.0 co
 
 ## How the parts connect
 
-Each level reads only the level to its left. A change on the left changes everything to its right.
+Each step reads only the steps before it. A change in an early step changes all the later steps.
 
-<div class="topo">
-  <div class="node-stack">
-    <a class="node lvl-theme" href="#/tokens/theme"><b>Theme layer</b><span>--wa-* values, light and dark</span><code>theme/vsa.css</code></a>
-    <a class="node lvl-project" href="#/tokens/project"><b>Project tokens</b><span>Only new ideas</span><code>--vsa-*</code></a>
-  </div>
-  <span class="arrow">→</span>
-  <a class="node lvl-theme" href="#/foundations/elevation"><b>Looks</b><span>Raised, carved, knob</span><code>::part()</code></a>
-  <span class="arrow">→</span>
-  <div class="node-stack">
-    <a class="node lvl-web" href="#/gallery"><b>Web Awesome components</b><span>73, styled by the theme</span><code>&lt;wa-*&gt;</code></a>
-    <a class="node lvl-project" href="#/components/dial"><b>VSA components</b><span>Only where Web Awesome has none</span><code>&lt;vsa-*&gt;</code></a>
-  </div>
-  <span class="arrow">→</span>
-  <div class="node lvl-planned"><b>Molecules, pages</b><span>Planned</span><code>slots</code></div>
+<div class="wa-grid wa-gap-s" style="--min-column-size: 12rem">
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="brand" appearance="filled">Step 1</wa-badge>
+      <a href="#/tokens/theme"><strong>Theme layer</strong></a>
+      <span class="wa-caption-s">--wa-* values, light and dark</span>
+      <code>theme/vsa.css</code>
+    </div>
+  </wa-card>
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="success" appearance="filled">Step 1</wa-badge>
+      <a href="#/tokens/project"><strong>Project tokens</strong></a>
+      <span class="wa-caption-s">Only new ideas</span>
+      <code>--vsa-*</code>
+    </div>
+  </wa-card>
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="brand" appearance="filled">Step 2</wa-badge>
+      <a href="#/foundations/elevation"><strong>Looks</strong></a>
+      <span class="wa-caption-s">Raised, carved, knob</span>
+      <code>::part()</code>
+    </div>
+  </wa-card>
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="neutral" appearance="filled">Step 3</wa-badge>
+      <a href="#/gallery"><strong>Web Awesome components</strong></a>
+      <span class="wa-caption-s">73, styled by the theme</span>
+      <code>&lt;wa-*&gt;</code>
+    </div>
+  </wa-card>
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="success" appearance="filled">Step 3</wa-badge>
+      <a href="#/components/dial"><strong>VSA components</strong></a>
+      <span class="wa-caption-s">Only where Web Awesome has none</span>
+      <code>&lt;vsa-*&gt;</code>
+    </div>
+  </wa-card>
+  <wa-card>
+    <div class="wa-stack wa-gap-2xs">
+      <wa-badge variant="neutral" appearance="filled">Step 4</wa-badge>
+      <strong>Molecules, pages</strong>
+      <span class="wa-caption-s">Planned</span>
+      <code>slots</code>
+    </div>
+  </wa-card>
 </div>
 
 | Link | What it adds |

@@ -26,7 +26,7 @@ The colors come from highlight.js. The file `theme/code.css` sets a project toke
 | Number | `--vsa-color-code-number` | `16`, `0.5` |
 | Comment, tag brackets | `--vsa-color-code-muted` | `<!-- -->`, `< >` |
 
-```tokens ^--vsa-(color-code|font-size-code)
+```tokens ^--vsa-(color-code|font-size-code-min)
 ```
 
 ## Languages

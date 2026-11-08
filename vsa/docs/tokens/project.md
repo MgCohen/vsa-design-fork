@@ -6,8 +6,8 @@ A project token, `--vsa-*`, is only for an idea that Web Awesome has no token fo
 |---|---|
 | Shadows | The raised and carved looks: `raise`, `carve`, `press`, `knob`, `glow`, `dial`, `hole` |
 | Gradients | The canvas, the raised surface, the knob and the dial center |
-| Type | The letter spacing and the weight of the display font |
-| Code | The colors of a code block, in `theme/code.css` |
+| Type | The letter spacing of the display font and of the small capitals. Web Awesome has no letter spacing token |
+| Code | The colors of a code block and the smallest size of its text, in `theme/code.css` |
 
 ```tokens ^--vsa- @vsa.css
 ```

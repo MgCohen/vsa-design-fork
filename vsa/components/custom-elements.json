@@ -40,7 +40,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "The accessible name. Screen readers read it with the value."
+              "description": "The accessible name. Screen readers read it with the value. Without it, the dial uses its center text, or \"Progress\", and warns in the console."
             },
             {
               "kind": "field",
@@ -57,10 +57,10 @@
               "name": "size",
               "attribute": "size",
               "type": {
-                "text": "'m' | 's'"
+                "text": "'s' | 'm' | 'l'"
               },
               "default": "'m'",
-              "description": "The size and the depth. The small dial (s) is 36 px, with a shallow carve, for lists and table rows. The names are the Web Awesome sizes."
+              "description": "The size and the depth. The small dial (s) has a shallow carve, for lists and table rows. The large dial (l) is for the main number of a page. All sizes follow the font size."
             }
           ],
           "slots": [
@@ -86,12 +86,12 @@
           "cssProperties": [
             {
               "name": "--size",
-              "default": "120px",
+              "default": "8.5em",
               "description": "The diameter of the dial."
             },
             {
               "name": "--track-width",
-              "default": "12px",
+              "default": "calc(var(--size) * 0.1)",
               "description": "The width of the colored ring."
             },
             {

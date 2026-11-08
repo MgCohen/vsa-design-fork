@@ -15,6 +15,11 @@
       crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/styles/utilities.css"
     />
+    <link
+      rel="stylesheet"
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/styles/native.css"
+    />
     <link rel="stylesheet" href="../theme/vsa.css" />
     <link rel="stylesheet" href="../theme/code.css" />
     <script
@@ -26,13 +31,16 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@11.2.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
-      * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-      }
-      html {
-        background: var(--vsa-gradient-canvas);
-        color: var(--wa-color-text-normal);
+      /*
+        The docs site shell. It uses the system: wa-page for the layout and the mobile drawer,
+        Web Awesome native styles for the text and the tables, and wa-* components for each control.
+        This CSS only places things. It uses tokens, not px or hex values.
+      */
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
       }
       html.wa-light {
         color-scheme: light;
@@ -41,517 +49,217 @@
         color-scheme: dark;
       }
       /* The background is also on body, because a host page (for example a claude.ai artifact) can paint body. */
+      html,
       body {
-        margin: 0;
-        font: var(--wa-font-size-m) / var(--wa-line-height-normal) var(--wa-font-family-body);
-        min-height: 100vh;
         background: var(--vsa-gradient-canvas);
         color: var(--wa-color-text-normal);
       }
-      a {
-        color: inherit;
+
+      wa-page {
+        --menu-width: 16rem;
+        background: none;
+      }
+      wa-page[view='mobile'] {
+        --menu-width: auto;
+      }
+      wa-page[view='mobile'] main {
+        padding: var(--wa-space-l) var(--wa-space-m);
+      }
+      .mobile-header {
+        padding: var(--wa-space-xs) var(--wa-space-m);
+        border-block-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
+      }
+      .mobile-header .brand {
+        font-size: var(--wa-font-size-l);
+      }
+      wa-page::part(navigation) {
+        border-inline-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
       }
 
-      .shell {
-        display: grid;
-        grid-template-columns: 240px minmax(0, 1fr);
-        min-height: 100vh;
-      }
-      nav.side {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        padding: 20px 14px 40px;
-        border-right: 1px solid var(--wa-color-surface-border);
-      }
       .brand {
-        display: block;
-        text-decoration: none;
-        margin: 0 6px 16px;
-        font: var(--vsa-font-weight-display) 22px/1 var(--wa-font-family-heading);
+        font-family: var(--wa-font-family-heading);
+        font-weight: var(--wa-font-weight-heading);
+        font-size: var(--wa-font-size-xl);
         letter-spacing: var(--vsa-letter-spacing-display);
+        color: var(--wa-color-text-normal);
+        text-decoration: none;
       }
       .brand small {
         display: block;
-        margin-top: 6px;
-        font: 500 var(--wa-font-size-2xs) / 1.2 var(--wa-font-family-body);
+        font-family: var(--wa-font-family-body);
+        font-weight: var(--wa-font-weight-semibold);
+        font-size: var(--wa-font-size-2xs);
         letter-spacing: 0;
         color: var(--wa-color-text-quiet);
       }
-      .seg {
-        display: inline-flex;
-        gap: 2px;
-        padding: 3px;
-        border-radius: var(--wa-border-radius-pill);
-        background: var(--wa-color-surface-lowered);
-        box-shadow: var(--vsa-shadow-carve);
+
+      /* Navigation */
+      .site-nav a {
+        display: block;
+        padding: var(--wa-space-2xs) var(--wa-space-xs);
+        border-radius: var(--wa-border-radius-s);
+        color: var(--wa-color-neutral-on-quiet);
+        text-decoration: none;
       }
-      .theme-corner {
-        position: fixed;
-        top: 16px;
-        right: 20px;
-        z-index: 10;
-      }
-      .seg button {
-        all: unset;
-        cursor: pointer;
-        padding: 5px 10px;
-        border-radius: var(--wa-border-radius-pill);
-        font-size: var(--wa-font-size-2xs);
-        color: var(--wa-form-control-placeholder-color);
-      }
-      .seg button[aria-pressed='true'] {
-        background: var(--vsa-gradient-surface);
-        box-shadow: var(--vsa-shadow-raise-sm);
-        color: var(--wa-color-text-normal);
-      }
-      .seg button:focus-visible {
-        outline: var(--wa-focus-ring-width) solid var(--wa-color-brand-fill-loud);
-      }
-      details.section {
-        margin-top: 10px;
-        border-top: 1px solid var(--wa-color-surface-border);
-        padding-top: 6px;
-      }
-      details.section > summary {
-        list-style: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 8px;
-        border-radius: 8px;
-        font: 700 var(--wa-font-size-xs) / 1 var(--wa-font-family-body);
-        text-transform: uppercase;
-        letter-spacing: var(--vsa-letter-spacing-caps);
-        color: var(--wa-color-text-normal);
-      }
-      details.section > summary::-webkit-details-marker {
-        display: none;
-      }
-      details.section > summary::before {
-        content: '';
-        width: 7px;
-        height: 7px;
-        border-right: 2px solid var(--wa-color-brand-fill-loud);
-        border-bottom: 2px solid var(--wa-color-brand-fill-loud);
-        transform: rotate(-45deg);
-        transition: transform var(--wa-transition-fast);
-        flex: none;
-      }
-      details.section[open] > summary::before {
-        transform: rotate(45deg) translate(-2px, -2px);
-      }
-      details.section > summary:hover {
+      .site-nav a:hover {
         background: var(--wa-color-neutral-fill-quiet);
+        color: var(--wa-color-text-normal);
       }
-      details.section > summary:focus-visible {
-        outline: var(--wa-focus-ring-width) solid var(--wa-color-brand-fill-loud);
+      .site-nav a[aria-current='page'] {
+        background: var(--vsa-gradient-surface);
+        box-shadow: var(--wa-shadow-s);
+        color: var(--wa-color-text-normal);
       }
-      nav.side ul {
+      .site-nav a .mark {
+        display: inline-block;
+        inline-size: 1.2em;
+        color: var(--wa-color-brand-on-normal);
+        font-weight: var(--wa-font-weight-bold);
+      }
+      .site-nav ul {
         list-style: none;
         margin: 0;
         padding: 0;
       }
-      nav.side li a {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 6px 8px;
-        border-radius: 8px;
-        text-decoration: none;
-        color: var(--wa-color-neutral-on-quiet);
-      }
-      nav.side li a:hover {
-        background: var(--wa-color-neutral-fill-quiet);
-      }
-      nav.side li a[aria-current='page'] {
-        background: var(--vsa-gradient-surface);
-        box-shadow: var(--vsa-shadow-raise-sm);
-        color: var(--wa-color-text-normal);
-      }
-      nav.side ul.marked li a {
-        justify-content: flex-start;
-      }
-      nav.side .mark {
-        flex: none;
-        width: 14px;
-        text-align: center;
-        font-weight: 700;
-        color: var(--wa-color-brand-fill-loud);
+      .site-nav wa-details::part(header) {
+        text-transform: uppercase;
+        letter-spacing: var(--vsa-letter-spacing-caps);
+        font-size: var(--wa-font-size-xs);
+        font-weight: var(--wa-font-weight-bold);
       }
       .sub-group {
-        margin: 10px 8px 2px;
+        margin: var(--wa-space-s) var(--wa-space-xs) var(--wa-space-3xs);
         font-size: var(--wa-font-size-2xs);
-        font-weight: 600;
-        color: var(--wa-color-neutral-on-quiet);
-      }
-      .filter {
-        margin: 0 6px 8px;
-      }
-      .lvl-tag {
-        display: inline-block;
-        padding: 2px 7px;
-        border-radius: 999px;
-        font-size: 10.5px;
-        font-weight: 600;
-        white-space: nowrap;
-      }
-      .lvl-theme {
-        --lvl: var(--wa-color-brand-fill-loud);
-      }
-      .lvl-project {
-        --lvl: var(--wa-color-success-fill-loud);
-      }
-      .lvl-web {
-        --lvl: var(--wa-color-text-quiet);
-      }
-      .lvl-tag {
-        color: var(--lvl);
-        background: color-mix(in srgb, var(--lvl) 14%, transparent);
-      }
-      .lvl-planned {
-        --lvl: var(--wa-color-neutral-border-normal);
-      }
-      .topo {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 10px;
-        margin: 16px 0 24px;
-      }
-      .topo .node {
-        display: grid;
-        gap: 3px;
-        min-width: 132px;
-        padding: 12px 14px;
-        border-radius: var(--wa-border-radius-m);
-        text-decoration: none;
-        color: var(--wa-color-text-normal);
-        background: var(--vsa-gradient-surface);
-        box-shadow: var(--vsa-shadow-raise-sm);
-        border-top: 3px solid var(--lvl);
-      }
-      .topo a.node:hover {
-        box-shadow: var(--vsa-shadow-raise);
-      }
-      .topo .node span {
-        font-size: var(--wa-font-size-xs);
+        font-weight: var(--wa-font-weight-semibold);
         color: var(--wa-color-text-quiet);
-      }
-      .topo .node code {
-        justify-self: start;
-      }
-      .topo .node-stack {
-        display: grid;
-        gap: 8px;
-      }
-      .topo .arrow {
-        color: var(--wa-color-text-quiet);
-        font-size: 18px;
-      }
-      .topo .lvl-planned {
-        border-top-style: dashed;
-        opacity: 0.75;
-      }
-      @media (max-width: 760px) {
-        .topo {
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .topo .arrow {
-          transform: rotate(90deg);
-          align-self: center;
-        }
-      }
-      .chain .lvl {
-        border-bottom: 2px solid color-mix(in srgb, var(--lvl) 55%, transparent);
       }
 
+      /* Content */
       main {
-        padding: 64px 40px 80px;
-        max-width: 1040px;
-        width: 100%;
+        max-inline-size: 68rem;
       }
-      .page h1 {
-        margin: 0 0 6px;
-        font: var(--vsa-font-weight-display) var(--wa-font-size-3xl) / 1.1 var(--wa-font-family-heading);
+      main h1 {
         letter-spacing: var(--vsa-letter-spacing-display);
       }
-      .page .lead {
-        margin: 0 0 24px;
+      main .lead {
         font-size: var(--wa-font-size-l);
         color: var(--wa-color-neutral-on-quiet);
-        max-width: 70ch;
       }
-      .page h2 {
-        margin: 36px 0 12px;
-        font: 600 var(--wa-font-size-xl) / 1.2 var(--wa-font-family-body);
+      main .meta {
+        margin-block-end: var(--wa-space-l);
       }
-      .page h3 {
-        margin: 24px 0 8px;
-        font: 600 var(--wa-font-size-l) / 1.2 var(--wa-font-family-body);
-      }
-      .page p,
-      .page li {
-        max-width: 75ch;
-      }
-      .page code {
-        font: 12px/1.4 var(--wa-font-family-code);
-        background: var(--wa-color-neutral-fill-quiet);
-        padding: 1px 5px;
-        border-radius: 5px;
-      }
-      .page pre.vsa-code {
-        margin: 12px 0 20px;
-      }
-      .meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: center;
-        margin-bottom: 20px;
+      main :is(p, li) {
+        max-inline-size: 75ch;
       }
 
+      /* An "html preview" block: the live HTML in a card, and its code in the card footer. */
       .example {
-        margin: 12px 0 20px;
-        border-radius: var(--wa-border-radius-l);
-        background: var(--vsa-gradient-surface);
-        box-shadow: var(--vsa-shadow-raise);
+        margin-block: var(--wa-space-m) var(--wa-space-l);
       }
-      .example .preview {
-        padding: 24px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        align-items: center;
-      }
-      .example details {
-        border-top: 1px solid var(--wa-color-surface-border);
-      }
-      .example summary {
-        list-style: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 14px 24px 16px;
-        border-radius: 0 0 var(--wa-border-radius-l) var(--wa-border-radius-l);
-        font-size: var(--wa-font-size-xs);
-        color: var(--wa-color-text-quiet);
-      }
-      .example summary::-webkit-details-marker {
-        display: none;
-      }
-      .example summary::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-right: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        transform: rotate(-45deg);
-        transition: transform var(--wa-transition-fast);
-        flex: none;
-      }
-      .example details[open] summary {
-        padding-bottom: 12px;
-        border-radius: 0;
-      }
-      .example details[open] summary::before {
-        transform: rotate(45deg) translate(-2px, -2px);
-      }
-      .example summary:hover {
-        color: var(--wa-color-text-normal);
-      }
-      .example summary:focus-visible {
-        outline: var(--wa-focus-ring-width) solid var(--wa-color-brand-fill-loud);
-        outline-offset: -2px;
-      }
-      .example details[open] {
-        padding-bottom: 20px;
-      }
-      .example details pre.vsa-code {
-        margin: 0 20px;
-      }
-      @media (max-width: 600px) {
-        .example details pre.vsa-code {
-          margin: 0 8px;
-        }
-        .example details[open] {
-          padding-bottom: 8px;
-        }
-        .page pre.vsa-code {
-          padding: 10px;
-        }
+      .example pre.vsa-code {
+        margin: 0;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 8px 0 20px;
-        font-size: var(--wa-font-size-xs);
-      }
-      th {
-        text-align: left;
-        font-weight: 600;
-        color: var(--wa-color-text-quiet);
-        padding: 8px 10px;
-        border-bottom: 1px solid var(--wa-color-surface-border);
-      }
-      td {
-        padding: 8px 10px;
-        border-bottom: 1px solid var(--wa-color-surface-border);
-        vertical-align: top;
-      }
+      /* Tables */
       vsa-table:not(:state(stacked)) td code {
         white-space: nowrap;
       }
       vsa-table:state(stacked) td code {
         overflow-wrap: anywhere;
       }
-      table.api td.name {
-        width: 60%;
+      table {
+        font-size: var(--wa-font-size-s);
       }
-      table.api .attr {
-        display: inline-block;
-        margin-left: 8px;
-        font: 11px/1.3 var(--wa-font-family-code);
+      table.api .attr,
+      .val,
+      .chain {
+        font-family: var(--wa-font-family-code);
+        font-size: var(--wa-font-size-2xs);
         color: var(--wa-color-text-quiet);
-      }
-      table.api .desc {
-        margin-top: 4px;
-        color: var(--wa-color-neutral-on-quiet);
-      }
-      table.api td.type {
-        width: 28%;
-      }
-      table.api td.type code {
-        display: inline-block;
-        margin: 0 4px 4px 0;
-      }
-      .sw {
-        display: inline-block;
-        width: 28px;
-        height: 20px;
-        border-radius: 6px;
-        vertical-align: middle;
-        margin-right: 6px;
-        box-shadow: inset 0 0 0 1px var(--wa-color-surface-border);
-      }
-      .demo-shadow {
-        width: 64px;
-        height: 36px;
-        border-radius: 10px;
-        background: var(--vsa-gradient-surface);
-      }
-      .demo-radius {
-        width: 40px;
-        height: 28px;
-        background: var(--wa-color-brand-fill-loud);
-      }
-      .demo-space {
-        height: 10px;
-        background: var(--wa-color-brand-fill-loud);
-        border-radius: 3px;
       }
       .val {
-        font: 11px/1.4 var(--wa-font-family-code);
-        color: var(--wa-color-text-quiet);
         word-break: break-all;
       }
       .chain {
-        font: 11px/1.6 var(--wa-font-family-code);
-        color: var(--wa-color-neutral-on-quiet);
         overflow-wrap: anywhere;
-        width: 60%;
-      }
-      td:has(> .scheme) {
-        width: 20%;
-        min-width: 96px;
       }
       .chain b {
         color: var(--wa-color-text-normal);
-        font-weight: 500;
+        font-weight: var(--wa-font-weight-semibold);
+      }
+      .chain .lvl-theme {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-brand-border-normal);
+      }
+      .chain .lvl-project {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-success-border-normal);
+      }
+      .scheme {
+        padding: var(--wa-space-2xs) var(--wa-space-xs);
+        border-radius: var(--wa-border-radius-s);
+        background: var(--wa-color-surface-default);
+        color: var(--wa-color-text-normal);
+      }
+
+      /* Token samples */
+      .sw {
+        display: inline-block;
+        inline-size: 2em;
+        block-size: 1.4em;
+        border-radius: var(--wa-border-radius-s);
+        vertical-align: middle;
+        box-shadow: inset 0 0 0 var(--wa-border-width-s) var(--wa-color-surface-border);
+      }
+      .demo-shadow {
+        inline-size: 4.5em;
+        block-size: 2.5em;
+        border-radius: var(--wa-border-radius-m);
+        background: var(--vsa-gradient-surface);
+      }
+      .demo-radius {
+        inline-size: 3em;
+        block-size: 2em;
+        background: var(--wa-color-brand-fill-loud);
+      }
+      .demo-space {
+        block-size: var(--wa-space-xs);
+        background: var(--wa-color-brand-fill-loud);
+        border-radius: var(--wa-border-radius-s);
+      }
+      .demo-font {
+        font-size: var(--wa-font-size-l);
       }
       .probes {
         position: absolute;
-        width: 0;
-        height: 0;
+        inline-size: 0;
+        block-size: 0;
         overflow: hidden;
       }
       .empty {
         color: var(--wa-color-text-quiet);
         font-style: italic;
       }
-
-      .menu-toggle {
-        display: none;
-      }
-      @media (max-width: 760px) {
-        .shell {
-          grid-template-columns: minmax(0, 1fr);
-        }
-        nav.side {
-          position: static;
-          height: auto;
-          border-right: 0;
-          border-bottom: 1px solid var(--wa-color-surface-border);
-          padding: 14px 16px;
-        }
-        nav.side .lists,
-        nav.side .filter {
-          display: none;
-        }
-        nav.side.open .lists,
-        nav.side.open .filter {
-          display: block;
-        }
-        nav.side.open .filter {
-          margin-top: 12px;
-        }
-        .menu-toggle {
-          display: inline-flex;
-          flex: none;
-        }
-        .top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-        }
-        .top .brand {
-          margin: 0;
-          font-size: 18px;
-          white-space: nowrap;
-        }
-        .theme-corner {
-          position: static;
-          margin-top: 12px;
-        }
-        main {
-          padding: 20px 16px 60px;
-        }
-      }
     </style>
   </head>
   <body>
-    <div class="shell">
-      <nav class="side" aria-label="Design system">
-        <div class="top">
-          <a class="brand" href="#/">VSA Design System<small>on Web Awesome 3.14.0</small></a>
-          <wa-button class="menu-toggle" size="s" appearance="outlined">Menu</wa-button>
-        </div>
-        <div class="seg theme-corner" role="group" aria-label="Theme">
-          <button type="button" data-theme-choice="system">System</button>
-          <button type="button" data-theme-choice="light">Light</button>
-          <button type="button" data-theme-choice="dark">Dark</button>
-        </div>
+    <wa-page mobile-breakpoint="920">
+      <header slot="header" class="mobile-header wa-split wa-mobile-only">
+        <a class="brand" href="#/">VSA Design System</a>
+        <wa-button data-toggle-nav appearance="plain" size="s">
+          <wa-icon name="bars" label="Menu"></wa-icon>
+        </wa-button>
+      </header>
+      <header slot="navigation-header" class="wa-stack wa-gap-s">
+        <a class="brand" href="#/" data-drawer="close">VSA Design System<small>on Web Awesome 3.14.0</small></a>
+        <wa-radio-group class="theme-switch" orientation="horizontal" size="s" label="Theme" value="system">
+          <wa-radio appearance="button" value="system">System</wa-radio>
+          <wa-radio appearance="button" value="light">Light</wa-radio>
+          <wa-radio appearance="button" value="dark">Dark</wa-radio>
+        </wa-radio-group>
         <wa-input class="filter" size="s" placeholder="Search pages" aria-label="Search pages" with-clear></wa-input>
-        <div class="lists"></div>
-      </nav>
-      <main id="page" class="page" tabindex="-1"></main>
-    </div>
+      </header>
+      <nav slot="navigation" class="site-nav wa-stack wa-gap-2xs" aria-label="Design system"></nav>
+      <main id="page" tabindex="-1"></main>
+    </wa-page>
     <div class="probes" aria-hidden="true">
       <div id="probe-light" class="wa-light"><span></span></div>
       <div id="probe-dark" class="wa-dark"><span></span></div>
@@ -600,23 +308,17 @@
         const isDark = choice === 'dark' || (choice === 'system' && darkMq.matches);
         root.classList.toggle('wa-dark', isDark);
         root.classList.toggle('wa-light', !isDark);
-        document
-          .querySelectorAll('[data-theme-choice]')
-          .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeChoice === choice)));
+        themeSwitch.value = choice;
       }
-      document.querySelectorAll('[data-theme-choice]').forEach(b =>
-        b.addEventListener('click', () => {
-          try {
-            localStorage.setItem(KEY, b.dataset.themeChoice);
-          } catch {}
-          applyTheme(b.dataset.themeChoice);
-        }),
-      );
+      const themeSwitch = document.querySelector('.theme-switch');
+      themeSwitch.addEventListener('change', () => {
+        try {
+          localStorage.setItem(KEY, themeSwitch.value);
+        } catch {}
+        applyTheme(themeSwitch.value);
+      });
       darkMq.addEventListener('change', () => applyTheme(readTheme()));
       applyTheme(readTheme());
-      document
-        .querySelector('.menu-toggle')
-        .addEventListener('click', () => document.querySelector('nav.side').classList.toggle('open'));
 
       /* Tokens: declared values from the stylesheets this page can read. A later declaration wins. */
       let tokenMap;
@@ -686,9 +388,15 @@
         else if (k === 'shadow') holder.innerHTML = `<div class="demo-shadow" style="box-shadow:${v}"></div>`;
         else if (k === 'radius') holder.innerHTML = `<div class="demo-radius" style="border-radius:${v}"></div>`;
         else if (k === 'space') holder.innerHTML = `<div class="demo-space" style="width:${v}"></div>`;
-        else if (k === 'font') holder.innerHTML = `<span style="font-family:${v};font-size:15px">Aa Runner 0123</span>`;
+        else if (k === 'font')
+          holder.innerHTML = `<span class="demo-font" style="font-family:${v}">Aa Runner 0123</span>`;
         else holder.innerHTML = `<span class="val">${esc(computed(box, name))}</span>`;
         return holder.innerHTML;
+      }
+      /* The level of a token as a badge: the theme layer is brand, a project token is success, a Web Awesome default is neutral. */
+      function levelBadge(text) {
+        const variant = { 'Theme layer': 'brand', 'Project token': 'success' }[text] || 'neutral';
+        return `<wa-badge variant="${variant}" appearance="filled">${esc(text)}</wa-badge>`;
       }
       /* Query: an optional regex for the name, and an optional @file, for example "^--wa-color- @vsa.css". */
       function tokenTable(query) {
@@ -711,9 +419,9 @@
               c.value && !/^var\(--[\w-]+\)$/.test(c.value)
                 ? ` → <span class="val">${esc(c.value.length > 70 ? c.value.slice(0, 70) + '…' : c.value)}</span>`
                 : '';
-            const light = `<div class="scheme wa-light" style="background:var(--wa-color-surface-default);padding:6px 8px;border-radius:8px">${demo(n, 'probe-light')}</div>`;
-            const dark = `<div class="scheme wa-dark" style="background:var(--wa-color-surface-default);padding:6px 8px;border-radius:8px">${demo(n, 'probe-dark')}</div>`;
-            return `<tr><td><span class="lvl-tag lvl-${esc(level(map.get(n).file, n).split(' ')[0].toLowerCase())}">${esc(level(map.get(n).file, n))}</span></td><td class="chain">${path}${tail}</td><td>${light}</td><td>${dark}</td></tr>`;
+            const light = `<div class="scheme wa-light">${demo(n, 'probe-light')}</div>`;
+            const dark = `<div class="scheme wa-dark">${demo(n, 'probe-dark')}</div>`;
+            return `<tr><td>${levelBadge(level(map.get(n).file, n))}</td><td class="chain">${path}${tail}</td><td>${light}</td><td>${dark}</td></tr>`;
           })
           .join('');
         return `<vsa-table><table><thead><tr><th>Level</th><th>Token and path to the value</th><th>Light</th><th>Dark</th></tr></thead><tbody>${rows}</tbody></table></vsa-table>`;
@@ -725,7 +433,7 @@
           code(code, info) {
             const lang = (info || '').trim();
             if (lang === 'html preview')
-              return `<div class="example"><div class="preview">${code}</div><details><summary>Code</summary>${codeBlock(code, 'html')}</details></div>`;
+              return `<wa-card class="example"><div class="preview wa-cluster wa-gap-m wa-align-items-center">${code}</div><wa-details slot="footer" appearance="plain" summary="Code">${codeBlock(code, 'html')}</wa-details></wa-card>`;
             if (lang.startsWith('tokens ')) return `<div data-tokens="${esc(lang.slice(7).trim())}"></div>`;
             return codeBlock(code, lang.split(/\s+/)[0]);
           },
@@ -754,13 +462,7 @@
         cancelAnimationFrame(fitFrame);
         fitFrame = requestAnimationFrame(() => fitCode());
       });
-      document.addEventListener(
-        'toggle',
-        e => {
-          if (e.target instanceof HTMLDetailsElement) fitCode(e.target);
-        },
-        true,
-      );
+      document.addEventListener('wa-after-show', e => fitCode(e.target));
       document.fonts?.ready.then(() => fitCode());
       function renderMarkdown(md) {
         const div = document.createElement('div');
@@ -783,32 +485,42 @@
       async function buildNav() {
         const [ix, all] = await Promise.all([docsIndex(), manifest()]);
         const documented = new Set(ix.components.map(c => c.name));
-        const link = (href, label) => `<li><a href="${href}">${esc(label)}</a></li>`;
+        const link = (href, label) => `<li><a href="${href}" data-drawer="close">${esc(label)}</a></li>`;
         const markedLink = (href, label, done) =>
-          `<li><a href="${href}"><span class="mark" ${done ? 'title="Has a VSA usage page"' : 'aria-hidden="true"'}>${done ? '✓' : ''}</span><span class="label">${esc(label)}</span></a></li>`;
+          `<li><a href="${href}" data-drawer="close"><span class="mark" ${done ? 'title="Has a VSA usage page"' : 'aria-hidden="true"'}>${done ? '✓' : ''}</span>${esc(label)}</a></li>`;
         const names = [...new Set([...all.keys(), ...documented])];
         const byCategory = ix.categoryOrder.map(cat => [
           cat,
           names.filter(n => (ix.categories[n] || 'Helpers') === cat).sort(),
         ]);
-        const section = (id, title, body, note = '') =>
-          `<details class="section" data-section="${id}"${folded.has(id) ? '' : ' open'}><summary>${esc(title)}${note}</summary>${body}</details>`;
-        document.querySelector('nav.side .lists').innerHTML = `
+        const section = (id, title, body) =>
+          `<wa-details appearance="plain" data-section="${id}" summary="${esc(title)}"${folded.has(id) ? '' : ' open'}>${body}</wa-details>`;
+        nav.innerHTML = `
     <ul>${link('#/', 'Overview')}${link('#/gallery', 'Gallery')}</ul>
     ${section('foundations', 'Foundations', `<ul>${ix.foundations.map(f => link('#/foundations/' + f.name, f.title)).join('')}</ul>`)}
     ${section('tokens', 'Tokens', `<ul>${ix.tokens.map(t => link('#/tokens/' + t.name, t.title)).join('')}</ul>`)}
-    ${section('components', 'Components', byCategory.map(([cat, list]) => `<div class="sub-group">${esc(cat)}</div><ul class="marked">${list.map(n => markedLink('#/components/' + n, ix.components.find(c => c.name === n)?.title || titleOf(n), documented.has(n))).join('')}</ul>`).join(''))}`;
-        document.querySelectorAll('nav.side details.section').forEach(d =>
-          d.addEventListener('toggle', () => {
+    ${section('components', 'Components', byCategory.map(([cat, list]) => `<div class="sub-group">${esc(cat)}</div><ul>${list.map(n => markedLink('#/components/' + n, ix.components.find(c => c.name === n)?.title || titleOf(n), documented.has(n))).join('')}</ul>`).join(''))}`;
+        nav.querySelectorAll('wa-details').forEach(d => {
+          const remember = () => {
             if (searching) return;
             if (d.open) folded.delete(d.dataset.section);
             else folded.add(d.dataset.section);
             try {
               localStorage.setItem(FOLD_KEY, JSON.stringify([...folded]));
             } catch {}
-          }),
-        );
+          };
+          d.addEventListener('wa-after-show', remember);
+          d.addEventListener('wa-after-hide', remember);
+        });
         markCurrent();
+      }
+      const nav = document.querySelector('.site-nav');
+      /* The nav is in the wa-page drawer on mobile. The show and hide events of the wa-details sections bubble,
+         and the drawer reads them as its own events. So they stop at the nav. */
+      for (const type of ['wa-show', 'wa-after-show', 'wa-hide', 'wa-after-hide']) {
+        nav.addEventListener(type, e => {
+          if (e.target !== nav) e.stopPropagation();
+        });
       }
       const FOLD_KEY = 'vsa-ds-folded';
       let folded = new Set();
@@ -819,29 +531,27 @@
       function filterNav(q) {
         q = q.trim().toLowerCase();
         searching = !!q;
-        const lists = document.querySelector('nav.side .lists');
-        lists.querySelectorAll('li').forEach(li => {
+        nav.querySelectorAll('li').forEach(li => {
           li.hidden = !!q && !li.textContent.toLowerCase().includes(q);
         });
-        lists.querySelectorAll('ul').forEach(ul => {
+        nav.querySelectorAll('ul').forEach(ul => {
           const empty = !!q && ![...ul.children].some(li => !li.hidden);
           ul.hidden = empty;
           const head = ul.previousElementSibling;
           if (head?.classList.contains('sub-group')) head.hidden = empty;
         });
-        lists.querySelectorAll('details.section').forEach(d => {
+        nav.querySelectorAll('wa-details').forEach(d => {
           d.hidden = !!q && ![...d.querySelectorAll('li')].some(li => !li.hidden);
           d.open = q ? true : !folded.has(d.dataset.section);
         });
-        if (q) document.querySelector('nav.side').classList.add('open');
         setTimeout(() => {
           searching = false;
-        });
+        }, 400);
       }
       document.querySelector('.filter').addEventListener('input', e => filterNav(e.target.value || ''));
       function markCurrent() {
         const h = location.hash || '#/';
-        document.querySelectorAll('nav.side .lists a').forEach(a => {
+        nav.querySelectorAll('a').forEach(a => {
           if (a.getAttribute('href') === h) a.setAttribute('aria-current', 'page');
           else a.removeAttribute('aria-current');
         });
@@ -929,7 +639,7 @@
         const title = doc?.title || titleOf(name);
         page.innerHTML = `<h1>${esc(title)}</h1>
     <p class="lead">${esc(d?.summary || doc?.summary || '')}</p>
-    <div class="meta">${d ? `<code>&lt;${esc(d.tagName)}&gt;</code>${d.tagName.startsWith('vsa-') ? '<wa-badge variant="brand" appearance="filled">VSA component</wa-badge>' : `<wa-badge variant="neutral" appearance="filled">${esc(d.status || '')}</wa-badge>`}${d.documentation ? `<a href="${esc(d.documentation)}" target="_blank" rel="noopener">Web Awesome docs</a>` : ''}` : ''}
+    <div class="meta wa-cluster wa-gap-xs wa-align-items-center">${d ? `<code>&lt;${esc(d.tagName)}&gt;</code>${d.tagName.startsWith('vsa-') ? '<wa-badge variant="brand" appearance="filled">VSA component</wa-badge>' : `<wa-badge variant="neutral" appearance="filled">${esc(d.status || '')}</wa-badge>`}${d.documentation ? `<a href="${esc(d.documentation)}" target="_blank" rel="noopener">Web Awesome docs</a>` : ''}` : ''}
     ${doc ? '<wa-badge variant="brand">VSA usage page</wa-badge>' : '<wa-badge variant="warning" appearance="filled">No VSA usage page yet</wa-badge>'}</div>`;
         if (doc) page.append(renderMarkdown(await loadText('components/' + name + '.md')));
         if (d) page.insertAdjacentHTML('beforeend', apiTables(d));
@@ -960,7 +670,6 @@
         main.querySelector('h1 + p')?.classList.add('lead');
         markCurrent();
         fitCode(main);
-        document.querySelector('nav.side').classList.remove('open');
         window.scrollTo(0, 0);
       }
       addEventListener('hashchange', route);

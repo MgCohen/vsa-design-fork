@@ -17,22 +17,22 @@ One example of each component with the VSA look, grouped by category. To see all
   <wa-button>Month</wa-button>
 </wa-button-group>
 <wa-copy-button value="dotnet test"
-  aria-label="Copy the command"></wa-copy-button>
+  copy-label="Copy the command"></wa-copy-button>
 ```
 
 ## Forms
 
 ```html preview
 <wa-input label="Name" placeholder="Runner name"
-  style="width: 220px"></wa-input>
+  style="width: 14rem"></wa-input>
 <wa-select label="Source" value="git"
-  style="width: 180px">
+  style="width: 11rem">
   <wa-option value="git">Git</wa-option>
   <wa-option value="nuget">NuGet</wa-option>
 </wa-select>
 <wa-textarea label="Notes" rows="2"
   placeholder="Write a note"
-  style="width: 220px"></wa-textarea>
+  style="width: 14rem"></wa-textarea>
 <wa-switch checked>Sync</wa-switch>
 <wa-checkbox checked>Run tests</wa-checkbox>
 <wa-radio-group label="Channel" value="stable"
@@ -41,17 +41,17 @@ One example of each component with the VSA look, grouped by category. To see all
   <wa-radio value="preview">Preview</wa-radio>
 </wa-radio-group>
 <wa-slider label="Parallel jobs" min="1" max="16"
-  value="6" style="width: 200px"></wa-slider>
+  value="6" style="width: 12rem"></wa-slider>
 <wa-rating label="Rating" value="3"></wa-rating>
 ```
 
 ## Feedback
 
 ```html preview
-<wa-callout variant="success" style="width: 260px">
+<wa-callout variant="success" style="width: 16rem">
   All 412 tests pass.
 </wa-callout>
-<wa-callout variant="danger" style="width: 260px">
+<wa-callout variant="danger" style="width: 16rem">
   The build failed.
 </wa-callout>
 <wa-badge variant="success">Done</wa-badge>
@@ -59,7 +59,7 @@ One example of each component with the VSA look, grouped by category. To see all
 <wa-badge variant="danger">Failed</wa-badge>
 <wa-tag>net10.0</wa-tag>
 <wa-progress-bar value="62" label="Build"
-  style="width: 200px"></wa-progress-bar>
+  style="width: 12rem"></wa-progress-bar>
 <wa-progress-ring value="62" label="Build">
 </wa-progress-ring>
 <wa-spinner></wa-spinner>
@@ -98,7 +98,7 @@ One example of each component with the VSA look, grouped by category. To see all
 ## Layout
 
 ```html preview
-<wa-card style="width: 260px">
+<wa-card style="width: 16rem">
   <div slot="header">Runner Home</div>
   A card is a raised panel.
   <div slot="footer">
@@ -106,7 +106,7 @@ One example of each component with the VSA look, grouped by category. To see all
   </div>
 </wa-card>
 <wa-details summary="Build settings"
-  style="width: 260px">
+  style="width: 16rem">
   Release, net10.0, no restore.
 </wa-details>
 <wa-divider style="width: 100%"></wa-divider>
