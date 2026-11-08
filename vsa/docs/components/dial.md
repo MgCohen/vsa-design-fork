@@ -1,3 +1,47 @@
+## Test: the dial as a styled wa-progress-ring
+
+Decision `0008` tests if the dial can be `wa-progress-ring` with the house class `vsa-dial`, so that Web Awesome gives the behavior. In each row: `vsa-dial` left, `wa-progress-ring.vsa-dial` right.
+
+```html preview
+<vsa-dial value="72" label="Tests that pass"></vsa-dial>
+<wa-progress-ring class="vsa-dial" value="72" label="Tests that pass">72%</wa-progress-ring>
+```
+
+```html preview
+<vsa-dial value="90" variant="success" label="Done"></vsa-dial>
+<wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
+<vsa-dial value="20" variant="danger" label="Failed"></vsa-dial>
+<wa-progress-ring class="vsa-dial wa-danger" value="20" label="Failed">20%</wa-progress-ring>
+```
+
+Move the slider: it sets the value of both dials.
+
+```html preview
+<div class="wa-stack wa-gap-m dial-test">
+  <div class="wa-cluster wa-gap-l wa-align-items-center">
+    <vsa-dial value="72" label="Test value"></vsa-dial>
+    <wa-progress-ring class="vsa-dial" value="72" label="Test value">72%</wa-progress-ring>
+    <vsa-dial size="s" value="72" label="Test value"></vsa-dial>
+    <wa-progress-ring class="vsa-dial vsa-dial-s" value="72" label="Test value"></wa-progress-ring>
+  </div>
+  <wa-slider label="Value" min="0" max="100" value="72"></wa-slider>
+</div>
+<script>
+  for (const box of document.querySelectorAll('.dial-test')) {
+    const slider = box.querySelector('wa-slider');
+    slider.addEventListener('input', () => {
+      for (const dial of box.querySelectorAll('vsa-dial, wa-progress-ring')) dial.value = slider.value;
+      for (const ring of box.querySelectorAll('wa-progress-ring:not(.vsa-dial-s)')) ring.textContent = `${slider.value}%`;
+    });
+  }
+</script>
+```
+
+```html preview
+<vsa-dial size="s" value="60" label="Sync"></vsa-dial>
+<wa-progress-ring class="vsa-dial vsa-dial-s" value="60" label="Sync"></wa-progress-ring>
+```
+
 ## When to use it
 
 - Use a dial to show one value of a whole, for example the part of the tests that pass.
@@ -51,27 +95,6 @@ Use `size="s"`, `"m"` (the default) or `"l"`. The small dial has a shallow carve
   label="Build"></vsa-dial>
 <vsa-dial value="72" label="Tests"></vsa-dial>
 <vsa-dial size="l" value="72" label="Tests"></vsa-dial>
-```
-
-## Test: the dial as a styled wa-progress-ring
-
-Decision `0008` tests if the dial can be `wa-progress-ring` with the house class `vsa-dial`, so that Web Awesome gives the behavior. In each row: `vsa-dial` left, `wa-progress-ring.vsa-dial` right.
-
-```html preview
-<vsa-dial value="72" label="Tests that pass"></vsa-dial>
-<wa-progress-ring class="vsa-dial" value="72" label="Tests that pass">72%</wa-progress-ring>
-```
-
-```html preview
-<vsa-dial value="90" variant="success" label="Done"></vsa-dial>
-<wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
-<vsa-dial value="20" variant="danger" label="Failed"></vsa-dial>
-<wa-progress-ring class="vsa-dial wa-danger" value="20" label="Failed">20%</wa-progress-ring>
-```
-
-```html preview
-<vsa-dial size="s" value="60" label="Sync"></vsa-dial>
-<wa-progress-ring class="vsa-dial vsa-dial-s" value="60" label="Sync"></wa-progress-ring>
 ```
 
 ## Accessibility

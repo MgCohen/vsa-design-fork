@@ -668,6 +668,12 @@
           el.outerHTML = tokenTable(el.dataset.tokens);
         });
         main.replaceChildren(...page.childNodes);
+        // A script in an "html preview" block runs, so that an example can be interactive. innerHTML does not run it.
+        main.querySelectorAll('.example .preview script').forEach(old => {
+          const script = document.createElement('script');
+          script.textContent = old.textContent;
+          old.replaceWith(script);
+        });
         main.querySelector('h1 + p')?.classList.add('lead');
         markCurrent();
         fitCode(main);
