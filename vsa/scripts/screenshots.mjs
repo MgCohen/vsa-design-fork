@@ -56,6 +56,13 @@ try {
         if (msg.type() === 'error') problems.push(`${viewportName} ${scheme}: console error: ${msg.text()}`);
       });
       page.on('pageerror', err => problems.push(`${viewportName} ${scheme}: page error: ${err.message}`));
+      // We own every file we ship. The only outside host allowed is Google Fonts.
+      page.on('request', req => {
+        const host = new URL(req.url()).hostname;
+        if (/^(localhost|fonts\.googleapis\.com|fonts\.gstatic\.com)$/.test(host) || req.url().startsWith('data:'))
+          return;
+        problems.push(`${viewportName} ${scheme}: request to an outside host: ${req.url()}`);
+      });
       for (const route of PAGES) {
         await page.goto(`${base}#${route}`);
         await page.waitForFunction(() => document.querySelector('main h1'), null, { timeout: 15000 });

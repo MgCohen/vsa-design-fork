@@ -22,3 +22,6 @@ node_modules
 packages/**/*/_site
 packages/**/*/_bundle_
 packages/webawesome/docs/assets/scripts/prism-downloaded.js
+
+# Vendored build output. Do not format. See vsa/scripts/vendor-webawesome.mjs
+vsa/vendor

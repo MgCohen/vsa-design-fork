@@ -285,7 +285,8 @@
     "docs/assets/examples/include.html",
     ".vscode/**",
     "src/translations/!(en).ts",
-    "**/*.min.js"
+    "**/*.min.js",
+    "vsa/vendor/**"
   ],
   "ignoreRegExpList": [
     "(^|[^a-z])sl[a-z]*(^|[^a-z])"

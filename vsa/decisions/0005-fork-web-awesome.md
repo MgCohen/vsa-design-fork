@@ -34,7 +34,7 @@ We own the build so that every file we ship is ours, with no outside service at 
 ## Cost
 
 - A build step: Node, npm and esbuild. Automatic tests need Node in any case.
-- The upstream build assumes Linux or macOS. `scripts/make-react.js` makes wrong import paths on Windows. See `0007`.
+- The upstream build assumes Linux or macOS. On Windows it made wrong module paths. See `0007` for the fix.
 - Upstream fixes need a merge and a new build.
 
 ## Open questions

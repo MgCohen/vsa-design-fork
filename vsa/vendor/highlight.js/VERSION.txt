@@ -1,0 +1,1 @@
+highlight.js 11.9.0 browser build, from the npm package @highlightjs/cdn-assets@11.9.0.

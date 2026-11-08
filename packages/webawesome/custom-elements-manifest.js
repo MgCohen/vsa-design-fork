@@ -173,22 +173,25 @@ export default {
           //
           //  components/button/button.js
           //
+          // On Windows the analyzer gives absolute paths (C:/.../src/...). Make them relative to this
+          // package first, with forward slashes, so that the terms below match on every platform.
+          const relative = p => (p && path.isAbsolute(p) ? path.relative(__dirname, p).split(path.sep).join('/') : p);
           const terms = [
             { from: /^src\//, to: '' }, // Strip the src/ prefix
             { from: /\.(t|j)sx?$/, to: '.js' }, // Convert .ts to .js
           ];
 
-          mod.path = replace(mod.path, terms);
+          mod.path = replace(relative(mod.path), terms);
 
           for (const ex of mod.exports ?? []) {
-            ex.declaration.module = replace(ex.declaration.module, terms);
+            ex.declaration.module = replace(relative(ex.declaration.module), terms);
           }
 
           for (const dec of mod.declarations ?? []) {
             if (dec.kind === 'class') {
               for (const member of dec.members ?? []) {
                 if (member.inheritedFrom) {
-                  member.inheritedFrom.module = replace(member.inheritedFrom.module, terms);
+                  member.inheritedFrom.module = replace(relative(member.inheritedFrom.module), terms);
                 }
               }
             }

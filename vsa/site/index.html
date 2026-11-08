@@ -5,31 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VSA Design System</title>
     <link rel="stylesheet" href="../theme/fonts.css" />
-    <link
-      rel="stylesheet"
-      crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/styles/themes/default.css"
-    />
-    <link
-      rel="stylesheet"
-      crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/styles/utilities.css"
-    />
-    <link
-      rel="stylesheet"
-      crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/styles/native.css"
-    />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/themes/default.css" />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/utilities.css" />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/native.css" />
     <link rel="stylesheet" href="../theme/vsa.css" />
     <link rel="stylesheet" href="../theme/code.css" />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/webawesome.loader.js"
-    ></script>
+    <script type="module" src="../vendor/webawesome/webawesome.loader.js"></script>
     <script type="module" src="../components/vsa-dial.js"></script>
     <script type="module" src="../components/vsa-table.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked@11.2.0/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../vendor/marked/marked.min.js"></script>
+    <script src="../vendor/highlight.js/highlight.min.js"></script>
     <style>
       /*
         The docs site shell. It uses the system: wa-page for the layout and the mobile drawer,
@@ -265,7 +250,7 @@
       <div id="probe-dark" class="wa-dark"><span></span></div>
     </div>
     <script>
-      const MANIFEST_URL = 'https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/custom-elements.json';
+      const MANIFEST_URL = '../vendor/webawesome/custom-elements.json';
       const VSA_MANIFEST_URL = '../components/custom-elements.json';
       const DOCS_ROOT = '../docs/';
       const esc = s =>
