@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="../theme/looks.css" />
     <link rel="stylesheet" href="../theme/code.css" />
     <script type="module" src="../setup.js"></script>
-    <script type="module" src="../vendor/webawesome/webawesome.loader.js"></script>
+    <!-- data-webawesome: the base path for the loader, resolved from this page. Without it, the loader resolves the
+         relative src from its own chunk files. -->
+    <script
+      type="module"
+      src="../vendor/webawesome/webawesome.loader.js"
+      data-webawesome="../vendor/webawesome"
+    ></script>
     <script type="module" src="../components/vsa-dial.js"></script>
     <script type="module" src="../components/vsa-table.js"></script>
     <script src="../vendor/marked/marked.min.js"></script>
