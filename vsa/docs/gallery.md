@@ -110,6 +110,15 @@ One example of each component with the VSA look, grouped by category. To see all
   Release, net10.0, no restore.
 </wa-details>
 <wa-divider style="width: 100%"></wa-divider>
+<vsa-table style="width: 100%">
+  <table>
+    <thead><tr><th>Runner</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>build-01</td><td><wa-badge variant="success">Done</wa-badge></td></tr>
+      <tr><td>build-02</td><td><wa-badge variant="warning">Pending</wa-badge></td></tr>
+    </tbody>
+  </table>
+</vsa-table>
 ```
 
 ## Media

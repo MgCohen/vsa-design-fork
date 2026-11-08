@@ -47,17 +47,13 @@
     {
       "name": "switch",
       "title": "Switch"
+    },
+    {
+      "name": "table",
+      "title": "Table"
     }
   ],
-  "categoryOrder": [
-    "Actions",
-    "Forms",
-    "Feedback",
-    "Navigation",
-    "Layout",
-    "Media",
-    "Helpers"
-  ],
+  "categoryOrder": ["Actions", "Forms", "Feedback", "Navigation", "Layout", "Media", "Helpers"],
   "categories": {
     "accordion": "Layout",
     "accordion-item": "Layout",
@@ -133,6 +129,7 @@
     "tree": "Navigation",
     "tree-item": "Navigation",
     "zoomable-frame": "Media",
-    "dial": "Feedback"
+    "dial": "Feedback",
+    "table": "Layout"
   }
 }

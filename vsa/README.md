@@ -9,7 +9,7 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 | Path | Content |
 |---|---|
 | `theme/vsa.css` | The theme layer: the only place for `--wa-*` overrides, in the three blocks that Web Awesome recommends. It also sets the project tokens (`--vsa-*`) for the raised and carved looks. Then the looks, with `::part()` |
-| `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-dial` |
+| `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-dial` and `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
 | `theme/code.css` | The code block: project tokens for code colors, and the dark IDE look of `pre.vsa-code` |
 | `site/index.html` | The docs site: side menu, foundations, one page for each component, light and dark |
@@ -36,7 +36,7 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 2. Web Awesome `styles/themes/default.css` and `styles/utilities.css` from jsDelivr: their default tokens and the utilities, in cascade layers.
 3. `theme/vsa.css`: not in a layer, so it wins over all Web Awesome layers.
 4. `theme/code.css`: the code block.
-5. `components/vsa-dial.js`: it defines `<vsa-dial>`.
+5. `components/vsa-dial.js` and `components/vsa-table.js`: they define `<vsa-dial>` and `<vsa-table>`.
 6. Web Awesome `webawesome.loader.js` from jsDelivr: it loads each component when the page uses it.
 7. `marked` 11.2.0 from jsDelivr: it changes Markdown to HTML.
 8. `highlight.js` 11.9.0 from cdnjs: it gives the code colors.

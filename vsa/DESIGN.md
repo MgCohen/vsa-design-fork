@@ -21,6 +21,7 @@
 | Name | Built from | Use for | Defined in |
 |---|---|---|---|
 | `<vsa-dial>` | Own element: Web Awesome has no dial | One value of a whole, the main number of a card | `components/vsa-dial.js` |
+| `<vsa-table>` | Own element around a native `<table>`: Web Awesome has no narrow table layout | Each data table. In a narrow container, each row shows as a block | `components/vsa-table.js` |
 | `pre.vsa-code` | `<pre>` | A code sample, dark in both schemes | `theme/code.css` |
 
 **Conventions.** Main action: `variant="brand"`, one on each screen. Sizes: `s`, `m`, `l`. Status colors: `variant="success"`, `"warning"`, `"danger"`. An own element uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
