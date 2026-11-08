@@ -48,3 +48,22 @@ The skills must have the same version as the Web Awesome code in this repo.
 - **After the build works:** run `npm run build` in `packages/webawesome/`, then copy `packages/webawesome/dist/skills/webawesome/` and `packages/webawesome/dist/skills/webawesome-design/` to `.claude/skills/`. Then the `webawesome` skill describes our components, not the upstream ones.
 
 Do not edit the files in `.claude/skills/` by hand. The next update writes over them. Put our rules in `vsa/DESIGN.md`.
+
+## Publish the docs site
+
+The live docs site is the claude.ai artifact [VSA on Web Awesome](https://claude.ai/artifact/2DLUahWMpZMHyBMtu8EGDH). Keep it current: publish it again after each change to `vsa/` that a reader can see.
+
+1. Run `node vsa/scripts/build-artifact.mjs`. It writes `vsa/dist/vsa-design.html`. Git ignores this file.
+2. Publish that file with the Artifact tool, with `url` set to `https://claude.ai/artifact/2DLUahWMpZMHyBMtu8EGDH`. Do not publish without `url`, because that makes a new artifact with a new link.
+3. If the tool refuses because this session did not read the artifact, read it with `action: "read"` first. Then publish again.
+
+The script needs Node 18 or later and access to `cdn.jsdelivr.net`. It puts these items into one HTML file:
+
+| Item | Source |
+|---|---|
+| Our CSS and `vsa-dial.js` | `vsa/theme/`, `vsa/components/` |
+| The Web Awesome theme and utilities CSS | jsDelivr. An artifact page cannot load stylesheets from jsDelivr |
+| The docs pages | `vsa/docs/`, as `window.VSA_FILES` |
+| The two API manifests | `vsa/components/custom-elements.json`, and the Web Awesome manifest from jsDelivr |
+
+The page still loads the Web Awesome components, `marked` and `highlight.js` from the CDN at run time, and the fonts from Google Fonts.

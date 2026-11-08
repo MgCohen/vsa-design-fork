@@ -13,6 +13,7 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
 | `theme/code.css` | The code block: project tokens for code colors, and the dark IDE look of `pre.vsa-code` |
 | `site/index.html` | The docs site: side menu, foundations, one page for each component, light and dark |
+| `scripts/build-artifact.mjs` | Makes the docs site into one HTML file for the live artifact. See "Publish the docs site" in the root `AGENTS.md` |
 | `docs/index.json` | The menu: the foundations pages and the components that have a usage page |
 | `decisions/` | Design decisions. `0005` is the fork |
 | `reference/custom-design/` | Our first design system, before the fork: tokens, atoms, gallery and decisions `0001` to `0004`. Use it as a reference for the look and the gallery |
