@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="wa-theme-default wa-palette-default wa-light wa-cloak">
+<html lang="en" class="wa-theme-vsa wa-palette-vsa wa-brand-orange wa-light wa-cloak">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="../vendor/webawesome/styles/themes/default.css" />
     <link rel="stylesheet" href="../vendor/webawesome/styles/utilities.css" />
     <link rel="stylesheet" href="../vendor/webawesome/styles/native.css" />
-    <link rel="stylesheet" href="../theme/vsa.css" />
+    <link rel="stylesheet" href="../theme/palette.css" />
+    <link rel="stylesheet" href="../theme/theme.css" />
+    <link rel="stylesheet" href="../theme/looks.css" />
     <link rel="stylesheet" href="../theme/code.css" />
     <script type="module" src="../setup.js"></script>
     <script type="module" src="../vendor/webawesome/webawesome.loader.js"></script>
@@ -56,7 +58,7 @@
         border-block-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
       }
       .mobile-header .brand {
-        font-size: var(--wa-font-size-l);
+        font-size: var(--wa-font-size-m);
       }
       wa-page::part(navigation) {
         border-inline-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
@@ -65,7 +67,7 @@
       .brand {
         font-family: var(--wa-font-family-heading);
         font-weight: var(--wa-font-weight-heading);
-        font-size: var(--wa-font-size-xl);
+        font-size: var(--wa-font-size-l);
         letter-spacing: var(--vsa-letter-spacing-display);
         color: var(--wa-color-text-normal);
         text-decoration: none;
@@ -175,6 +177,9 @@
       }
       .chain .lvl-theme {
         border-block-end: var(--wa-border-width-m) solid var(--wa-color-brand-border-normal);
+      }
+      .chain .lvl-palette {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-warning-border-normal);
       }
       .chain .lvl-project {
         border-block-end: var(--wa-border-width-m) solid var(--wa-color-success-border-normal);
@@ -320,7 +325,7 @@
               continue;
             }
             if (r instanceof CSSMediaRule) continue;
-            if (r instanceof CSSStyleRule && /:root/.test(r.selectorText)) {
+            if (r instanceof CSSStyleRule && /:root|\.wa-theme-vsa|\.wa-palette-vsa/.test(r.selectorText)) {
               for (const p of r.style)
                 if (p.startsWith('--')) tokenMap.set(p, { value: r.style.getPropertyValue(p).trim(), file });
             }
@@ -335,12 +340,16 @@
         }
         return tokenMap;
       }
-      /* The level of a token: a --wa-* token that our theme layer sets, a --vsa-* project token, or a Web Awesome default. */
+      /* The level of a token: a hue tint of our palette, a --wa-* token that our theme sets, a --vsa-* project
+         token, or a Web Awesome default. */
       function level(file, name) {
-        if (file === 'vsa.css' || file === 'code.css')
-          return name.startsWith('--wa-') ? 'Theme layer' : 'Project token';
+        if (file === 'palette.css') return 'VSA palette';
+        if (name.startsWith('--vsa-')) return 'Project token';
+        if (file === 'theme.css') return 'VSA theme';
         return 'Web Awesome default';
       }
+      const levelKey = text =>
+        ({ 'VSA palette': 'palette', 'VSA theme': 'theme', 'Project token': 'project' })[text] || 'web';
       function chain(name) {
         const map = tokens();
         const steps = [name];
@@ -381,7 +390,8 @@
       }
       /* The level of a token as a badge: the theme layer is brand, a project token is success, a Web Awesome default is neutral. */
       function levelBadge(text) {
-        const variant = { 'Theme layer': 'brand', 'Project token': 'success' }[text] || 'neutral';
+        const variant =
+          { 'VSA theme': 'brand', 'VSA palette': 'warning', 'Project token': 'success' }[text] || 'neutral';
         return `<wa-badge variant="${variant}" appearance="filled">${esc(text)}</wa-badge>`;
       }
       /* Query: an optional regex for the name, and an optional @file, for example "^--wa-color- @vsa.css". */
@@ -398,7 +408,7 @@
             const path = c.steps
               .map(
                 (s, i) =>
-                  `<span class="lvl lvl-${esc(level(map.get(s)?.file, s).split(' ')[0].toLowerCase())}" title="${esc(level(map.get(s)?.file, s))}">${i === 0 ? `<b>${esc(s)}</b>` : esc(s)}</span>`,
+                  `<span class="lvl lvl-${levelKey(level(map.get(s)?.file, s))}" title="${esc(level(map.get(s)?.file, s))}">${i === 0 ? `<b>${esc(s)}</b>` : esc(s)}</span>`,
               )
               .join(' → ');
             const tail =

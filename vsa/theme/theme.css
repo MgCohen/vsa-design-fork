@@ -1,0 +1,258 @@
+/*
+  VSA theme, in the Web Awesome theme format (styles/themes/*.css), with the same selector sets and regions.
+  Use: class="wa-theme-vsa wa-palette-vsa wa-brand-orange" on <html>, plus wa-light or wa-dark.
+  Load after Web Awesome styles/themes/default.css. A token that this file does not set keeps its default value.
+  Rules: a role refers to a role tint (brand, neutral, success, warning, danger), never to a hex color. Sizes come
+  from the Web Awesome formulas and the scale controls. Decision record: vsa/decisions/0006-theme-and-palette.md.
+*/
+
+@layer wa-theme {
+  .wa-theme-vsa,
+  .wa-theme-vsa.wa-light,
+  .wa-theme-vsa .wa-light,
+  .wa-theme-vsa.wa-dark .wa-invert,
+  .wa-theme-vsa .wa-dark .wa-invert,
+  .wa-light .wa-theme-vsa,
+  .wa-dark .wa-theme-vsa.wa-invert,
+  .wa-dark .wa-theme-vsa .wa-invert {
+    /* #region Colors (Light) ~~~~~~~~~~~~~~~~~~~~~ */
+    color-scheme: light;
+    color: var(--wa-color-text-normal);
+
+    --wa-color-surface-raised: var(--wa-color-neutral-95);
+    --wa-color-surface-default: var(--wa-color-neutral-95);
+    --wa-color-surface-lowered: var(--wa-color-neutral-80);
+    --wa-color-surface-border: color-mix(in oklab, var(--wa-color-neutral-10) 9%, transparent);
+
+    --wa-color-text-normal: var(--wa-color-neutral-10);
+    --wa-color-text-quiet: var(--wa-color-neutral-40);
+    /* The brand fill (60) has less than 3:1 contrast on light surfaces. Links and focus use 40 (about 5.7:1). */
+    --wa-color-text-link: var(--wa-color-brand-40);
+    --wa-color-focus: var(--wa-color-brand-40);
+
+    --wa-color-shadow: color-mix(in oklab, var(--wa-color-neutral-10) 12%, transparent);
+
+    --wa-color-brand-fill-quiet: color-mix(in oklab, var(--wa-color-brand-60) 10%, transparent);
+    --wa-color-brand-fill-normal: color-mix(in oklab, var(--wa-color-brand-60) 22%, transparent);
+    --wa-color-brand-fill-loud: var(--wa-color-brand-60);
+    --wa-color-brand-border-quiet: color-mix(in oklab, var(--wa-color-brand-60) 25%, transparent);
+    --wa-color-brand-border-normal: color-mix(in oklab, var(--wa-color-brand-60) 45%, transparent);
+    --wa-color-brand-border-loud: var(--wa-color-brand-60);
+    --wa-color-brand-on-quiet: var(--wa-color-brand-40);
+    --wa-color-brand-on-normal: var(--wa-color-brand-40);
+    --wa-color-brand-on-loud: var(--wa-color-neutral-10);
+
+    --wa-color-success-fill-quiet: color-mix(in oklab, var(--wa-color-success-40) 12%, transparent);
+    --wa-color-success-fill-normal: color-mix(in oklab, var(--wa-color-success-40) 24%, transparent);
+    --wa-color-success-fill-loud: var(--wa-color-success-40);
+    --wa-color-success-border-quiet: color-mix(in oklab, var(--wa-color-success-40) 30%, transparent);
+    --wa-color-success-border-normal: color-mix(in oklab, var(--wa-color-success-40) 50%, transparent);
+    --wa-color-success-border-loud: var(--wa-color-success-40);
+    --wa-color-success-on-quiet: var(--wa-color-success-40);
+    --wa-color-success-on-normal: var(--wa-color-success-40);
+    --wa-color-success-on-loud: var(--wa-color-neutral-95);
+
+    --wa-color-warning-fill-quiet: color-mix(in oklab, var(--wa-color-warning-40) 12%, transparent);
+    --wa-color-warning-fill-normal: color-mix(in oklab, var(--wa-color-warning-40) 24%, transparent);
+    --wa-color-warning-fill-loud: var(--wa-color-warning-40);
+    --wa-color-warning-border-quiet: color-mix(in oklab, var(--wa-color-warning-40) 30%, transparent);
+    --wa-color-warning-border-normal: color-mix(in oklab, var(--wa-color-warning-40) 50%, transparent);
+    --wa-color-warning-border-loud: var(--wa-color-warning-40);
+    --wa-color-warning-on-quiet: var(--wa-color-warning-40);
+    --wa-color-warning-on-normal: var(--wa-color-warning-40);
+    --wa-color-warning-on-loud: var(--wa-color-neutral-95);
+
+    --wa-color-danger-fill-quiet: color-mix(in oklab, var(--wa-color-danger-40) 12%, transparent);
+    --wa-color-danger-fill-normal: color-mix(in oklab, var(--wa-color-danger-40) 24%, transparent);
+    --wa-color-danger-fill-loud: var(--wa-color-danger-40);
+    --wa-color-danger-border-quiet: color-mix(in oklab, var(--wa-color-danger-40) 30%, transparent);
+    --wa-color-danger-border-normal: color-mix(in oklab, var(--wa-color-danger-40) 50%, transparent);
+    --wa-color-danger-border-loud: var(--wa-color-danger-40);
+    --wa-color-danger-on-quiet: var(--wa-color-danger-40);
+    --wa-color-danger-on-normal: var(--wa-color-danger-40);
+    --wa-color-danger-on-loud: var(--wa-color-neutral-95);
+
+    /* The neutral loud fill is the raised surface, so a default button is a light, raised key. */
+    --wa-color-neutral-fill-quiet: color-mix(in oklab, var(--wa-color-neutral-10) 5%, transparent);
+    --wa-color-neutral-fill-normal: color-mix(in oklab, var(--wa-color-neutral-10) 10%, transparent);
+    --wa-color-neutral-fill-loud: var(--wa-color-neutral-95);
+    --wa-color-neutral-border-quiet: color-mix(in oklab, var(--wa-color-neutral-10) 9%, transparent);
+    --wa-color-neutral-border-normal: color-mix(in oklab, var(--wa-color-neutral-10) 20%, transparent);
+    --wa-color-neutral-border-loud: color-mix(in oklab, var(--wa-color-neutral-10) 20%, transparent);
+    --wa-color-neutral-on-quiet: var(--wa-color-neutral-30);
+    --wa-color-neutral-on-normal: var(--wa-color-neutral-10);
+    --wa-color-neutral-on-loud: var(--wa-color-neutral-10);
+    /* #endregion */
+
+    /* #region Shadows (Light) ~~~~~~~~~~~~~~~~~~~~ */
+    /* Raised: a light top edge and a soft drop. -s for small parts, -m for surfaces, -l for popups. */
+    --wa-shadow-s:
+      inset 0 0.0625rem 0 color-mix(in oklab, white 63%, transparent),
+      0 0.125rem 0.375rem color-mix(in oklab, var(--wa-color-neutral-10) 11%, transparent);
+    --wa-shadow-m:
+      inset 0 0.0625rem 0 color-mix(in oklab, white 63%, transparent),
+      inset 0 -0.1875rem 0.4375rem color-mix(in oklab, var(--wa-color-neutral-10) 5%, transparent),
+      -0.375rem -0.375rem 0.875rem color-mix(in oklab, white 36%, transparent),
+      0 0.125rem 0.1875rem color-mix(in oklab, var(--wa-color-neutral-10) 6%, transparent),
+      0 0.6875rem 1.3125rem -0.5rem color-mix(in oklab, var(--wa-color-neutral-10) 23%, transparent);
+    --wa-shadow-l: var(--wa-shadow-m);
+    /* #endregion */
+
+    /* #region Components (Light) ~~~~~~~~~~~~~~~~~ */
+    --wa-form-control-background-color: var(--wa-color-surface-lowered);
+    --wa-form-control-value-color: var(--wa-color-text-normal);
+    --wa-form-control-placeholder-color: var(--wa-color-neutral-40);
+    --wa-form-control-label-color: var(--wa-color-neutral-30);
+    --wa-form-control-hint-color: var(--wa-color-text-quiet);
+    /* #endregion */
+  }
+
+  .wa-theme-vsa.wa-dark,
+  .wa-theme-vsa .wa-dark,
+  .wa-theme-vsa.wa-invert,
+  .wa-theme-vsa .wa-invert,
+  .wa-dark .wa-theme-vsa,
+  .wa-light .wa-theme-vsa.wa-invert,
+  .wa-light .wa-theme-vsa .wa-invert {
+    /* #region Colors (Dark) ~~~~~~~~~~~~~~~~~~~~~~ */
+    color-scheme: dark;
+    color: var(--wa-color-text-normal);
+
+    --wa-color-surface-raised: var(--wa-color-neutral-20);
+    --wa-color-surface-default: var(--wa-color-neutral-20);
+    --wa-color-surface-lowered: var(--wa-color-neutral-05);
+    --wa-color-surface-border: color-mix(in oklab, var(--wa-color-neutral-95) 9%, transparent);
+
+    --wa-color-text-normal: var(--wa-color-neutral-95);
+    --wa-color-text-quiet: var(--wa-color-neutral-60);
+    --wa-color-text-link: var(--wa-color-brand-60);
+    --wa-color-focus: var(--wa-color-brand-60);
+
+    --wa-color-shadow: color-mix(in oklab, black 40%, transparent);
+
+    --wa-color-brand-fill-quiet: color-mix(in oklab, var(--wa-color-brand-60) 10%, transparent);
+    --wa-color-brand-fill-normal: color-mix(in oklab, var(--wa-color-brand-60) 22%, transparent);
+    --wa-color-brand-fill-loud: var(--wa-color-brand-60);
+    --wa-color-brand-border-quiet: color-mix(in oklab, var(--wa-color-brand-60) 25%, transparent);
+    --wa-color-brand-border-normal: color-mix(in oklab, var(--wa-color-brand-60) 45%, transparent);
+    --wa-color-brand-border-loud: var(--wa-color-brand-60);
+    --wa-color-brand-on-quiet: var(--wa-color-brand-70);
+    --wa-color-brand-on-normal: var(--wa-color-brand-80);
+    --wa-color-brand-on-loud: var(--wa-color-neutral-10);
+
+    --wa-color-success-fill-quiet: color-mix(in oklab, var(--wa-color-success-70) 12%, transparent);
+    --wa-color-success-fill-normal: color-mix(in oklab, var(--wa-color-success-70) 24%, transparent);
+    --wa-color-success-fill-loud: var(--wa-color-success-70);
+    --wa-color-success-border-quiet: color-mix(in oklab, var(--wa-color-success-70) 30%, transparent);
+    --wa-color-success-border-normal: color-mix(in oklab, var(--wa-color-success-70) 50%, transparent);
+    --wa-color-success-border-loud: var(--wa-color-success-70);
+    --wa-color-success-on-quiet: var(--wa-color-success-70);
+    --wa-color-success-on-normal: var(--wa-color-success-70);
+    --wa-color-success-on-loud: var(--wa-color-neutral-20);
+
+    --wa-color-warning-fill-quiet: color-mix(in oklab, var(--wa-color-warning-70) 12%, transparent);
+    --wa-color-warning-fill-normal: color-mix(in oklab, var(--wa-color-warning-70) 24%, transparent);
+    --wa-color-warning-fill-loud: var(--wa-color-warning-70);
+    --wa-color-warning-border-quiet: color-mix(in oklab, var(--wa-color-warning-70) 30%, transparent);
+    --wa-color-warning-border-normal: color-mix(in oklab, var(--wa-color-warning-70) 50%, transparent);
+    --wa-color-warning-border-loud: var(--wa-color-warning-70);
+    --wa-color-warning-on-quiet: var(--wa-color-warning-70);
+    --wa-color-warning-on-normal: var(--wa-color-warning-70);
+    --wa-color-warning-on-loud: var(--wa-color-neutral-20);
+
+    --wa-color-danger-fill-quiet: color-mix(in oklab, var(--wa-color-danger-70) 12%, transparent);
+    --wa-color-danger-fill-normal: color-mix(in oklab, var(--wa-color-danger-70) 24%, transparent);
+    --wa-color-danger-fill-loud: var(--wa-color-danger-70);
+    --wa-color-danger-border-quiet: color-mix(in oklab, var(--wa-color-danger-70) 30%, transparent);
+    --wa-color-danger-border-normal: color-mix(in oklab, var(--wa-color-danger-70) 50%, transparent);
+    --wa-color-danger-border-loud: var(--wa-color-danger-70);
+    --wa-color-danger-on-quiet: var(--wa-color-danger-70);
+    --wa-color-danger-on-normal: var(--wa-color-danger-70);
+    --wa-color-danger-on-loud: var(--wa-color-neutral-20);
+
+    --wa-color-neutral-fill-quiet: color-mix(in oklab, var(--wa-color-neutral-95) 7%, transparent);
+    --wa-color-neutral-fill-normal: color-mix(in oklab, var(--wa-color-neutral-95) 10%, transparent);
+    --wa-color-neutral-fill-loud: var(--wa-color-neutral-20);
+    --wa-color-neutral-border-quiet: color-mix(in oklab, var(--wa-color-neutral-95) 9%, transparent);
+    --wa-color-neutral-border-normal: color-mix(in oklab, var(--wa-color-neutral-95) 20%, transparent);
+    --wa-color-neutral-border-loud: color-mix(in oklab, var(--wa-color-neutral-95) 20%, transparent);
+    --wa-color-neutral-on-quiet: var(--wa-color-neutral-70);
+    --wa-color-neutral-on-normal: var(--wa-color-neutral-95);
+    --wa-color-neutral-on-loud: var(--wa-color-neutral-95);
+    /* #endregion */
+
+    /* #region Shadows (Dark) ~~~~~~~~~~~~~~~~~~~~~ */
+    --wa-shadow-s:
+      inset 0 0.0625rem 0 color-mix(in oklab, white 7%, transparent),
+      0 0.125rem 0.375rem color-mix(in oklab, black 27%, transparent);
+    --wa-shadow-m:
+      inset 0 0.0625rem 0 color-mix(in oklab, white 7%, transparent),
+      inset 0 -0.1875rem 0.4375rem color-mix(in oklab, black 35%, transparent),
+      0 0.125rem 0.1875rem color-mix(in oklab, black 18%, transparent),
+      0 0.6875rem 1.3125rem -0.5rem color-mix(in oklab, black 41%, transparent);
+    --wa-shadow-l: var(--wa-shadow-m);
+    /* #endregion */
+
+    /* #region Components (Dark) ~~~~~~~~~~~~~~~~~~ */
+    --wa-form-control-background-color: var(--wa-color-surface-lowered);
+    --wa-form-control-value-color: var(--wa-color-text-normal);
+    --wa-form-control-placeholder-color: var(--wa-color-neutral-60);
+    --wa-form-control-label-color: var(--wa-color-neutral-70);
+    --wa-form-control-hint-color: var(--wa-color-text-quiet);
+    /* #endregion */
+  }
+
+  .wa-theme-vsa,
+  .wa-theme-vsa.wa-light,
+  .wa-theme-vsa .wa-light,
+  .wa-theme-vsa.wa-dark,
+  .wa-theme-vsa .wa-dark,
+  .wa-theme-vsa.wa-invert,
+  .wa-theme-vsa .wa-invert {
+    font-family: var(--wa-font-family-body);
+
+    /* #region Fonts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    --wa-font-family-body: Inter, system-ui, sans-serif;
+    --wa-font-family-heading: Doto, 'Cascadia Mono', monospace;
+    --wa-font-family-code: 'JetBrains Mono', 'Cascadia Mono', monospace;
+
+    /* The Web Awesome formulas, 14 px body: 3xs 9, 2xs 10, xs 11, s 12, m 14, l 18, xl 22, 2xl 28, 3xl 36. */
+    --wa-font-size-scale: 0.875;
+
+    --wa-font-weight-semibold: 600;
+    --wa-font-weight-heading: 800;
+    --wa-font-weight-action: 500;
+
+    --wa-line-height-condensed: 1.1;
+    --wa-line-height-normal: 1.35;
+    /* #endregion */
+
+    /* #region Rounding ~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /* The Web Awesome formulas, two times: s 6, m 12, l 24 px. */
+    --wa-border-radius-scale: 2;
+    /* #endregion */
+
+    /* #region Focus ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    --wa-focus-ring-width: 0.125rem;
+    --wa-focus-ring-offset: 0.125rem;
+    /* #endregion */
+
+    /* #region Transitions ~~~~~~~~~~~~~~~~~~~~~~ */
+    --wa-transition-fast: 150ms;
+    --wa-transition-easing: ease-out;
+    /* #endregion */
+
+    /* #region Components ~~~~~~~~~~~~~~~~~~~~~~~ */
+    /* Form controls are carved channels: no border. */
+    --wa-form-control-border-color: transparent;
+    --wa-form-control-border-radius: var(--wa-border-radius-m);
+    --wa-form-control-activated-color: var(--wa-color-brand-fill-loud);
+
+    /* Panels are raised surfaces: no border. */
+    --wa-panel-border-width: 0;
+    --wa-panel-border-radius: var(--wa-border-radius-l);
+
+    --wa-button-transform-active: translateY(0.0625rem);
+    /* #endregion */
+  }
+}

@@ -10,9 +10,9 @@ Each step reads only the steps before it. A change in an early step changes all 
   <wa-card>
     <div class="wa-stack wa-gap-2xs">
       <wa-badge variant="brand" appearance="filled">Step 1</wa-badge>
-      <a href="#/tokens/theme"><strong>Theme layer</strong></a>
+      <a href="#/tokens/theme"><strong>Theme and palette</strong></a>
       <span class="wa-caption-s">--wa-* values, light and dark</span>
-      <code>theme/vsa.css</code>
+      <code>theme/theme.css</code>
     </div>
   </wa-card>
   <wa-card>
@@ -59,7 +59,7 @@ Each step reads only the steps before it. A change in an early step changes all 
 
 | Link | What it adds |
 |---|---|
-| Theme layer → Components | Each component reads the `--wa-*` tokens. A new `--wa-color-brand-fill-loud` changes each brand button, switch and slider |
+| Theme and palette → Components | Each component reads the `--wa-*` tokens. A new `--wa-color-brand-fill-loud` changes each brand button, switch and slider |
 | Project tokens → Looks | A shape that tokens cannot give, with `::part()`. `--vsa-shadow-carve` goes on the switch track |
 | Components → Molecules | Composition. A molecule puts components into the slots of other components |
 
@@ -69,7 +69,7 @@ Each step reads only the steps before it. A change in an early step changes all 
 |---|---|---|
 | [Gallery](#/gallery) | One example of each component | See the look of the whole system |
 | Foundations | [Color](#/foundations/color), [Typography](#/foundations/typography), [Spacing](#/foundations/spacing), [Radius](#/foundations/radius), [Elevation](#/foundations/elevation), [Motion](#/foundations/motion) | Select a token for a purpose |
-| Tokens | [Theme layer](#/tokens/theme), [Project tokens](#/tokens/project) | See all tokens that the VSA theme sets, with light and dark values |
+| Tokens | [Theme and palette](#/tokens/theme), [Project tokens](#/tokens/project) | See all tokens that the VSA theme sets, with light and dark values |
 | Components | One page for each component, for example [Switch](#/components/switch) and [Dial](#/components/dial) | Use a component: variants, slots, events, API |
 
 ## Important pages
@@ -77,4 +77,4 @@ Each step reads only the steps before it. A change in an early step changes all 
 - [Switch](#/components/switch): the sample usage page of a Web Awesome component. Each new usage page uses the same sections.
 - [Dial](#/components/dial): the sample VSA component. A VSA component reads the `--wa-*` tokens, as a Web Awesome component does.
 - [Elevation](#/foundations/elevation): the raised and carved looks, and where `::part()` applies them.
-- [Theme layer](#/tokens/theme): all `--wa-*` values, and the Web Awesome defaults that the theme does not set.
+- [Theme and palette](#/tokens/theme): the palette tints, all `--wa-*` values of the theme, and the Web Awesome defaults that the theme does not set.

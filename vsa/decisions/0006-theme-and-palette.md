@@ -7,8 +7,9 @@
 | Palette | `vsa/theme/palette.css` | `wa-color-palette` | 11 tints for each hue. The only file with hex colors |
 | Brand | `wa-brand-orange` on `<html>` | `wa-color-variant` | Which hue is the brand |
 | Theme | `vsa/theme/theme.css` | `wa-theme` | Roles to tints, light and dark, fonts, scale controls |
-| Looks | `vsa/theme/looks.css` | `wa-theme` | Project tokens and documented `::part()` rules for the raised and carved looks |
-| App variation | The app's own stylesheet | `wa-theme-overrides` | The app's values, in the three scopes: both schemes, light, dark |
+| Looks | `vsa/theme/looks.css` | `wa-theme` (tokens), `wa-theme-dimension` (rules) | Project tokens, and documented `::part()` rules for the raised and carved looks. Web Awesome's own Awesome theme puts its component looks in `wa-theme-dimension` too |
+| Code block | `vsa/theme/code.css` | `wa-theme`, `wa-theme-dimension` | The code colors and the look of `pre.vsa-code` |
+| App variation | The app's own stylesheet | No layer | The app's values, in the three scopes: both schemes, light, dark. A stylesheet with no layer wins over every Web Awesome layer, also `wa-theme-overrides`, which themes use |
 
 On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange` plus `wa-light` or `wa-dark`.
 
@@ -16,7 +17,7 @@ On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange` plus `wa-light` or `w
 
 - A role refers to a palette tint, for example `--wa-color-surface-lowered: var(--wa-color-neutral-90)`. A role never holds a hex value.
 - Sizes use the Web Awesome formulas. The theme sets only the scale controls: `--wa-font-size-scale: 0.875` (14 px body), `--wa-border-radius-scale: 2`, `--wa-space-scale: 1`.
-- An app variation is not a new theme. It is a stylesheet in the `wa-theme-overrides` layer, as the Web Awesome design skill describes (`your-design-system.md`, section 2).
+- An app variation is not a new theme. It is a stylesheet with no cascade layer, as the Web Awesome design skill shows (`your-design-system.md`, section 2).
 - For how to make each kind of change, use the Web Awesome design skill: `theming.md`, `your-design-system.md` sections 2 and 3, and `composition.md` "Styling components".
 
 ## Reason

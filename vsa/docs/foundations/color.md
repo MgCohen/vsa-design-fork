@@ -1,6 +1,6 @@
 # Color
 
-Components read the Web Awesome color tokens. The theme layer, `theme/vsa.css`, sets each value for light and for dark.
+Components read the Web Awesome color tokens. The theme, `theme/theme.css`, maps each role to a tint of the palette, `theme/palette.css`, for light and for dark.
 
 ## Surfaces and text
 
