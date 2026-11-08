@@ -36,6 +36,8 @@ const html = HOST_FRAME + fs.readFileSync(built, 'utf8');
 const server = http
   .createServer((req, res) => {
     res.setHeader('content-type', 'text/html');
+    // The artifact frame blocks fetch() to other hosts and to data: URLs. The same rule here finds that kind of problem.
+    res.setHeader('content-security-policy', "connect-src 'self'");
     res.end(html);
   })
   .listen(0);

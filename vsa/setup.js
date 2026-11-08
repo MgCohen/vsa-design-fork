@@ -6,6 +6,21 @@
 
 import { getIconFolder, registerIconLibrary } from './vendor/webawesome/webawesome.js';
 
+// <wa-icon> loads each icon with fetch(), also the Web Awesome system icons, which are data: URLs. A page with a
+// strict Content-Security-Policy (connect-src), for example the claude.ai artifact frame, blocks fetch() of a data:
+// URL, and every icon is then empty. A data:image/svg+xml URL needs no request, so this answers it here.
+const nativeFetch = window.fetch.bind(window);
+window.fetch = (input, init) => {
+  const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input?.url;
+  if (url?.startsWith('data:image/svg+xml')) {
+    const comma = url.indexOf(',');
+    const data = url.slice(comma + 1);
+    const svg = url.slice(0, comma).endsWith(';base64') ? atob(data) : decodeURIComponent(data);
+    return Promise.resolve(new Response(svg, { headers: { 'content-type': 'image/svg+xml' } }));
+  }
+  return nativeFetch(input, init);
+};
+
 const iconBase = new URL('./vendor/icons/svgs/', import.meta.url);
 
 registerIconLibrary('default', {
