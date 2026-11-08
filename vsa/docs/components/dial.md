@@ -53,6 +53,27 @@ Use `size="s"`, `"m"` (the default) or `"l"`. The small dial has a shallow carve
 <vsa-dial size="l" value="72" label="Tests"></vsa-dial>
 ```
 
+## Test: the dial as a styled wa-progress-ring
+
+Decision `0008` tests if the dial can be `wa-progress-ring` with the house class `vsa-dial`, so that Web Awesome gives the behavior. In each row: `vsa-dial` left, `wa-progress-ring.vsa-dial` right.
+
+```html preview
+<vsa-dial value="72" label="Tests that pass"></vsa-dial>
+<wa-progress-ring class="vsa-dial" value="72" label="Tests that pass">72%</wa-progress-ring>
+```
+
+```html preview
+<vsa-dial value="90" variant="success" label="Done"></vsa-dial>
+<wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
+<vsa-dial value="20" variant="danger" label="Failed"></vsa-dial>
+<wa-progress-ring class="vsa-dial wa-danger" value="20" label="Failed">20%</wa-progress-ring>
+```
+
+```html preview
+<vsa-dial size="s" value="60" label="Sync"></vsa-dial>
+<wa-progress-ring class="vsa-dial vsa-dial-s" value="60" label="Sync"></wa-progress-ring>
+```
+
 ## Accessibility
 
 The dial has the role `progressbar`, with its value, its minimum and its maximum. Always set `label`: screen readers read it with the value. Without `label`, the dial uses its center text, or "Progress", and shows a warning in the console.

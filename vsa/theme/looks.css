@@ -192,5 +192,49 @@
       box-shadow: var(--vsa-shadow-knob);
       border: none;
     }
+
+    /* House class: a dial is wa-progress-ring.vsa-dial, a deep carved channel with a raised center and a glow.
+       Only documented parts and properties of wa-progress-ring. Its track is SVG, so the channel is drawn on the
+       progress-ring part behind it. The SVG viewport clips a filter, so this dial has no glow.
+       Size: --size. Color: a Web Awesome variant class (wa-success, wa-warning, wa-danger). */
+    wa-progress-ring.vsa-dial {
+      --size: 8.5em;
+      --track-width: calc(var(--size) * 0.1);
+      --track-color: transparent;
+      --indicator-color: var(--wa-color-brand-fill-loud);
+      /* The hole starts after the track (10 %) and a gap (5 %). A percent, so the label font size has no effect. */
+      --vsa-dial-hole-inset: 15%;
+    }
+    wa-progress-ring.vsa-dial:is(.wa-brand, .wa-success, .wa-warning, .wa-danger) {
+      --indicator-color: var(--wa-color-fill-loud);
+    }
+    wa-progress-ring.vsa-dial::part(progress-ring) {
+      border-radius: var(--wa-border-radius-circle);
+      background: var(--wa-color-surface-lowered);
+      box-shadow: var(--vsa-shadow-dial);
+    }
+    wa-progress-ring.vsa-dial::part(label) {
+      inset: var(--vsa-dial-hole-inset);
+      width: auto;
+      height: auto;
+      border-radius: var(--wa-border-radius-circle);
+      background: var(--vsa-gradient-hole);
+      box-shadow: var(--vsa-shadow-hole);
+      font-weight: var(--wa-font-weight-semibold);
+      font-size: calc(var(--size) * 0.17);
+    }
+    /* The small dial: a shallow carve, for lists and table rows. */
+    wa-progress-ring.vsa-dial.vsa-dial-s {
+      --size: 2.5em;
+      --track-width: calc(var(--size) * 0.14);
+      --vsa-dial-hole-inset: 17%;
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(progress-ring) {
+      box-shadow: var(--vsa-shadow-carve);
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(label) {
+      box-shadow: var(--wa-shadow-s);
+      font-size: calc(var(--size) * 0.3);
+    }
   }
 }
