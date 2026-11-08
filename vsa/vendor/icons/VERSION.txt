@@ -1,0 +1,3 @@
+Font Awesome Free 7.3.0 icons, from the npm package @fortawesome/fontawesome-free@7.3.0 (svgs/).
+Icons: CC BY 4.0. Only the icons that VSA uses are here, in the same folders as the package.
+To add an icon: copy svgs/<folder>/<name>.svg from that package version into svgs/ here.

@@ -106,8 +106,18 @@ const files = {};
     else files[posix(path.relative(docs, full))] = fs.readFileSync(full, 'utf8');
   }
 })(docs);
+// The vendored icons as data URLs, for vsa/setup.js. The page is one file, so it has no icon folder.
+const iconRoot = path.join(vsa, 'vendor', 'icons', 'svgs');
+const icons = {};
+for (const folder of fs.readdirSync(iconRoot)) {
+  for (const file of fs.readdirSync(path.join(iconRoot, folder))) {
+    const svg = fs.readFileSync(path.join(iconRoot, folder, file), 'utf8');
+    icons[`${folder}/${file.replace(/\.svg$/, '')}`] = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  }
+}
 const waManifest = fromSite(html.match(/const MANIFEST_URL = '([^']+)'/)[1]);
 const data = `<script>
+window.VSA_ICONS = ${scriptSafe(JSON.stringify(icons))};
 window.VSA_FILES = ${scriptSafe(JSON.stringify(files))};
 window.VSA_MANIFEST = ${scriptSafe(fs.readFileSync(path.join(vsa, 'components', 'custom-elements.json'), 'utf8'))};
 window.WA_MANIFEST = ${scriptSafe(fs.readFileSync(waManifest, 'utf8'))};
