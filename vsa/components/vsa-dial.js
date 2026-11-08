@@ -46,7 +46,7 @@ const styles = `
 }
 .label {
   position: relative; z-index: 3; display: grid; place-items: center; text-align: center;
-  font-size: calc(var(--size) * 0.17); font-weight: var(--wa-font-weight-semibold); line-height: 1.1;
+  font-size: calc(var(--size) * 0.17); font-weight: var(--wa-font-weight-semibold); line-height: var(--wa-line-height-condensed);
 }
 :host([size="s"]) .label { font-size: calc(var(--size) * 0.3); }
 :host([size="s"]) .value { display: none; }

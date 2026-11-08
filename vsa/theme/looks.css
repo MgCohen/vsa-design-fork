@@ -1,5 +1,6 @@
 /*
   VSA looks: the raised and carved shapes that no Web Awesome token can give.
+  They style the wa-* components only, not native buttons and inputs.
   Part 1, layer wa-theme: project tokens (--vsa-*), only for ideas that Web Awesome has no token for.
   Part 2, layer wa-theme-dimension: documented ::part() and :state() rules, scoped to .wa-theme-vsa.
   This is the same place that Web Awesome's own Awesome theme uses for its component looks.
@@ -95,15 +96,11 @@
 
 @layer wa-theme-dimension {
   .wa-theme-vsa {
-    /* Raised: buttons. Each button that is not plain or outlined is raised. The variant keeps its colors. */
+    /* Raised: buttons. Each button that is not plain or outlined is raised. The colors come from the tokens:
+       the neutral loud fill is the raised surface, so the default button is a raised key, with Web Awesome's own
+       hover and press colors. */
     wa-button:not([appearance='plain'], [appearance*='outlined'])::part(button) {
       box-shadow: var(--wa-shadow-m);
-    }
-    /* The neutral accent button (the default button) is the raised surface. */
-    wa-button:is(:not([variant]), [variant='neutral']):is(:not([appearance]), [appearance='accent'])::part(button) {
-      background: var(--vsa-gradient-surface);
-      color: var(--wa-color-text-normal);
-      border-color: transparent;
     }
     wa-button[variant='brand']:is(:not([appearance]), [appearance='accent'])::part(button) {
       box-shadow: var(--wa-shadow-m), var(--vsa-shadow-glow);
@@ -144,8 +141,9 @@
       box-shadow: var(--vsa-shadow-carve);
       border-color: transparent;
     }
+    /* :state(checked) is set by wa-switch (switch.ts), but its reference does not list it. Check it at each update. */
     wa-switch:state(checked)::part(control) {
-      background: var(--wa-color-brand-fill-loud);
+      background: var(--wa-form-control-activated-color);
       box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
     }
     wa-switch::part(thumb) {
@@ -162,12 +160,12 @@
     }
     wa-checkbox:state(checked)::part(control),
     wa-checkbox:state(indeterminate)::part(control) {
-      background: var(--wa-color-brand-fill-loud);
+      background: var(--wa-form-control-activated-color);
       color: var(--wa-color-brand-on-loud);
       box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
     }
     wa-radio:not([appearance='button']):state(checked)::part(control) {
-      color: var(--wa-color-brand-fill-loud);
+      color: var(--wa-form-control-activated-color);
     }
 
     /* Carved: tracks */

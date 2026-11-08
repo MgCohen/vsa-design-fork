@@ -14,7 +14,7 @@ const hostStyles = `
 // These rules style the slotted table, so they must be in the document, not in the shadow root.
 // The selectors start with vsa-table:state(stacked), so they win over page rules for one class, for example a column width.
 const documentStyles = `
-vsa-table:state(stacked) :is(table, tbody, tr, td) { display: block; width: auto; min-width: 0; }
+vsa-table:state(stacked) :is(table, tbody, tfoot, tr, td, th) { display: block; width: auto; min-width: 0; }
 /* The visually hidden pattern: screen readers still read the header row. 1 px is part of the pattern. */
 vsa-table:state(stacked) thead {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
@@ -23,7 +23,7 @@ vsa-table:state(stacked) tr {
   padding-block: var(--wa-space-s);
   border-block-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
 }
-vsa-table:state(stacked) td { padding: var(--wa-space-2xs) 0; border: 0; }
+vsa-table:state(stacked) :is(td, th) { padding: var(--wa-space-2xs) 0; border: 0; text-align: start; }
 vsa-table:state(stacked) td[data-label]:not([data-label=""])::before {
   content: attr(data-label);
   display: block;

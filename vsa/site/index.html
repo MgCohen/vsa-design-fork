@@ -36,12 +36,6 @@
         margin: 0;
         padding: 0;
       }
-      html.wa-light {
-        color-scheme: light;
-      }
-      html.wa-dark {
-        color-scheme: dark;
-      }
       /* The background is also on body, because a host page (for example a claude.ai artifact) can paint body. */
       html,
       body {
@@ -331,8 +325,14 @@
             }
             if (r instanceof CSSMediaRule) continue;
             if (r instanceof CSSStyleRule && /:root|\.wa-theme-vsa|\.wa-palette-vsa/.test(r.selectorText)) {
-              for (const p of r.style)
-                if (p.startsWith('--')) tokenMap.set(p, { value: r.style.getPropertyValue(p).trim(), file });
+              // The path column shows the light value. A dark block (its first selector names .wa-dark) does not
+              // replace a value that the same file set before. The Dark column shows the dark value.
+              const dark = /\.wa-dark/.test(r.selectorText.split(',')[0]);
+              for (const p of r.style) {
+                if (!p.startsWith('--')) continue;
+                if (dark && tokenMap.get(p)?.file === file) continue;
+                tokenMap.set(p, { value: r.style.getPropertyValue(p).trim(), file });
+              }
             }
             if (r.cssRules && !(r instanceof CSSStyleRule)) walk(r.cssRules, file);
           }

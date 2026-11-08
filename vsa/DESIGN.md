@@ -16,7 +16,7 @@
 
 **Project tokens.** `--vsa-*` tokens are only for ideas that Web Awesome has no token for: the carved, knob, press, glow, dial and hole shadows (`--vsa-shadow-*`), the surface gradients (`--vsa-gradient-*`), the letter spacing (`--vsa-letter-spacing-*`), the code colors (`--vsa-color-code-*`) and the smallest code size (`--vsa-font-size-code-min`). The raised look uses `--wa-shadow-m` and `--wa-shadow-s`. Do not make a `--vsa-*` name for an idea that a `--wa-*` token has. The page background is `--wa-color-surface-default`, and the card surface is `--wa-color-surface-raised`.
 
-**Looks.** Each surface is raised or carved. `theme/looks.css` gives the looks to Web Awesome components with documented parts and states, in the `wa-theme-dimension` layer, as Web Awesome's own Awesome theme does:
+**Looks.** Each surface is raised or carved. The looks are for the `wa-*` components only, not for native buttons and inputs. `theme/looks.css` gives the looks to Web Awesome components with documented parts and states, in the `wa-theme-dimension` layer, as Web Awesome's own Awesome theme does:
 
 | Look | Where |
 |---|---|
@@ -53,7 +53,7 @@
 - Do not use `size="small"`, `"medium"` or `"large"`. They are deprecated. Use `s`, `m`, `l`.
 - Do not style `::part(base)`. It is deprecated. Use the part names on the component page.
 - Do not put a hex color outside `theme/palette.css`, or a px size outside the theme files. Use a token. One exception: the 1 px of the visually hidden pattern in `components/vsa-table.js`.
-- Do not set a `--wa-*` token outside `theme/theme.css` and `theme/palette.css`.
+- In `vsa/`, do not set a `--wa-*` token outside `theme/theme.css` and `theme/palette.css`. An app sets its own values in its own stylesheet (see the table above).
 - Do not load a file from a CDN. Add it to `vendor/`.
 
 **Verify.** Run `node vsa/scripts/check.mjs`. Then check each visible change on mobile and on desktop, in light and in dark: run `node vsa/scripts/build-artifact.mjs`, then `node vsa/scripts/screenshots.mjs`, and look at the screenshots. See "Verify a change" in the root `AGENTS.md`.

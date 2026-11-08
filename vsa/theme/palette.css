@@ -2,7 +2,8 @@
   VSA palette: the raw hues of the VSA look, in the Web Awesome palette format (styles/color/palettes/*.css).
   Use: class="wa-palette-vsa" on <html>. This is the only file of the system with hex colors.
   Tints go from 95 (lightest) to 05 (darkest). --wa-color-{hue}-key names the key tint, and Web Awesome uses it to
-  pick a readable text color on that hue (--wa-color-{hue}-on).
+  pick a readable text color on that hue (--wa-color-{hue}-on). The key is the most colorful tint, as in the Web
+  Awesome palettes. The theme picks other tints for its roles.
   Not set here: cyan, blue, indigo, purple and pink. They come from the Web Awesome default palette.
   Decision record: vsa/decisions/0006-theme-and-palette.md.
 */
@@ -51,8 +52,8 @@
     --wa-color-green-20: #134221;
     --wa-color-green-10: #0b2a15;
     --wa-color-green-05: #061a0c;
-    --wa-color-green: var(--wa-color-green-40);
-    --wa-color-green-key: 40;
+    --wa-color-green: var(--wa-color-green-60);
+    --wa-color-green-key: 60;
 
     /* Yellow: warning (amber). Light scheme uses 40, dark scheme uses 70. */
     --wa-color-yellow-95: #fdf2dd;
@@ -66,8 +67,8 @@
     --wa-color-yellow-20: #4e3206;
     --wa-color-yellow-10: #322003;
     --wa-color-yellow-05: #211402;
-    --wa-color-yellow: var(--wa-color-yellow-40);
-    --wa-color-yellow-key: 40;
+    --wa-color-yellow: var(--wa-color-yellow-80);
+    --wa-color-yellow-key: 80;
 
     /* Red: danger. Light scheme uses 40, dark scheme uses 70. */
     --wa-color-red-95: #fdeeee;
@@ -81,7 +82,7 @@
     --wa-color-red-20: #631410;
     --wa-color-red-10: #3e0c0a;
     --wa-color-red-05: #2a0806;
-    --wa-color-red: var(--wa-color-red-40);
-    --wa-color-red-key: 40;
+    --wa-color-red: var(--wa-color-red-50);
+    --wa-color-red-key: 50;
   }
 }

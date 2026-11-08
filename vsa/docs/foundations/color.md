@@ -32,7 +32,7 @@ The brand color is the VSA accent. Use it for one main action on each screen.
 
 ## Project colors
 
-Web Awesome has no token for the page canvas, the accent glow and the surface gradients. These are project tokens: new ideas, not new names for Web Awesome tokens.
+The page canvas is `--wa-color-surface-default`, and cards use `--wa-color-surface-raised`. Web Awesome has no token for the surface gradients, so these are project tokens: new ideas, not new names for Web Awesome tokens.
 
 ```tokens ^--vsa-(color|gradient)-
 ```
