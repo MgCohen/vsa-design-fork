@@ -50,7 +50,7 @@ for (const [tag] of [...html.matchAll(/<link\b[^>]*>/g)]) {
   if (rel !== 'stylesheet' || /^https?:/.test(href)) continue;
   const file = fromSite(href);
   const replacement = href.endsWith('fonts.css')
-    ? `<link rel="stylesheet" href="${fs.readFileSync(file, 'utf8').match(/url\("([^"]+)"\)/)[1]}">`
+    ? `<link rel="stylesheet" href="${fs.readFileSync(file, 'utf8').match(/url\(['"]?([^'")]+)['"]?\)/)[1]}">`
     : `<style data-source="${path.basename(href)}">\n${inlineCss(file)}\n</style>`;
   html = html.replace(tag, () => replacement);
 }
