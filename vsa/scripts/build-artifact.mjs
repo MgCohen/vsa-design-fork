@@ -39,27 +39,35 @@ const ARTIFACT_TITLE = 'VSA on Web Awesome';
 
 let html = read('index.html').replace(/<title>[^<]*<\/title>/, `<title>${ARTIFACT_TITLE}</title>`);
 
-// 1. Local stylesheets. The fonts file only imports Google Fonts, so it becomes a link to that URL.
-html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (m, href) => {
-  const css = read(href);
-  if (href.endsWith('fonts.css')) return `<link rel="stylesheet" href="${css.match(/url\("([^"]+)"\)/)[1]}">`;
-  return `<style data-source="${path.basename(href)}">\n${css}\n</style>`;
-});
+// Reads the attributes of one tag. Prettier can split a tag over several lines and close it with "/>".
+const attrs = tag => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
 
-// 2. Local module scripts.
-html = html.replace(
-  /<script type="module" src="(\.\.\/[^"]+)"><\/script>/g,
-  (m, src) => `<script type="module">\n${scriptSafe(read(src))}\n</script>`,
-);
-
-// 3. Web Awesome stylesheets from jsDelivr. An artifact page can load scripts from jsDelivr, but not stylesheets.
-for (const [tag, href] of [
-  ...html.matchAll(/<link rel="stylesheet" crossorigin="anonymous" href="(https:\/\/cdn\.jsdelivr\.net[^"]+)">/g),
-]) {
-  html = html.replace(tag, `<style data-source="${href.split('/').pop()}">\n${await inlineCss(href)}\n</style>`);
+// 1. Stylesheets. The fonts file only imports Google Fonts, so it becomes a link to that URL.
+//    A local file goes inline. A jsDelivr file also goes inline: an artifact page can load
+//    scripts from jsDelivr, but not stylesheets.
+for (const [tag] of [...html.matchAll(/<link\b[^>]*>/g)]) {
+  const { rel, href } = attrs(tag);
+  if (rel !== 'stylesheet') continue;
+  let replacement;
+  if (href.startsWith('https://cdn.jsdelivr.net/')) {
+    replacement = `<style data-source="${href.split('/').pop()}">\n${await inlineCss(href)}\n</style>`;
+  } else if (!/^https?:/.test(href)) {
+    const css = read(href);
+    replacement = href.endsWith('fonts.css')
+      ? `<link rel="stylesheet" href="${css.match(/url\("([^"]+)"\)/)[1]}">`
+      : `<style data-source="${path.basename(href)}">\n${css}\n</style>`;
+  } else continue;
+  html = html.replace(tag, () => replacement);
 }
 
-// 4. The docs files and the two manifests, as data. The site reads window.VSA_FILES before it fetches.
+// 2. Local module scripts.
+for (const [tag] of [...html.matchAll(/<script\b[^>]*><\/script>/g)]) {
+  const { type, src } = attrs(tag);
+  if (type !== 'module' || !src || /^https?:/.test(src)) continue;
+  html = html.replace(tag, () => `<script type="module">\n${scriptSafe(read(src))}\n</script>`);
+}
+
+// 3. The docs files and the two manifests, as data. The site reads window.VSA_FILES before it fetches.
 const docs = path.join(vsa, 'docs');
 const files = {};
 (function walk(dir) {
@@ -76,12 +84,13 @@ window.VSA_MANIFEST = ${scriptSafe(fs.readFileSync(path.join(vsa, 'components', 
 window.WA_MANIFEST = ${scriptSafe(await get(waManifestUrl))};
 </script>
 `;
-html = html.replace(/<script>(\r?\n)const MANIFEST_URL/, m => data + m);
+html = html.replace(/<script>\s*const MANIFEST_URL/, m => data + m);
 
 // Checks.
 if (!html.includes('window.VSA_FILES =')) throw new Error('data script not placed');
-if (/(href|src)="\.\.\//.test(html)) throw new Error('a relative file is still linked');
-if (/<link rel="stylesheet"[^>]+jsdelivr/.test(html)) throw new Error('a CDN stylesheet is still linked');
+const relative = html.match(/(href|src)="\.\.\/[^"]*"/);
+if (relative) throw new Error(`a relative file is still linked: ${relative[0]}`);
+if (/<link\b[^>]+jsdelivr/.test(html)) throw new Error('a CDN stylesheet is still linked');
 
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
