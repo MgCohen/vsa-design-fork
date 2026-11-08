@@ -1,21 +1,27 @@
 # VSA Design
 
-VSA Design is the design system of VSA apps. It is a fork of Web Awesome 3.14.0 (MIT). The Web Awesome source is in `packages/`, unchanged so far. Our work is in this `vsa/` folder: the theme, the looks, our own components and the docs site.
+VSA Design is the design system of VSA apps. It owns a build of Web Awesome 3.14.0 (MIT). The Web Awesome source is in `packages/`, and we do not change its components. Our work is in this `vsa/` folder: a Web Awesome theme and palette, the looks, our own components, the vendored files and the docs site.
 
-See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for the reason for the fork, and [DESIGN.md](DESIGN.md) for the brief for agents.
+See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and palette, `0007` Windows build fix, `0008` dial test), and [DESIGN.md](DESIGN.md) for the brief for agents.
 
 ## Files
 
 | Path | Content |
 |---|---|
-| `theme/vsa.css` | The theme layer: the only place for `--wa-*` overrides, in the three blocks that Web Awesome recommends. It also sets the project tokens (`--vsa-*`) for the raised and carved looks. Then the looks, with `::part()` |
+| `theme/palette.css` | `.wa-palette-vsa`: the hue tints. The only file with hex colors |
+| `theme/theme.css` | `.wa-theme-vsa`: roles to tints for light and dark, fonts, scale controls, shadows |
+| `theme/looks.css` | Project tokens (`--vsa-*`), and the raised and carved looks with documented `::part()` rules |
+| `setup.js` | Registers the vendored icons as the default icon library. Load it before the Web Awesome loader |
+| `vendor/` | Our build of Web Awesome (`vendor/webawesome`, made by `scripts/vendor-webawesome.mjs`), the icons, `marked` and `highlight.js`. Do not edit these files |
 | `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-dial` and `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
 | `theme/code.css` | The code block: project tokens for code colors, and the dark IDE look of `pre.vsa-code` |
 | `site/index.html` | The docs site, made from the system: `<wa-page>` with the menu in a drawer on mobile, foundations, one page for each component, light and dark |
 | `scripts/build-artifact.mjs` | Makes the docs site into one HTML file for the live artifact. See "Publish the docs site" in the root `AGENTS.md` |
+| `scripts/check.mjs` | Checks our files against the Web Awesome design rules and our rules |
+| `scripts/screenshots.mjs` | Screenshots of the published page: mobile and desktop, light and dark |
 | `docs/index.json` | The menu: the foundations pages and the components that have a usage page |
-| `decisions/` | Design decisions. `0005` is the fork |
+| `decisions/` | Design decisions |
 | `reference/custom-design/` | Our first design system, before the fork: tokens, atoms, gallery and decisions `0001` to `0004`. Use it as a reference for the look and the gallery |
 | `DESIGN.md` | The design brief for agents, in the form that Web Awesome recommends |
 | `docs/overview.md` | The first page |
@@ -32,16 +38,15 @@ See [decisions/0005-fork-web-awesome.md](decisions/0005-fork-web-awesome.md) for
 
 ## How the site loads
 
-1. `theme/fonts.css`: the font files.
-2. Web Awesome `styles/themes/default.css`, `styles/utilities.css` and `styles/native.css` from jsDelivr: their default tokens, the utilities and the native element styles, in cascade layers.
-3. `theme/vsa.css`: not in a layer, so it wins over all Web Awesome layers.
-4. `theme/code.css`: the code block.
-5. `components/vsa-dial.js` and `components/vsa-table.js`: they define `<vsa-dial>` and `<vsa-table>`.
-6. Web Awesome `webawesome.loader.js` from jsDelivr: it loads each component when the page uses it.
-7. `marked` 11.2.0 from jsDelivr: it changes Markdown to HTML.
-8. `highlight.js` 11.9.0 from cdnjs: it gives the code colors.
+1. `theme/fonts.css`: the font files from Google Fonts.
+2. `vendor/webawesome/styles/themes/default.css`, `utilities.css` and `native.css`: the Web Awesome defaults, the utilities and the native element styles, in cascade layers.
+3. `theme/palette.css`, `theme/theme.css`, `theme/looks.css`, `theme/code.css`: the VSA palette, theme and looks, in the Web Awesome cascade layers.
+4. `setup.js`: the icon library.
+5. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it.
+6. `components/vsa-dial.js` and `components/vsa-table.js`: they define `<vsa-dial>` and `<vsa-table>`.
+7. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
 
-The site still uses the prebuilt Web Awesome files from the CDN, not the source in this repo.
+The published page is one file. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
 
 ## Add a usage page
 

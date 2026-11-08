@@ -1,12 +1,22 @@
 # Design system: VSA on Web Awesome
 
-**Foundation.** Web Awesome 3.14.0 from the CDN loader, version pinned. On `<html>`: `wa-theme-default wa-palette-default`, and `wa-light` or `wa-dark` from a System / Light / Dark switch. No Font Awesome Pro kit.
+**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0005`). `setup.js` registers our vendored icons, then the Web Awesome loader runs. No CDN, no Font Awesome kit. Google Fonts is the one outside link.
 
-**Theme layer.** All `--wa-*` overrides are in `theme/vsa.css`. Add there. Do not set `--wa-*` tokens in another file.
+**Theme.** The VSA style is a Web Awesome theme and palette (decision `0006`). On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, and `wa-light` or `wa-dark` from a System / Light / Dark switch.
 
-**Project tokens.** `--vsa-*` tokens are only for ideas that Web Awesome has no token for: the carved, knob, press, glow, dial and hole shadows (`--vsa-shadow-*`), the surface gradients (`--vsa-gradient-*`), the letter spacing (`--vsa-letter-spacing-*`), the code colors (`--vsa-color-code-*`) and the smallest code size (`--vsa-font-size-code-min`). The raised look uses `--wa-shadow-m` and `--wa-shadow-s`. Do not make a `--vsa-*` name for an idea that a `--wa-*` token has.
+| Level | File | Cascade layer | Holds |
+|---|---|---|---|
+| Palette | `theme/palette.css`, `.wa-palette-vsa` | `wa-color-palette` | 11 tints for gray, orange, green, yellow, red. The only hex colors |
+| Brand | `wa-brand-orange` on `<html>` | `wa-color-variant` | Which hue is the brand |
+| Theme | `theme/theme.css`, `.wa-theme-vsa` | `wa-theme` | Roles to role tints, light and dark, fonts, scale controls, shadows |
+| Looks | `theme/looks.css`, `theme/code.css` | `wa-theme`, `wa-theme-dimension` | Project tokens and documented `::part()` rules |
+| App variation | The app's own stylesheet | No layer | The app's values, in the three scopes: both schemes, light, dark |
 
-**Looks.** Each surface is raised or carved. `theme/vsa.css` gives the looks to Web Awesome components with documented parts and states:
+**How to change it.** Replace values, keep the structure. For which kind of change goes where, use the Web Awesome design skill: `theming.md` (palette, brand, roles, light and dark), `your-design-system.md` sections 2 and 3 (where a customization lives, how to extend), and `composition.md` "Styling components" (one component). The table above gives our file for each level.
+
+**Project tokens.** `--vsa-*` tokens are only for ideas that Web Awesome has no token for: the carved, knob, press, glow, dial and hole shadows (`--vsa-shadow-*`), the surface gradients (`--vsa-gradient-*`), the letter spacing (`--vsa-letter-spacing-*`), the code colors (`--vsa-color-code-*`) and the smallest code size (`--vsa-font-size-code-min`). The raised look uses `--wa-shadow-m` and `--wa-shadow-s`. Do not make a `--vsa-*` name for an idea that a `--wa-*` token has. The page background is `--wa-color-surface-default`, and the card surface is `--wa-color-surface-raised`.
+
+**Looks.** Each surface is raised or carved. `theme/looks.css` gives the looks to Web Awesome components with documented parts and states, in the `wa-theme-dimension` layer, as Web Awesome's own Awesome theme does:
 
 | Look | Where |
 |---|---|
@@ -32,7 +42,8 @@
 
 | Name | Built from | Use for | Defined in |
 |---|---|---|---|
-| `<vsa-dial>` | Own element: Web Awesome has no dial | One value of a whole, the main number of a card | `components/vsa-dial.js` |
+| `<vsa-dial>` | Own element | One value of a whole, the main number of a card | `components/vsa-dial.js` |
+| `wa-progress-ring.vsa-dial` | House class on `wa-progress-ring` (proposed in decision `0008`: it can replace `<vsa-dial>`) | The same as `<vsa-dial>`, without the glow | `theme/looks.css` |
 | `<vsa-table>` | Own element around a native `<table>`: Web Awesome has no narrow table layout | Each data table. In a narrow container, each row shows as a block | `components/vsa-table.js` |
 | `pre.vsa-code` | `<pre>` | A code sample, dark in both schemes | `theme/code.css` |
 
@@ -41,6 +52,8 @@
 **Don't.**
 - Do not use `size="small"`, `"medium"` or `"large"`. They are deprecated. Use `s`, `m`, `l`.
 - Do not style `::part(base)`. It is deprecated. Use the part names on the component page.
-- Do not put a hex color or a px size outside `theme/vsa.css` and `theme/code.css`. Use a token. One exception: the 1 px of the visually hidden pattern in `components/vsa-table.js`.
+- Do not put a hex color outside `theme/palette.css`, or a px size outside the theme files. Use a token. One exception: the 1 px of the visually hidden pattern in `components/vsa-table.js`.
+- Do not set a `--wa-*` token outside `theme/theme.css` and `theme/palette.css`.
+- Do not load a file from a CDN. Add it to `vendor/`.
 
-**Verify.** Check each change on mobile and on desktop, in light and in dark. Run `node vsa/scripts/build-artifact.mjs`, then `node vsa/scripts/screenshots.mjs`, and look at the screenshots. See "Verify a change" in the root `AGENTS.md`.
+**Verify.** Run `node vsa/scripts/check.mjs`. Then check each visible change on mobile and on desktop, in light and in dark: run `node vsa/scripts/build-artifact.mjs`, then `node vsa/scripts/screenshots.mjs`, and look at the screenshots. See "Verify a change" in the root `AGENTS.md`.

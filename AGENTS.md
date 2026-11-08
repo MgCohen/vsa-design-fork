@@ -71,13 +71,20 @@ The live docs site is the claude.ai artifact [VSA on Web Awesome](https://claude
 2. Publish that file with the Artifact tool, with `url` set to `https://claude.ai/artifact/2DLUahWMpZMHyBMtu8EGDH`. Do not publish without `url`, because that makes a new artifact with a new link.
 3. If the tool refuses because this session did not read the artifact, read it with `action: "read"` first. Then publish again.
 
-The script needs Node 18 or later and access to `cdn.jsdelivr.net`. It puts these items into one HTML file:
+The script uses only local files. It puts these items into one HTML file:
 
 | Item | Source |
 |---|---|
-| Our CSS and `vsa-dial.js` | `vsa/theme/`, `vsa/components/` |
-| The Web Awesome theme and utilities CSS | jsDelivr. An artifact page cannot load stylesheets from jsDelivr |
-| The docs pages | `vsa/docs/`, as `window.VSA_FILES` |
-| The two API manifests | `vsa/components/custom-elements.json`, and the Web Awesome manifest from jsDelivr |
+| All CSS, with its imports | `vsa/theme/`, `vsa/vendor/webawesome/styles/` |
+| All components, bundled with esbuild | `vsa/vendor/webawesome/`, `vsa/setup.js`, `vsa/components/` |
+| `marked` and `highlight.js` | `vsa/vendor/` |
+| The docs pages, the icons and the two API manifests | `vsa/docs/`, `vsa/vendor/icons/`, the two `custom-elements.json` files |
 
-The page still loads the Web Awesome components, `marked` and `highlight.js` from the CDN at run time, and the fonts from Google Fonts.
+The only outside link is Google Fonts. The script stops if the page links any other outside file.
+
+## Update Web Awesome
+
+1. Merge the upstream release into `packages/webawesome` (see "Upstream").
+2. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the package and copies the runtime files to `vsa/vendor/webawesome`.
+3. Compare our theme with the new `styles/themes/default.css`, region by region, for new or renamed tokens.
+4. Run the checks in "Verify a change".
