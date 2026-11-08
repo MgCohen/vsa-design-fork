@@ -4,11 +4,11 @@ Instructions for AI coding agents (and humans) that work in this repository. Thi
 
 ## Project
 
-VSA Design is the design system of VSA apps. It is a fork of Web Awesome (MIT) from the `v3.14.0` release. Our style is the base, and each app is a theme over it. See `vsa/decisions/0005-fork-web-awesome.md`.
+VSA Design is the design system of VSA apps. It owns a build of Web Awesome (MIT) from the `v3.14.0` release, with the source unchanged. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0005-fork-web-awesome.md` and `0006-theme-and-palette.md`.
 
 | Path | Content | Owner |
 |---|---|---|
-| `packages/webawesome/` | The Web Awesome source: components, themes, build, tests. Read `packages/webawesome/CLAUDE.md` before you change it | Upstream, changed by us |
+| `packages/webawesome/` | The Web Awesome source: components, themes, build, tests. We build it, but we do not change it without a decision record | Upstream, unchanged |
 | `vsa/` | Our work: the theme, the looks, `vsa-*` components, the docs site, decisions. See `vsa/README.md` | Us |
 | `vsa/DESIGN.md` | The design brief: the vocabulary, the conventions, the don'ts | Us |
 | `.claude/skills/` | The Web Awesome agent skills, `webawesome` and `webawesome-design` | Upstream, copied |
@@ -25,7 +25,9 @@ An agent that does not load skills by itself can read the files: `.claude/skills
 
 ## Rules
 
-- Set `--wa-*` tokens only in `vsa/theme/vsa.css`. Use the three scopes that the file has.
+- Put hex colors only in `vsa/theme/palette.css`. A role in `vsa/theme/theme.css` refers to a palette tint.
+- Set `--wa-*` tokens only in `vsa/theme/theme.css`, and sizes only through the scale controls. See `0006`.
+- Do not change `packages/webawesome/src` without a decision record.
 - Make a `--vsa-*` token only for an idea that Web Awesome has no token for.
 - An own component uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
 - Use the sizes `s`, `m` and `l`. Do not use `::part(base)`.
