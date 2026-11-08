@@ -42,7 +42,7 @@ Each step reads only the steps before it. A change in an early step changes all 
   <wa-card>
     <div class="wa-stack wa-gap-2xs">
       <wa-badge variant="success" appearance="filled">Step 3</wa-badge>
-      <a href="#/components/dial"><strong>VSA components</strong></a>
+      <a href="#/components/table"><strong>VSA components</strong></a>
       <span class="wa-caption-s">Only where Web Awesome has none</span>
       <code>&lt;vsa-*&gt;</code>
     </div>
@@ -75,6 +75,6 @@ Each step reads only the steps before it. A change in an early step changes all 
 ## Important pages
 
 - [Switch](#/components/switch): the sample usage page of a Web Awesome component. Each new usage page uses the same sections.
-- [Dial](#/components/dial): the sample VSA component. A VSA component reads the `--wa-*` tokens, as a Web Awesome component does.
+- [Table](#/components/table): the sample VSA component, for behavior that Web Awesome has not. [Dial](#/components/dial): the sample house class, a Web Awesome component with the VSA look.
 - [Elevation](#/foundations/elevation): the raised and carved looks, and where `::part()` applies them.
 - [Theme and palette](#/tokens/theme): the palette tints, all `--wa-*` values of the theme, and the Web Awesome defaults that the theme does not set.

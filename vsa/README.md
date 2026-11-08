@@ -13,7 +13,7 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 | `theme/looks.css` | Project tokens (`--vsa-*`), and the raised and carved looks with documented `::part()` rules |
 | `setup.js` | Registers the vendored icons as the default icon library. Load it before the Web Awesome loader |
 | `vendor/` | Our build of Web Awesome (`vendor/webawesome`, made by `scripts/vendor-webawesome.mjs`), the icons, `marked` and `highlight.js`. Do not edit these files |
-| `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-dial` and `vsa-table` |
+| `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
 | `theme/code.css` | The code block: project tokens for code colors, and the dark IDE look of `pre.vsa-code` |
 | `site/index.html` | The docs site, made from the system: `<wa-page>` with the menu in a drawer on mobile, foundations, one page for each component, light and dark |
@@ -43,7 +43,7 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 3. `theme/palette.css`, `theme/theme.css`, `theme/looks.css`, `theme/code.css`: the VSA palette, theme and looks, in the Web Awesome cascade layers.
 4. `setup.js`: the icon library.
 5. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it.
-6. `components/vsa-dial.js` and `components/vsa-table.js`: they define `<vsa-dial>` and `<vsa-table>`.
+6. `components/vsa-table.js`: it defines `<vsa-table>`.
 7. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
 
 The published page is one file. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
@@ -56,7 +56,7 @@ The published page is one file. `scripts/build-artifact.mjs` bundles the compone
 
 ## Add a VSA component
 
-Do this only for a component that Web Awesome does not have. [Dial](site/index.html#/components/dial) is the sample.
+Do this only for behavior that no Web Awesome component has. For a new look on a Web Awesome component, make a house class in `theme/looks.css` instead, as the dial does. [Table](site/index.html#/components/table) is the sample.
 
 1. Write `components/vsa-<name>.js`: a custom element with shadow DOM. Use the API names of the HTML element or the Web Awesome component that is nearest.
 2. Read the `--wa-*` tokens, as a Web Awesome component does. Read a project token only for a look that Web Awesome has no token for, for example `--vsa-shadow-carve`.

@@ -1,47 +1,3 @@
-## Test: the dial as a styled wa-progress-ring
-
-Decision `0008` tests if the dial can be `wa-progress-ring` with the house class `vsa-dial`, so that Web Awesome gives the behavior. In each row: `vsa-dial` left, `wa-progress-ring.vsa-dial` right.
-
-```html preview
-<vsa-dial value="72" label="Tests that pass"></vsa-dial>
-<wa-progress-ring class="vsa-dial" value="72" label="Tests that pass">72%</wa-progress-ring>
-```
-
-```html preview
-<vsa-dial value="90" variant="success" label="Done"></vsa-dial>
-<wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
-<vsa-dial value="20" variant="danger" label="Failed"></vsa-dial>
-<wa-progress-ring class="vsa-dial wa-danger" value="20" label="Failed">20%</wa-progress-ring>
-```
-
-Move the slider: it sets the value of both dials.
-
-```html preview
-<div class="wa-stack wa-gap-m dial-test">
-  <div class="wa-cluster wa-gap-l wa-align-items-center">
-    <vsa-dial value="72" label="Test value"></vsa-dial>
-    <wa-progress-ring class="vsa-dial" value="72" label="Test value">72%</wa-progress-ring>
-    <vsa-dial size="s" value="72" label="Test value"></vsa-dial>
-    <wa-progress-ring class="vsa-dial vsa-dial-s" value="72" label="Test value"></wa-progress-ring>
-  </div>
-  <wa-slider label="Value" min="0" max="100" value="72"></wa-slider>
-</div>
-<script>
-  for (const box of document.querySelectorAll('.dial-test')) {
-    const slider = box.querySelector('wa-slider');
-    slider.addEventListener('input', () => {
-      for (const dial of box.querySelectorAll('vsa-dial, wa-progress-ring')) dial.value = slider.value;
-      for (const ring of box.querySelectorAll('wa-progress-ring:not(.vsa-dial-s)')) ring.textContent = `${slider.value}%`;
-    });
-  }
-</script>
-```
-
-```html preview
-<vsa-dial size="s" value="60" label="Sync"></vsa-dial>
-<wa-progress-ring class="vsa-dial vsa-dial-s" value="60" label="Sync"></wa-progress-ring>
-```
-
 ## When to use it
 
 - Use a dial to show one value of a whole, for example the part of the tests that pass.
@@ -51,79 +7,77 @@ Move the slider: it sets the value of both dials.
 
 ## Look
 
-The ring is a deep carved channel. The indicator fills the channel with the accent color and a glow. The center is a raised hole.
+A dial is `<wa-progress-ring>` with the house class `vsa-dial`. Web Awesome gives the behavior: the value, the label, the progressbar role and the animation. The class gives the VSA look: a deep carved channel, an indicator with a glow, and a raised center.
 
 ```html preview
-<vsa-dial value="72" label="Tests that pass"></vsa-dial>
+<wa-progress-ring class="vsa-dial" value="72" label="Tests that pass">72%</wa-progress-ring>
+```
+
+Move the slider to change the value.
+
+```html preview
+<div class="wa-stack wa-gap-m dial-demo">
+  <div class="wa-cluster wa-gap-l wa-align-items-center">
+    <wa-progress-ring class="vsa-dial" value="72" label="Demo value">72%</wa-progress-ring>
+    <wa-progress-ring class="vsa-dial vsa-dial-s" value="72" label="Demo value"></wa-progress-ring>
+  </div>
+  <wa-slider label="Value" min="0" max="100" value="72"></wa-slider>
+</div>
+<script>
+  for (const box of document.querySelectorAll('.dial-demo')) {
+    const slider = box.querySelector('wa-slider');
+    slider.addEventListener('input', () => {
+      for (const ring of box.querySelectorAll('wa-progress-ring')) ring.value = slider.value;
+      box.querySelector('wa-progress-ring:not(.vsa-dial-s)').textContent = `${slider.value}%`;
+    });
+  }
+</script>
 ```
 
 ## Variants
 
-### Center content
-
-Put a number, a word or an icon in the default slot. If the slot is empty, the medium dial shows the percent, and the small dial shows nothing.
-
-```html preview
-<vsa-dial value="131" max="133" label="Tests that pass">
-  <div>131<br><small>of 133</small></div>
-</vsa-dial>
-<vsa-dial value="40" label="Disk use"></vsa-dial>
-```
-
 ### Colors
 
-Set `variant` for a state color. The default is the accent color.
+Add a Web Awesome variant class for a state color. The default is the brand color.
 
 ```html preview
-<vsa-dial value="90" variant="success"
-  label="Done"></vsa-dial>
-<vsa-dial value="45" variant="warning"
-  label="Pending"></vsa-dial>
-<vsa-dial value="20" variant="danger"
-  label="Failed"></vsa-dial>
+<wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
+<wa-progress-ring class="vsa-dial wa-warning" value="45" label="Pending">45%</wa-progress-ring>
+<wa-progress-ring class="vsa-dial wa-danger" value="20" label="Failed">20%</wa-progress-ring>
+```
+
+### Center content
+
+The default slot is the center. Put a number, a word or an icon in it.
+
+```html preview
+<wa-progress-ring class="vsa-dial" value="98" label="Tests that pass">
+  <div>131<br><small>of 133</small></div>
+</wa-progress-ring>
 ```
 
 ### Sizes
 
-Use `size="s"`, `"m"` (the default) or `"l"`. The small dial has a shallow carve: use it in lists and table rows. The large dial is for the main number of a page. All sizes follow the font size. For another size, set `--size`, as on `wa-progress-ring`. The track follows `--size`.
+The class `vsa-dial-s` is the small dial, with a shallow carve, for lists and table rows. All sizes follow the font size. For another size, set `--size`.
 
 ```html preview
-<vsa-dial size="s" value="60" label="Sync">
-  <wa-icon name="rotate" label="Sync"></wa-icon>
-</vsa-dial>
-<vsa-dial size="s" value="100" variant="success"
-  label="Build"></vsa-dial>
-<vsa-dial value="72" label="Tests"></vsa-dial>
-<vsa-dial size="l" value="72" label="Tests"></vsa-dial>
+<wa-progress-ring class="vsa-dial vsa-dial-s" value="60" label="Sync"></wa-progress-ring>
+<wa-progress-ring class="vsa-dial" value="72" label="Tests">72%</wa-progress-ring>
+<wa-progress-ring class="vsa-dial" value="72" label="Tests" style="--size: 12em">72%</wa-progress-ring>
 ```
 
 ## Accessibility
 
-The dial has the role `progressbar`, with its value, its minimum and its maximum. Always set `label`: screen readers read it with the value. Without `label`, the dial uses its center text, or "Progress", and shows a warning in the console.
-
-## Change the value
-
-Set `value` from code. The dial shows the new value at once.
-
-```html
-<vsa-dial id="tests" label="Tests that pass"></vsa-dial>
-<script>
-  const dial = document.getElementById('tests');
-  dial.value = 72;
-</script>
-```
+`wa-progress-ring` has the role `progressbar`, with its value. Always set `label`: screen readers read it with the value.
 
 ## Tokens and looks
 
-The dial is a VSA component: `components/vsa-dial.js`. Web Awesome has no dial, so the project owns it. It follows the Web Awesome rules for an own component: its own prefix, the `--wa-*` tokens, and the custom property names of `wa-progress-ring`.
+The class is in `theme/looks.css`. It uses only the documented parts and properties of `wa-progress-ring`.
 
 | Item | Value |
 |---|---|
-| Channel | `--track-color` (default `--wa-color-surface-lowered`), and the deep carve `--vsa-shadow-dial`. The small dial uses `--vsa-shadow-carve` |
-| Indicator | `--indicator-color` (default `--wa-color-brand-fill-loud`). `variant` sets it to `--wa-color-success-fill-loud`, `--wa-color-warning-fill-loud` or `--wa-color-danger-fill-loud`. The glow is the same color |
-| Center | `--vsa-gradient-hole` and `--vsa-shadow-hole`. The small dial uses `--wa-shadow-s` |
-| Text | `--wa-font-family-body`, `--wa-color-text-normal` |
+| Channel | The `progress-ring` part: `--wa-color-surface-lowered` and the deep carve `--vsa-shadow-dial`. The small dial uses `--vsa-shadow-carve` |
+| Indicator | `--indicator-color` (default `--wa-color-brand-fill-loud`). A variant class sets it to the variant fill. The glow is the same color |
+| Center | The `label` part: `--vsa-gradient-hole` and `--vsa-shadow-hole`. The small dial uses `--wa-shadow-s` |
 
-## Open question
-
-The Runner reference also shows a ring with more than one color, for example done, pending and failed. Add it as a `segments` API, or as a separate component?
+The glow needs room inside the ring. Keep `--track-width` wider than `--indicator-width`: the class sets 16 % and 10 % of `--size`.

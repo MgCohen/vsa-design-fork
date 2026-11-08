@@ -1,8 +1,8 @@
 # 0008: The dial as a styled wa-progress-ring
 
-**Status:** proposed. The choice waits for a look at the side-by-side test on the Dial page.
+**Status:** accepted on 2026-11-08, after a side-by-side test on the live page. `vsa-dial` is deleted.
 
-**Proposal:** The dial becomes `<wa-progress-ring class="vsa-dial">`, a house class in `theme/looks.css`, and we delete the own element `vsa-dial`. Web Awesome then gives the behavior: the value, the progressbar role, the label and the upstream fixes.
+**Decision:** The dial is `<wa-progress-ring class="vsa-dial">`, a house class in `theme/looks.css`. The own element `vsa-dial` is deleted. Web Awesome then gives the behavior: the value, the progressbar role, the label and the upstream fixes.
 
 | Look | `vsa-dial` (own element) | `wa-progress-ring.vsa-dial` (house class) |
 |---|---|---|

@@ -57,7 +57,7 @@ Check each visible change on mobile and on desktop, in light and in dark. A chan
 
 1. Run `node vsa/scripts/check.mjs`. It checks the Web Awesome design rules and our rules: hex colors only in the palette, `--wa-*` tokens only in the theme, no px, no `::part(base)`, no visual host rules, no hand-written flex or grid, no outside links. Fix each finding.
 2. Run `node vsa/scripts/build-artifact.mjs`.
-3. Run `node vsa/scripts/screenshots.mjs`. Add hash routes to check other pages, for example `node vsa/scripts/screenshots.mjs /components/table`.
+3. Run `node vsa/scripts/screenshots.mjs`. Add hash routes to check other pages, for example `node vsa/scripts/screenshots.mjs /components/table`. In Git Bash, put `MSYS_NO_PATHCONV=1` <!-- cspell:disable-line --> before the command, or Git Bash changes `/components/table` into a Windows path.
 4. Look at the screenshots in `vsa/dist/screenshots/`: mobile (390 px) and desktop (1440 px), light and dark, for each page.
 5. If the script reports a problem, fix it. It reports console errors, page errors, a page that is wider than the screen, a wrong screen size, and each request to an outside host except Google Fonts.
 

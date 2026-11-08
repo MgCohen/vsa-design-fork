@@ -42,7 +42,8 @@
   "components": [
     {
       "name": "dial",
-      "title": "Dial"
+      "title": "Dial",
+      "summary": "A dial shows one value of a whole: wa-progress-ring with the house class vsa-dial."
     },
     {
       "name": "switch",

@@ -63,10 +63,10 @@ One example of each component with the VSA look, grouped by category. To see all
 <wa-progress-ring value="62" label="Build">
 </wa-progress-ring>
 <wa-spinner></wa-spinner>
-<vsa-dial value="72" label="Tests that pass"></vsa-dial>
 <wa-progress-ring class="vsa-dial" value="72"
   label="Tests that pass">72%</wa-progress-ring>
-<vsa-dial size="s" value="60" label="Sync"></vsa-dial>
+<wa-progress-ring class="vsa-dial vsa-dial-s" value="60"
+  label="Sync"></wa-progress-ring>
 <wa-tooltip for="tip-target">Runs on each push</wa-tooltip>
 <wa-button id="tip-target" size="s">
   Hover for a tooltip

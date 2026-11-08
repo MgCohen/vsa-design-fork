@@ -15,7 +15,8 @@ The VSA look has two shapes. Tokens give the shadow values. `theme/looks.css` ap
 <wa-button>Raised</wa-button>
 <wa-input placeholder="Carved" style="width: 12rem"></wa-input>
 <wa-switch checked aria-label="Knob"></wa-switch>
-<vsa-dial value="72" label="Deep carve"></vsa-dial>
+<wa-progress-ring class="vsa-dial" value="72"
+  label="Deep carve">72%</wa-progress-ring>
 ```
 
 ## Web Awesome shadows
