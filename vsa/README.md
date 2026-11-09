@@ -67,7 +67,6 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 
 ## Open questions
 
-- The site loads the prebuilt Web Awesome 3.14.0 files from the CDN. Change it to the files that this repo builds.
 - Two-way binding in Blazor needs a thin Razor wrapper for each form control. Nobody has tested Blazor yet.
 - The badge default color is the brand color. Decide if the VSA default is neutral.
 - The dots have no Web Awesome component. Write them as a VSA component, as the dial.

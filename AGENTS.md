@@ -55,6 +55,8 @@ Do not edit the files in `.claude/skills/` by hand. The next update writes over 
 
 Check each visible change on mobile and on desktop, in light and in dark. A change that looks correct on one screen size can break the other.
 
+In a new clone, run `npm ci` in the repo root first. The scripts need `esbuild` and `playwright`.
+
 1. Run `node vsa/scripts/check.mjs`. It checks the Web Awesome design rules and our rules: hex colors only in the palette, `--wa-*` tokens only in the theme, no px, no `::part(base)`, no visual host rules, no hand-written flex or grid, no outside links. Fix each finding.
 2. Run `node vsa/scripts/build-artifact.mjs`.
 3. Run `node vsa/scripts/screenshots.mjs`. Add hash routes to check other pages, for example `node vsa/scripts/screenshots.mjs /components/table`. In Git Bash, put `MSYS_NO_PATHCONV=1` <!-- cspell:disable-line --> before the command, or Git Bash changes `/components/table` into a Windows path.

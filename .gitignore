@@ -12,5 +12,6 @@ _bundle_
 /packages/webawesome-app
 custom-elements.json
 !vsa/components/custom-elements.json
+!vsa/vendor/webawesome/custom-elements.json
 .claude/settings.local.json
 **/.claude/scheduled_tasks.lock
