@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en" class="wa-theme-vsa wa-palette-vsa wa-brand-orange wa-light wa-cloak">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VSA Design System</title>
+    <link rel="stylesheet" href="../theme/fonts.css" />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/themes/default.css" />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/utilities.css" />
+    <link rel="stylesheet" href="../vendor/webawesome/styles/native.css" />
+    <link rel="stylesheet" href="../theme/palette.css" />
+    <link rel="stylesheet" href="../theme/theme.css" />
+    <link rel="stylesheet" href="../theme/looks.css" />
+    <link rel="stylesheet" href="../theme/code.css" />
+    <script type="module" src="../setup.js"></script>
+    <!-- data-webawesome: the base path for the loader, resolved from this page. Without it, the loader resolves the
+         relative src from its own chunk files. -->
+    <script
+      type="module"
+      src="../vendor/webawesome/webawesome.loader.js"
+      data-webawesome="../vendor/webawesome"
+    ></script>
+    <script type="module" src="../components/vsa-table.js"></script>
+    <script src="../vendor/marked/marked.min.js"></script>
+    <script src="../vendor/highlight.js/highlight.min.js"></script>
+    <style>
+      /*
+        The docs site shell. It uses the system: wa-page for the layout and the mobile drawer,
+        Web Awesome native styles for the text and the tables, and wa-* components for each control.
+        This CSS only places things. It uses tokens, not px or hex values.
+      */
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      /* The background is also on body, because a host page (for example a claude.ai artifact) can paint body. */
+      html,
+      body {
+        background: var(--wa-color-surface-default);
+        color: var(--wa-color-text-normal);
+      }
+
+      wa-page {
+        --menu-width: 16rem;
+      }
+      wa-page[view='mobile'] {
+        --menu-width: auto;
+      }
+      wa-page[view='mobile'] main {
+        padding: var(--wa-space-l) var(--wa-space-m);
+      }
+      .mobile-header {
+        padding: var(--wa-space-xs) var(--wa-space-m);
+        border-block-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
+      }
+      .mobile-header .brand {
+        font-size: var(--wa-font-size-m);
+      }
+      wa-page::part(navigation) {
+        border-inline-end: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
+      }
+
+      .brand {
+        font-family: var(--wa-font-family-heading);
+        font-weight: var(--wa-font-weight-heading);
+        font-size: var(--wa-font-size-l);
+        letter-spacing: var(--vsa-letter-spacing-display);
+        color: var(--wa-color-text-normal);
+        text-decoration: none;
+      }
+      .brand small {
+        display: block;
+        font-family: var(--wa-font-family-body);
+        font-weight: var(--wa-font-weight-semibold);
+        font-size: var(--wa-font-size-2xs);
+        letter-spacing: 0;
+        color: var(--wa-color-text-quiet);
+      }
+
+      /* Navigation */
+      .site-nav a {
+        display: block;
+        padding: var(--wa-space-2xs) var(--wa-space-xs);
+        border-radius: var(--wa-border-radius-s);
+        color: var(--wa-color-neutral-on-quiet);
+        text-decoration: none;
+      }
+      .site-nav a:hover {
+        background: var(--wa-color-neutral-fill-quiet);
+        color: var(--wa-color-text-normal);
+      }
+      .site-nav a[aria-current='page'] {
+        background: var(--vsa-gradient-surface);
+        box-shadow: var(--wa-shadow-s);
+        color: var(--wa-color-text-normal);
+      }
+      .site-nav a .mark {
+        display: inline-block;
+        inline-size: 1.2em;
+        color: var(--wa-color-brand-on-normal);
+        font-weight: var(--wa-font-weight-bold);
+      }
+      .site-nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .site-nav wa-details::part(header) {
+        text-transform: uppercase;
+        letter-spacing: var(--vsa-letter-spacing-caps);
+        font-size: var(--wa-font-size-xs);
+        font-weight: var(--wa-font-weight-bold);
+      }
+      .sub-group {
+        margin: var(--wa-space-s) var(--wa-space-xs) var(--wa-space-3xs);
+        font-size: var(--wa-font-size-2xs);
+        font-weight: var(--wa-font-weight-semibold);
+        color: var(--wa-color-text-quiet);
+      }
+
+      /* Content */
+      /* A grid item is as wide as its widest content by default. A wide example then makes the page wider than the
+         screen. With no minimum width, the example scrolls in its own box. */
+      main,
+      wa-page::part(main) {
+        min-inline-size: 0;
+      }
+      main {
+        max-inline-size: 68rem;
+      }
+      main h1 {
+        letter-spacing: var(--vsa-letter-spacing-display);
+      }
+      main .lead {
+        font-size: var(--wa-font-size-l);
+        color: var(--wa-color-neutral-on-quiet);
+      }
+      main .meta {
+        margin-block-end: var(--wa-space-l);
+      }
+      main :is(p, li) {
+        max-inline-size: 75ch;
+      }
+
+      /* An "html preview" block: the live HTML in a card, and its code in the card footer. */
+      .example {
+        margin-block: var(--wa-space-m) var(--wa-space-l);
+      }
+      .example pre.vsa-code {
+        margin: 0;
+      }
+      /* A wide example scrolls in its box. The box clips, so it has room around the example for the shadows. */
+      .preview {
+        overflow-x: auto;
+        padding: var(--wa-space-m);
+        margin: calc(-1 * var(--wa-space-m));
+      }
+      .gallery {
+        --min-column-size: 18rem;
+      }
+      /* The width of an example card comes from the page, not from the example. Before the components load, an
+         example can be very wide, and a phone then makes the whole page wider. */
+      .gallery-card,
+      .example {
+        min-inline-size: 0;
+        contain: inline-size;
+      }
+      .gallery-card a[slot='header'] {
+        font-weight: var(--wa-font-weight-semibold);
+      }
+
+      /* Tables */
+      vsa-table:not(:state(stacked)) td code {
+        white-space: nowrap;
+      }
+      vsa-table:state(stacked) td code {
+        overflow-wrap: anywhere;
+      }
+      table {
+        font-size: var(--wa-font-size-s);
+      }
+      table.api .attr,
+      .val,
+      .chain {
+        font-family: var(--wa-font-family-code);
+        font-size: var(--wa-font-size-2xs);
+        color: var(--wa-color-text-quiet);
+      }
+      .val {
+        word-break: break-all;
+      }
+      .chain {
+        overflow-wrap: anywhere;
+      }
+      .chain b {
+        color: var(--wa-color-text-normal);
+        font-weight: var(--wa-font-weight-semibold);
+      }
+      .chain .lvl-theme {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-brand-border-normal);
+      }
+      .chain .lvl-palette {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-warning-border-normal);
+      }
+      .chain .lvl-project {
+        border-block-end: var(--wa-border-width-m) solid var(--wa-color-success-border-normal);
+      }
+      .scheme {
+        padding: var(--wa-space-2xs) var(--wa-space-xs);
+        border-radius: var(--wa-border-radius-s);
+        background: var(--wa-color-surface-raised);
+        color: var(--wa-color-text-normal);
+      }
+
+      /* Token samples */
+      .sw {
+        display: inline-block;
+        inline-size: 2em;
+        block-size: 1.4em;
+        border-radius: var(--wa-border-radius-s);
+        vertical-align: middle;
+        box-shadow: inset 0 0 0 var(--wa-border-width-s) var(--wa-color-surface-border);
+      }
+      .demo-shadow {
+        inline-size: 4.5em;
+        block-size: 2.5em;
+        border-radius: var(--wa-border-radius-m);
+        background: var(--vsa-gradient-surface);
+      }
+      .demo-radius {
+        inline-size: 3em;
+        block-size: 2em;
+        background: var(--wa-color-brand-fill-loud);
+      }
+      .demo-space {
+        block-size: var(--wa-space-xs);
+        background: var(--wa-color-brand-fill-loud);
+        border-radius: var(--wa-border-radius-s);
+      }
+      .demo-font {
+        font-size: var(--wa-font-size-l);
+      }
+      .probes {
+        position: absolute;
+        inline-size: 0;
+        block-size: 0;
+        overflow: hidden;
+      }
+      .empty {
+        color: var(--wa-color-text-quiet);
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <wa-page mobile-breakpoint="920">
+      <script>
+        // wa-page starts in the desktop view and measures its width after it loads. On a phone, a slow page then
+        // shows the desktop layout for a moment, and the phone makes the page wider. The first view comes from here.
+        document.currentScript.parentElement.setAttribute('view', innerWidth < 920 ? 'mobile' : 'desktop');
+      </script>
+      <header slot="header" class="mobile-header wa-split wa-mobile-only">
+        <a class="brand" href="#/">VSA Design System</a>
+        <wa-button data-toggle-nav appearance="outlined" size="s">
+          <wa-icon slot="start" name="bars"></wa-icon>
+          Menu
+        </wa-button>
+      </header>
+      <header slot="navigation-header" class="wa-stack wa-gap-s">
+        <a class="brand" href="#/" data-drawer="close">VSA Design System<small>on Web Awesome 3.14.0</small></a>
+        <wa-radio-group class="theme-switch" orientation="horizontal" size="s" label="Theme" value="system">
+          <wa-radio appearance="button" value="system">System</wa-radio>
+          <wa-radio appearance="button" value="light">Light</wa-radio>
+          <wa-radio appearance="button" value="dark">Dark</wa-radio>
+        </wa-radio-group>
+        <wa-input class="filter" size="s" placeholder="Search pages" aria-label="Search pages" with-clear></wa-input>
+      </header>
+      <nav slot="navigation" class="site-nav wa-stack wa-gap-2xs" aria-label="Design system"></nav>
+      <main id="page" tabindex="-1"></main>
+    </wa-page>
+    <div class="probes" aria-hidden="true">
+      <div id="probe-light" class="wa-light"><span></span></div>
+      <div id="probe-dark" class="wa-dark"><span></span></div>
+    </div>
+    <script>
+      const MANIFEST_URL = '../vendor/webawesome/custom-elements.json';
+      const VSA_MANIFEST_URL = '../components/custom-elements.json';
+      const DOCS_ROOT = '../docs/';
+      // The Web Awesome component docs pages, copied by vsa/scripts/vendor-webawesome.mjs. Paths that start with "wa/".
+      const WA_DOCS_ROOT = '../vendor/webawesome/docs/';
+      const esc = s =>
+        String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+      async function loadText(path) {
+        // The published page is one file with all docs files in VSA_FILES. A file that is not there does not exist.
+        if (window.VSA_FILES) {
+          if (path in window.VSA_FILES) return window.VSA_FILES[path];
+          throw new Error(path + ': not found');
+        }
+        const url = path.startsWith('wa/') ? WA_DOCS_ROOT + path.slice(3) : DOCS_ROOT + path;
+        const r = await fetch(url, { cache: 'no-cache' });
+        if (!r.ok) throw new Error(path + ': ' + r.status);
+        return r.text();
+      }
+      let manifestPromise;
+      // The tag names of our build. An example with another wa-* tag (a Pro component) shows only its code.
+      let knownTags = new Set();
+      function manifest() {
+        const load = (bundled, url) =>
+          bundled ? Promise.resolve(bundled) : fetch(url, { cache: 'no-cache' }).then(r => r.json());
+        manifestPromise ??= Promise.all([
+          load(window.WA_MANIFEST, MANIFEST_URL),
+          load(window.VSA_MANIFEST, VSA_MANIFEST_URL),
+        ]).then(manifests => {
+          const list = manifests.flatMap(m => m.modules.flatMap(x => x.declarations || [])).filter(d => d.tagName);
+          knownTags = new Set(list.map(d => d.tagName));
+          return new Map(
+            list.sort((a, b) => a.tagName.localeCompare(b.tagName)).map(d => [d.tagName.replace(/^(wa|vsa)-/, ''), d]),
+          );
+        });
+        return manifestPromise;
+      }
+
+      /* Theme */
+      const KEY = 'vsa-ds-theme';
+      const darkMq = matchMedia('(prefers-color-scheme: dark)');
+      function readTheme() {
+        try {
+          return localStorage.getItem(KEY) || 'system';
+        } catch {
+          return 'system';
+        }
+      }
+      function applyTheme(choice) {
+        const root = document.documentElement;
+        const isDark = choice === 'dark' || (choice === 'system' && darkMq.matches);
+        root.classList.toggle('wa-dark', isDark);
+        root.classList.toggle('wa-light', !isDark);
+        themeSwitch.value = choice;
+      }
+      const themeSwitch = document.querySelector('.theme-switch');
+      themeSwitch.addEventListener('change', () => {
+        try {
+          localStorage.setItem(KEY, themeSwitch.value);
+        } catch {}
+        applyTheme(themeSwitch.value);
+      });
+      darkMq.addEventListener('change', () => applyTheme(readTheme()));
+      applyTheme(readTheme());
+
+      /* Tokens: declared values from the stylesheets this page can read. A later declaration wins. */
+      let tokenMap;
+      function tokens() {
+        if (tokenMap) return tokenMap;
+        tokenMap = new Map();
+        const walk = (rules, file) => {
+          for (const r of rules) {
+            if (r instanceof CSSImportRule) {
+              try {
+                walk(r.styleSheet.cssRules, file);
+              } catch {}
+              continue;
+            }
+            if (r instanceof CSSMediaRule) continue;
+            if (r instanceof CSSStyleRule && /:root|\.wa-theme-vsa|\.wa-palette-vsa/.test(r.selectorText)) {
+              // The path column shows the light value. A dark block (its first selector names .wa-dark) does not
+              // replace a value that the same file set before. The Dark column shows the dark value.
+              const dark = /\.wa-dark/.test(r.selectorText.split(',')[0]);
+              for (const p of r.style) {
+                if (!p.startsWith('--')) continue;
+                if (dark && tokenMap.get(p)?.file === file) continue;
+                tokenMap.set(p, { value: r.style.getPropertyValue(p).trim(), file });
+              }
+            }
+            if (r.cssRules && !(r instanceof CSSStyleRule)) walk(r.cssRules, file);
+          }
+        };
+        for (const s of document.styleSheets) {
+          const file = (s.ownerNode?.dataset?.source || s.href || '').split('/').pop();
+          try {
+            walk(s.cssRules, file);
+          } catch {}
+        }
+        return tokenMap;
+      }
+      /* The level of a token: a hue tint of our palette, a --wa-* token that our theme sets, a --vsa-* project
+         token, or a Web Awesome default. */
+      function level(file, name) {
+        if (file === 'palette.css') return 'VSA palette';
+        if (name.startsWith('--vsa-')) return 'Project token';
+        if (file === 'theme.css') return 'VSA theme';
+        return 'Web Awesome default';
+      }
+      const levelKey = text =>
+        ({ 'VSA palette': 'palette', 'VSA theme': 'theme', 'Project token': 'project' })[text] || 'web';
+      function chain(name) {
+        const map = tokens();
+        const steps = [name];
+        let v = map.get(name)?.value;
+        while (v) {
+          const m = /^var\((--[\w-]+)\)$/.exec(v);
+          if (!m || steps.includes(m[1])) break;
+          steps.push(m[1]);
+          v = map.get(m[1])?.value;
+        }
+        return { steps, value: v };
+      }
+      function kind(name) {
+        if (/shadow-(?!blur|offset|color)|shadow-[sml]$|^--vsa-shadow/.test(name) && !/color/.test(name))
+          return 'shadow';
+        if (/color|gradient/.test(name)) return 'color';
+        if (/radius/.test(name)) return 'radius';
+        if (/space/.test(name)) return 'space';
+        if (/font-family/.test(name) || /^--vsa-font-(body|display|mono)$/.test(name)) return 'font';
+        return 'text';
+      }
+      function computed(probe, name) {
+        return getComputedStyle(probe).getPropertyValue(name).trim();
+      }
+      function demo(name, probeId) {
+        const k = kind(name);
+        const v = `var(${name})`;
+        const box = document.getElementById(probeId);
+        const holder = document.createElement('span');
+        if (k === 'color') holder.innerHTML = `<span class="sw" style="background:${v}"></span>`;
+        else if (k === 'shadow') holder.innerHTML = `<div class="demo-shadow" style="box-shadow:${v}"></div>`;
+        else if (k === 'radius') holder.innerHTML = `<div class="demo-radius" style="border-radius:${v}"></div>`;
+        else if (k === 'space') holder.innerHTML = `<div class="demo-space" style="width:${v}"></div>`;
+        else if (k === 'font')
+          holder.innerHTML = `<span class="demo-font" style="font-family:${v}">Aa Runner 0123</span>`;
+        else holder.innerHTML = `<span class="val">${esc(computed(box, name))}</span>`;
+        return holder.innerHTML;
+      }
+      /* The level of a token as a badge: the theme layer is brand, a project token is success, a Web Awesome default is neutral. */
+      function levelBadge(text) {
+        const variant =
+          { 'VSA theme': 'brand', 'VSA palette': 'warning', 'Project token': 'success' }[text] || 'neutral';
+        return `<wa-badge variant="${variant}" appearance="filled">${esc(text)}</wa-badge>`;
+      }
+      /* Query: an optional regex for the name, and an optional @file, for example "^--wa-color- @vsa.css". */
+      function tokenTable(query) {
+        const fileArg = (query.match(/@(\S+)/) || [])[1];
+        const pattern = query.replace(/@\S+/, '').trim() || '.';
+        const re = new RegExp(pattern);
+        const map = tokens();
+        const names = [...map.keys()].filter(n => re.test(n) && (!fileArg || map.get(n).file === fileArg));
+        if (!names.length) return `<p class="empty">No token matches ${esc(query)}.</p>`;
+        const rows = names
+          .map(n => {
+            const c = chain(n);
+            const path = c.steps
+              .map(
+                (s, i) =>
+                  `<span class="lvl lvl-${levelKey(level(map.get(s)?.file, s))}" title="${esc(level(map.get(s)?.file, s))}">${i === 0 ? `<b>${esc(s)}</b>` : esc(s)}</span>`,
+              )
+              .join(' → ');
+            const tail =
+              c.value && !/^var\(--[\w-]+\)$/.test(c.value)
+                ? ` → <span class="val">${esc(c.value.length > 70 ? c.value.slice(0, 70) + '…' : c.value)}</span>`
+                : '';
+            const light = `<div class="scheme wa-light">${demo(n, 'probe-light')}</div>`;
+            const dark = `<div class="scheme wa-dark">${demo(n, 'probe-dark')}</div>`;
+            return `<tr><td>${levelBadge(level(map.get(n).file, n))}</td><td class="chain">${path}${tail}</td><td>${light}</td><td>${dark}</td></tr>`;
+          })
+          .join('');
+        return `<vsa-table><table><thead><tr><th>Level</th><th>Token and path to the value</th><th>Light</th><th>Dark</th></tr></thead><tbody>${rows}</tbody></table></vsa-table>`;
+      }
+
+      /* Markdown with two special code blocks: "html preview" shows the live HTML and its code; "tokens <regex>" shows a token table. */
+      marked.use({
+        renderer: {
+          code(code, info) {
+            const lang = (info || '').trim();
+            if (lang === 'html preview')
+              return `<wa-card class="example"><div class="preview wa-cluster wa-gap-m wa-align-items-center">${code}</div><wa-details slot="footer" appearance="plain" summary="Code">${codeBlock(code, 'html')}</wa-details></wa-card>`;
+            if (/^html\s*\{[^}]*\.example/.test(lang)) return waExample(code);
+            if (lang.startsWith('tokens ')) return `<div data-tokens="${esc(lang.slice(7).trim())}"></div>`;
+            return codeBlock(code, lang.split(/\s+/)[0]);
+          },
+        },
+      });
+      /* The Web Awesome docs pages. Their examples are 'html {.example}' blocks. They show live, with the VSA theme, when
+         they need no outside file. An Unsplash photo becomes a local placeholder. Other examples show only their code. */
+      const PLACEHOLDER =
+        'data:image/svg+xml,' +
+        encodeURIComponent(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect width='400' height='300' fill='gray'/><path d='M0 300 140 150l80 80 60-50 120 120z' fill='dimgray'/><circle cx='300' cy='80' r='30' fill='silver'/></svg>",
+        );
+      function liveCode(code) {
+        const live = code.replace(/(=")https:\/\/images\.unsplash\.com[^"]*"/g, `$1${PLACEHOLDER}"`);
+        const outside = /\b(src|srcset|poster|image)="(https?:|\/)|<link\b|<wa-include\b|\bimport\b|fetch\(/.test(live);
+        // A srcdoc with a script: the example shows a blocked script, which is a console error on our page.
+        const scriptFrame = /srcdoc="[^"]*<script/.test(live);
+        const pro = [...live.matchAll(/<(wa-[a-z-]+)/g)].some(m => !knownTags.has(m[1]));
+        return outside || scriptFrame || pro || /\{%|\{\{/.test(live) ? null : live;
+      }
+      function waExample(code) {
+        const live = liveCode(code);
+        const source = codeBlock(code, 'html');
+        if (!live) return source;
+        return `<wa-card class="example"><div class="preview">${live}</div><wa-details slot="footer" appearance="plain" summary="Code">${source}</wa-details></wa-card>`;
+      }
+      function waDoc(md, name) {
+        const CALLOUT = { info: 'brand', warning: 'warning', new: 'success' };
+        return md
+          .replace(/\r\n/g, '\n')
+          .replace(/^---\n[\s\S]*?\n---\n/, '')
+          .replace(/\{\{\s*site\.siblings\.fontAwesome\.name\s*\}\}/g, 'Font Awesome')
+          .replace(
+            /^:::(\w+)[^\n]*\n([\s\S]*?)\n:::[ \t]*$/gm,
+            (_, kind, body) => `<wa-callout variant="${CALLOUT[kind] || 'neutral'}">\n\n${body}\n\n</wa-callout>`,
+          )
+          .replace(/\]\(\/docs\/components\/([\w-]+)\/?(#[^)]*)?\)/g, '](#/components/$1)')
+          .replace(/\]\(\/docs\//g, '](https://webawesome.com/docs/')
+          .replace(/href="\/docs\//g, 'target="_blank" href="https://webawesome.com/docs/')
+          .replace(/\]\(#[^/)][^)]*\)/g, `](#/components/${name})`);
+      }
+      /* The first live example of a component, for the gallery: a VSA "html preview" block, else a Web Awesome example. */
+      async function firstExample(name, documented) {
+        if (documented) {
+          const m = (await loadText('components/' + name + '.md')).match(/```html preview\r?\n([\s\S]*?)\r?\n```/);
+          if (m) return m[1];
+        }
+        const md = await loadText('wa/components/' + name + '.md').catch(() => '');
+        for (const m of md.matchAll(/```html\s*\{[^}]*\.example[^}]*\}\r?\n([\s\S]*?)\r?\n```/g)) {
+          const live = liveCode(m[1]);
+          if (live) return live;
+        }
+        return null;
+      }
+      async function galleryCards() {
+        const [ix, all] = await Promise.all([docsIndex(), manifest()]);
+        const documented = new Set(ix.components.map(c => c.name));
+        const names = [...new Set([...all.keys(), ...documented])];
+        const groups = await Promise.all(
+          ix.categoryOrder.map(async cat => {
+            const list = names.filter(n => (ix.categories[n] || 'Helpers') === cat).sort();
+            const cards = await Promise.all(
+              list.map(async n => {
+                const code = await firstExample(n, documented.has(n));
+                const title = ix.components.find(c => c.name === n)?.title || titleOf(n);
+                const body = code
+                  ? `<div class="preview">${code}</div>`
+                  : '<p class="empty">No live example. Open the page.</p>';
+                return `<wa-card class="gallery-card"><a slot="header" href="#/components/${n}">${esc(title)}</a>${body}</wa-card>`;
+              }),
+            );
+            return `<h2>${esc(cat)}</h2><div class="wa-grid gallery">${cards.join('')}</div>`;
+          }),
+        );
+        return groups.join('');
+      }
+      /* Code blocks: dark, as in an IDE, with highlight.js colors. The text scales down until the longest line fits. */
+      function codeBlock(code, lang) {
+        const language = lang && window.hljs?.getLanguage(lang) ? lang : '';
+        const html = language ? hljs.highlight(code, { language, ignoreIllegals: true }).value : esc(code);
+        return `<pre class="vsa-code"><code${language ? ` class="hljs language-${esc(language)}"` : ''}>${html}</code></pre>`;
+      }
+      function fitCode(root = document) {
+        root.querySelectorAll('pre.vsa-code').forEach(pre => {
+          if (!pre.offsetParent) return;
+          pre.style.fontSize = '';
+          const cs = getComputedStyle(pre);
+          const base = parseFloat(cs.fontSize);
+          const min = parseFloat(cs.getPropertyValue('--vsa-font-size-code-min')) || 8;
+          const room = pre.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+          const need = pre.firstElementChild.offsetWidth;
+          if (need > room) pre.style.fontSize = Math.max(min, Math.floor(((base * room) / need) * 10) / 10) + 'px';
+        });
+      }
+      let fitFrame;
+      addEventListener('resize', () => {
+        cancelAnimationFrame(fitFrame);
+        fitFrame = requestAnimationFrame(() => fitCode());
+      });
+      document.addEventListener('wa-after-show', e => fitCode(e.target));
+      document.fonts?.ready.then(() => fitCode());
+      function renderMarkdown(md) {
+        const div = document.createElement('div');
+        div.innerHTML = marked.parse(md);
+        div.querySelectorAll('table').forEach(t => {
+          const wrap = document.createElement('vsa-table');
+          t.replaceWith(wrap);
+          wrap.append(t);
+        });
+        return div;
+      }
+
+      /* Pages */
+      let index;
+      async function docsIndex() {
+        return (index ??= JSON.parse(await loadText('index.json')));
+      }
+
+      const titleOf = name => name.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
+      async function buildNav() {
+        const [ix, all] = await Promise.all([docsIndex(), manifest()]);
+        const documented = new Set(ix.components.map(c => c.name));
+        const link = (href, label) => `<li><a href="${href}" data-drawer="close">${esc(label)}</a></li>`;
+        const markedLink = (href, label, done) =>
+          `<li><a href="${href}" data-drawer="close"><span class="mark" ${done ? 'title="Has a VSA usage page"' : 'aria-hidden="true"'}>${done ? '✓' : ''}</span>${esc(label)}</a></li>`;
+        const names = [...new Set([...all.keys(), ...documented])];
+        const byCategory = ix.categoryOrder.map(cat => [
+          cat,
+          names.filter(n => (ix.categories[n] || 'Helpers') === cat).sort(),
+        ]);
+        const section = (id, title, body) =>
+          `<wa-details appearance="plain" data-section="${id}" summary="${esc(title)}"${folded.has(id) ? '' : ' open'}>${body}</wa-details>`;
+        nav.innerHTML = `
+    <ul>${link('#/', 'Overview')}${link('#/gallery', 'Gallery')}</ul>
+    ${section('foundations', 'Foundations', `<ul>${ix.foundations.map(f => link('#/foundations/' + f.name, f.title)).join('')}</ul>`)}
+    ${section('tokens', 'Tokens', `<ul>${ix.tokens.map(t => link('#/tokens/' + t.name, t.title)).join('')}</ul>`)}
+    ${section('components', 'Components', byCategory.map(([cat, list]) => `<div class="sub-group">${esc(cat)}</div><ul>${list.map(n => markedLink('#/components/' + n, ix.components.find(c => c.name === n)?.title || titleOf(n), documented.has(n))).join('')}</ul>`).join(''))}`;
+        nav.querySelectorAll('wa-details').forEach(d => {
+          const remember = () => {
+            if (searching) return;
+            if (d.open) folded.delete(d.dataset.section);
+            else folded.add(d.dataset.section);
+            try {
+              localStorage.setItem(FOLD_KEY, JSON.stringify([...folded]));
+            } catch {}
+          };
+          d.addEventListener('wa-after-show', remember);
+          d.addEventListener('wa-after-hide', remember);
+        });
+        markCurrent();
+      }
+      const nav = document.querySelector('.site-nav');
+      /* The nav is in the wa-page drawer on mobile. The show and hide events of the wa-details sections bubble,
+         and the drawer reads them as its own events. So they stop at the nav. */
+      for (const type of ['wa-show', 'wa-after-show', 'wa-hide', 'wa-after-hide']) {
+        nav.addEventListener(type, e => {
+          if (e.target !== nav) e.stopPropagation();
+        });
+      }
+      const FOLD_KEY = 'vsa-ds-folded';
+      let folded = new Set();
+      try {
+        folded = new Set(JSON.parse(localStorage.getItem(FOLD_KEY) || '[]'));
+      } catch {}
+      let searching = false;
+      function filterNav(q) {
+        q = q.trim().toLowerCase();
+        searching = !!q;
+        nav.querySelectorAll('li').forEach(li => {
+          li.hidden = !!q && !li.textContent.toLowerCase().includes(q);
+        });
+        nav.querySelectorAll('ul').forEach(ul => {
+          const empty = !!q && ![...ul.children].some(li => !li.hidden);
+          ul.hidden = empty;
+          const head = ul.previousElementSibling;
+          if (head?.classList.contains('sub-group')) head.hidden = empty;
+        });
+        nav.querySelectorAll('wa-details').forEach(d => {
+          d.hidden = !!q && ![...d.querySelectorAll('li')].some(li => !li.hidden);
+          d.open = q ? true : !folded.has(d.dataset.section);
+        });
+        setTimeout(() => {
+          searching = false;
+        }, 400);
+      }
+      document.querySelector('.filter').addEventListener('input', e => filterNav(e.target.value || ''));
+      function markCurrent() {
+        const h = location.hash || '#/';
+        nav.querySelectorAll('a').forEach(a => {
+          if (a.getAttribute('href') === h) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
+        });
+      }
+
+      function typeChips(text) {
+        if (!text) return '';
+        return text
+          .split(/\s*\|\s*/)
+          .map(t => `<code>${esc(t)}</code>`)
+          .join('');
+      }
+      function apiTables(d) {
+        const table = (title, cols, rows) =>
+          rows.length
+            ? `<h3>${title}</h3><vsa-table><table class="api"><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></vsa-table>`
+            : '';
+        const attrs = (d.members || []).filter(
+          m =>
+            m.kind === 'field' &&
+            m.privacy !== 'private' &&
+            m.privacy !== 'protected' &&
+            !m.static &&
+            (m.attribute || m.description),
+        );
+        return (
+          `<h2>API</h2>` +
+          table(
+            'Attributes and properties',
+            ['Name and description', 'Type', 'Default'],
+            attrs.map(
+              m =>
+                `<tr><td class="name"><code>${esc(m.name)}</code>${m.attribute && m.attribute !== m.name ? `<span class="attr">attribute: ${esc(m.attribute)}</span>` : m.attribute ? '' : '<span class="attr">property only</span>'}<div class="desc">${esc(m.description)}</div></td><td class="type">${typeChips(m.type?.text)}</td><td>${m.default ? `<code>${esc(m.default)}</code>` : ''}</td></tr>`,
+            ),
+          ) +
+          table(
+            'Slots',
+            ['Name', 'Description'],
+            (d.slots || []).map(
+              s => `<tr><td><code>${esc(s.name || '(default)')}</code></td><td>${esc(s.description)}</td></tr>`,
+            ),
+          ) +
+          table(
+            'Events',
+            ['Name', 'Description'],
+            (d.events || [])
+              .filter(e => e.name)
+              .map(e => `<tr><td><code>${esc(e.name)}</code></td><td>${esc(e.description)}</td></tr>`),
+          ) +
+          table(
+            'Methods',
+            ['Name', 'Description'],
+            (d.members || [])
+              .filter(m => m.kind === 'method' && !m.privacy && m.description)
+              .map(m => `<tr><td><code>${esc(m.name)}()</code></td><td>${esc(m.description)}</td></tr>`),
+          ) +
+          table(
+            'CSS parts',
+            ['Name', 'Description'],
+            (d.cssParts || []).map(p => `<tr><td><code>${esc(p.name)}</code></td><td>${esc(p.description)}</td></tr>`),
+          ) +
+          table(
+            'CSS custom properties',
+            ['Name', 'Default', 'Description'],
+            (d.cssProperties || []).map(
+              p =>
+                `<tr><td><code>${esc(p.name)}</code></td><td>${p.default ? `<code>${esc(p.default)}</code>` : ''}</td><td>${esc(p.description)}</td></tr>`,
+            ),
+          ) +
+          table(
+            'Custom states',
+            ['Name', 'Description'],
+            (d.cssStates || []).map(
+              p => `<tr><td><code>:state(${esc(p.name)})</code></td><td>${esc(p.description)}</td></tr>`,
+            ),
+          )
+        );
+      }
+
+      async function componentPage(name) {
+        const [ix, all] = await Promise.all([docsIndex(), manifest()]);
+        const d = all.get(name);
+        const doc = ix.components.find(c => c.name === name);
+        const page = document.createElement('div');
+        const title = doc?.title || titleOf(name);
+        page.innerHTML = `<h1>${esc(title)}</h1>
+    <p class="lead">${esc(d?.summary || doc?.summary || '')}</p>
+    <div class="meta wa-cluster wa-gap-xs wa-align-items-center">${d ? `<code>&lt;${esc(d.tagName)}&gt;</code>${d.tagName.startsWith('vsa-') ? '<wa-badge variant="brand" appearance="filled">VSA component</wa-badge>' : `<wa-badge variant="neutral" appearance="filled">${esc(d.status || '')}</wa-badge>`}${d.documentation ? `<a href="${esc(d.documentation)}" target="_blank" rel="noopener">Web Awesome docs</a>` : ''}` : ''}
+    ${doc ? '<wa-badge variant="brand">VSA usage page</wa-badge>' : '<wa-badge variant="warning" appearance="filled">No VSA usage page yet</wa-badge>'}</div>`;
+        if (doc) page.append(renderMarkdown(await loadText('components/' + name + '.md')));
+        const wa = await loadText('wa/components/' + name + '.md').catch(() => null);
+        if (wa) {
+          page.insertAdjacentHTML(
+            'beforeend',
+            `<h2>Web Awesome examples</h2><p>The examples of the Web Awesome docs, with the VSA theme. An example that needs an outside file shows only its code.</p>`,
+          );
+          page.append(renderMarkdown(waDoc(wa, name)));
+        }
+        if (d) page.insertAdjacentHTML('beforeend', apiTables(d));
+        return page;
+      }
+      async function markdownPage(path) {
+        return renderMarkdown(await loadText(path));
+      }
+      async function route() {
+        const main = document.getElementById('page');
+        const h = (location.hash || '#/').slice(2);
+        const [section, name] = h.split('/');
+        let page;
+        try {
+          if (section === 'foundations' && name) page = await markdownPage('foundations/' + name + '.md');
+          else if (section === 'tokens' && name) page = await markdownPage('tokens/' + name + '.md');
+          else if (section === 'gallery') page = await markdownPage('gallery.md');
+          else if (section === 'components' && name) page = await componentPage(name);
+          else page = await markdownPage('overview.md');
+        } catch (e) {
+          page = document.createElement('div');
+          page.innerHTML = `<h1>Not found</h1><p class="empty">${esc(e.message)}</p>`;
+        }
+        for (const el of page.querySelectorAll('[data-gallery]')) el.outerHTML = await galleryCards();
+        page.querySelectorAll('[data-tokens]').forEach(el => {
+          el.outerHTML = tokenTable(el.dataset.tokens);
+        });
+        main.replaceChildren(...page.childNodes);
+        // A script in an example runs, so that the example can be interactive. innerHTML does not run it. Each script is a
+        // module, so that the top-level names of two examples on one page do not collide.
+        // A script with another type is data, for example the markdown of a wa-markdown example, and stays as it is.
+        main.querySelectorAll('.preview script:not([type]), .preview script[type="module"]').forEach(old => {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.textContent = old.textContent;
+          old.replaceWith(script);
+        });
+        main.querySelector('h1 + p')?.classList.add('lead');
+        markCurrent();
+        fitCode(main);
+        window.scrollTo(0, 0);
+      }
+      addEventListener('hashchange', route);
+      buildNav();
+      route();
+    </script>
+  </body>
+</html>

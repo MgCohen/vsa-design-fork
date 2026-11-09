@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "2.1.0",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "components/vsa-table.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "VsaTable",
+          "tagName": "vsa-table",
+          "customElement": true,
+          "summary": "A table wrapper that shows each row as a block in a narrow container. Each cell then shows its column header above its value.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "stackWidth",
+              "attribute": "stack-width",
+              "type": {
+                "text": "number"
+              },
+              "default": "600",
+              "description": "The width of the element, in px, below which each row shows as a block."
+            },
+            {
+              "kind": "field",
+              "name": "stacked",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true,
+              "description": "True when the rows show as blocks."
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "One native <table>, with its column headers in <thead>."
+            }
+          ],
+          "cssStates": [
+            {
+              "name": "stacked",
+              "description": "The element is narrower than stack-width, and each row shows as a block."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "vsa-table",
+          "declaration": {
+            "name": "VsaTable",
+            "module": "components/vsa-table.js"
+          }
+        }
+      ]
+    }
+  ]
+}

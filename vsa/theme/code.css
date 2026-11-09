@@ -1,0 +1,89 @@
+/*
+  VSA code block. A code block is always dark, as in an IDE, in the light and the dark scheme.
+  Part 1, layer wa-theme: project tokens for code. Web Awesome has no code colors, so these are new ideas.
+  The colors are fixed palette tints, not roles, because the block is dark in both schemes.
+  Part 2, layer wa-theme-dimension: the look of pre.vsa-code, and the colors of the highlight.js classes.
+*/
+
+@layer wa-theme {
+  .wa-theme-vsa,
+  .wa-theme-vsa.wa-light,
+  .wa-theme-vsa .wa-light,
+  .wa-theme-vsa.wa-dark,
+  .wa-theme-vsa .wa-dark,
+  .wa-theme-vsa.wa-invert,
+  .wa-theme-vsa .wa-invert {
+    --vsa-color-code-surface: var(--wa-color-gray-05);
+    --vsa-color-code-text: var(--wa-color-gray-95);
+    --vsa-color-code-muted: var(--wa-color-gray-60);
+    --vsa-color-code-tag: var(--wa-color-blue-70);
+    --vsa-color-code-attribute: var(--wa-color-yellow-70);
+    --vsa-color-code-string: var(--wa-color-green-70);
+    --vsa-color-code-keyword: var(--wa-color-brand-fill-loud);
+    --vsa-color-code-number: var(--wa-color-red-70);
+    /* The smallest size for a code block that the docs site scales down to fit. The site reads it as px. */
+    --vsa-font-size-code-min: 8px;
+  }
+}
+
+@layer wa-theme-dimension {
+  .wa-theme-vsa {
+    pre.vsa-code {
+      margin: 0;
+      padding: var(--wa-space-s) var(--wa-space-m);
+      overflow-x: auto;
+      background: var(--vsa-color-code-surface);
+      color: var(--vsa-color-code-text);
+      box-shadow: var(--vsa-shadow-carve);
+      border-radius: var(--wa-border-radius-m);
+      font: var(--wa-font-size-s) / 1.55 var(--wa-font-family-code);
+      tab-size: 2;
+    }
+    pre.vsa-code code {
+      display: inline-block;
+      font: inherit;
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+
+    pre.vsa-code .hljs-comment,
+    pre.vsa-code .hljs-tag,
+    pre.vsa-code .hljs-meta,
+    pre.vsa-code .hljs-punctuation {
+      color: var(--vsa-color-code-muted);
+    }
+    pre.vsa-code .hljs-comment {
+      font-style: italic;
+    }
+    pre.vsa-code .hljs-name,
+    pre.vsa-code .hljs-title,
+    pre.vsa-code .hljs-type,
+    pre.vsa-code .hljs-selector-tag,
+    pre.vsa-code .hljs-property {
+      color: var(--vsa-color-code-tag);
+    }
+    pre.vsa-code .hljs-tag .hljs-attr,
+    pre.vsa-code .hljs-attr,
+    pre.vsa-code .hljs-attribute,
+    pre.vsa-code .hljs-selector-class,
+    pre.vsa-code .hljs-selector-id,
+    pre.vsa-code .hljs-selector-pseudo,
+    pre.vsa-code .hljs-variable {
+      color: var(--vsa-color-code-attribute);
+    }
+    pre.vsa-code .hljs-string,
+    pre.vsa-code .hljs-tag .hljs-string {
+      color: var(--vsa-color-code-string);
+    }
+    pre.vsa-code .hljs-keyword,
+    pre.vsa-code .hljs-built_in,
+    pre.vsa-code .hljs-literal {
+      color: var(--vsa-color-code-keyword);
+    }
+    pre.vsa-code .hljs-number {
+      color: var(--vsa-color-code-number);
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# Vendored files stay byte-exact. See vsa/scripts/vendor-webawesome.mjs
+vsa/vendor/** -text

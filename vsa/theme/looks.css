@@ -1,0 +1,241 @@
+/*
+  VSA looks: the raised and carved shapes that no Web Awesome token can give.
+  They style the wa-* components only, not native buttons and inputs.
+  Part 1, layer wa-theme: project tokens (--vsa-*), only for ideas that Web Awesome has no token for.
+  Part 2, layer wa-theme-dimension: documented ::part() and :state() rules, scoped to .wa-theme-vsa.
+  This is the same place that Web Awesome's own Awesome theme uses for its component looks.
+  Colors come from the palette tints and the white and black keywords, not from hex values.
+  Raised = a surface over the canvas. Carved = a channel cut into the surface.
+*/
+
+@layer wa-theme {
+  /* Light */
+  .wa-theme-vsa,
+  .wa-theme-vsa.wa-light,
+  .wa-theme-vsa .wa-light,
+  .wa-theme-vsa.wa-dark .wa-invert,
+  .wa-theme-vsa .wa-dark .wa-invert,
+  .wa-light .wa-theme-vsa,
+  .wa-dark .wa-theme-vsa.wa-invert,
+  .wa-dark .wa-theme-vsa .wa-invert {
+    --vsa-gradient-surface: var(--wa-color-surface-raised);
+    --vsa-gradient-hole: radial-gradient(
+      circle at 35% 30%,
+      color-mix(in oklab, var(--wa-color-surface-raised), white 50%),
+      var(--wa-color-surface-raised) 70%
+    );
+    --vsa-gradient-knob: white;
+    --vsa-shadow-carve:
+      inset 0.2375rem 0.2375rem 0.5rem color-mix(in oklab, var(--wa-color-neutral-10) 15%, transparent),
+      inset -0.125rem -0.125rem 0.25rem color-mix(in oklab, white 57%, transparent);
+    --vsa-shadow-dial:
+      inset 0.3375rem 0.3375rem 0.6875rem color-mix(in oklab, var(--wa-color-neutral-10) 18%, transparent),
+      inset -0.1875rem -0.1875rem 0.5rem color-mix(in oklab, white 57%, transparent),
+      0 0.0625rem 0 color-mix(in oklab, white 36%, transparent);
+    --vsa-shadow-hole:
+      0 0.4375rem 0.875rem color-mix(in oklab, var(--wa-color-neutral-10) 10%, transparent),
+      0 0.125rem 0.1875rem color-mix(in oklab, var(--wa-color-neutral-10) 6%, transparent),
+      inset 0 0.0625rem 0 color-mix(in oklab, white 63%, transparent),
+      inset 0 -0.1875rem 0.375rem color-mix(in oklab, var(--wa-color-neutral-10) 4%, transparent);
+  }
+
+  /* Dark */
+  .wa-theme-vsa.wa-dark,
+  .wa-theme-vsa .wa-dark,
+  .wa-theme-vsa.wa-invert,
+  .wa-theme-vsa .wa-invert,
+  .wa-dark .wa-theme-vsa,
+  .wa-light .wa-theme-vsa.wa-invert,
+  .wa-light .wa-theme-vsa .wa-invert {
+    --vsa-gradient-surface: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--wa-color-surface-raised), white 7%),
+      color-mix(in oklab, var(--wa-color-surface-raised), black 30%)
+    );
+    --vsa-gradient-hole: radial-gradient(
+      circle at 35% 30%,
+      color-mix(in oklab, var(--wa-color-surface-raised), white 10%),
+      var(--wa-color-surface-raised) 70%
+    );
+    --vsa-gradient-knob: radial-gradient(
+      circle at 35% 30%,
+      color-mix(in oklab, var(--wa-color-surface-raised), white 18%),
+      var(--wa-color-surface-raised) 75%
+    );
+    --vsa-shadow-carve:
+      inset 0.2375rem 0.2375rem 0.5rem color-mix(in oklab, black 54%, transparent),
+      inset -0.125rem -0.125rem 0.25rem color-mix(in oklab, white 5%, transparent);
+    --vsa-shadow-dial:
+      inset 0.3375rem 0.3375rem 0.6875rem color-mix(in oklab, black 57%, transparent),
+      inset -0.1875rem -0.1875rem 0.5rem color-mix(in oklab, white 7%, transparent),
+      0 0.0625rem 0 color-mix(in oklab, white 5%, transparent);
+    --vsa-shadow-hole:
+      0 0.4375rem 0.875rem color-mix(in oklab, black 38%, transparent),
+      0 0.125rem 0.1875rem color-mix(in oklab, black 27%, transparent),
+      inset 0 0.0625rem 0 color-mix(in oklab, white 10%, transparent),
+      inset 0 -0.1875rem 0.375rem color-mix(in oklab, black 32%, transparent);
+  }
+
+  /* Both schemes */
+  .wa-theme-vsa,
+  .wa-theme-vsa.wa-light,
+  .wa-theme-vsa .wa-light,
+  .wa-theme-vsa.wa-dark,
+  .wa-theme-vsa .wa-dark,
+  .wa-theme-vsa.wa-invert,
+  .wa-theme-vsa .wa-invert {
+    --vsa-shadow-press: inset 0.125rem 0.125rem 0.25rem color-mix(in oklab, black 30%, transparent);
+    --vsa-shadow-knob:
+      0 0.125rem 0.25rem color-mix(in oklab, black 35%, transparent),
+      inset 0 0.0625rem 0 color-mix(in oklab, white 25%, transparent);
+    --vsa-shadow-glow: 0 0 0.25rem color-mix(in oklab, var(--wa-color-brand-fill-loud) 15%, transparent);
+    --vsa-letter-spacing-display: 0.02em;
+    --vsa-letter-spacing-caps: 0.07em;
+  }
+}
+
+@layer wa-theme-dimension {
+  .wa-theme-vsa {
+    /* Raised: buttons. Each button that is not plain or outlined is raised. The colors come from the tokens:
+       the neutral loud fill is the raised surface, so the default button is a raised key, with Web Awesome's own
+       hover and press colors. */
+    wa-button:not([appearance='plain'], [appearance*='outlined'])::part(button) {
+      box-shadow: var(--wa-shadow-m);
+    }
+    wa-button[variant='brand']:is(:not([appearance]), [appearance='accent'])::part(button) {
+      box-shadow: var(--wa-shadow-m), var(--vsa-shadow-glow);
+    }
+    wa-button:not(:state(disabled), [appearance='plain']):active::part(button) {
+      box-shadow: var(--vsa-shadow-press);
+    }
+    wa-button[variant='brand']:not(:state(disabled), [appearance='plain']):active::part(button) {
+      box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
+    }
+
+    /* Raised: panels, only in the default appearance (outlined). The card has no part for its surface, so this
+       rule is on the host, as Web Awesome's own card styles are. */
+    wa-card:is(:not([appearance]), [appearance='outlined']),
+    wa-details:is(:not([appearance]), [appearance='outlined'])::part(details) {
+      background: var(--vsa-gradient-surface);
+      box-shadow: var(--wa-shadow-m);
+    }
+    wa-details::part(icon) {
+      color: var(--wa-color-brand-fill-loud);
+    }
+
+    /* Carved: text fields */
+    wa-input::part(input-wrapper),
+    wa-textarea::part(textarea-wrapper),
+    wa-select::part(combobox) {
+      box-shadow: var(--vsa-shadow-carve);
+    }
+
+    /* Carved: switch track, raised knob. em keeps the size attribute working. */
+    wa-switch {
+      --width: calc(40em / 14);
+      --height: calc(24em / 14);
+      --thumb-size: calc(18em / 14);
+    }
+    wa-switch::part(control) {
+      background: var(--wa-color-surface-lowered);
+      box-shadow: var(--vsa-shadow-carve);
+      border-color: transparent;
+    }
+    /* :state(checked) is set by wa-switch (switch.ts), but its reference does not list it. Check it at each update. */
+    wa-switch:state(checked)::part(control) {
+      background: var(--wa-form-control-activated-color);
+      box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
+    }
+    wa-switch::part(thumb) {
+      background: var(--vsa-gradient-knob);
+      box-shadow: var(--vsa-shadow-knob);
+    }
+
+    /* Carved: checkbox and radio */
+    wa-checkbox::part(control),
+    wa-radio:not([appearance='button'])::part(control) {
+      background: var(--wa-color-surface-lowered);
+      box-shadow: var(--vsa-shadow-carve);
+      border-color: transparent;
+    }
+    wa-checkbox:state(checked)::part(control),
+    wa-checkbox:state(indeterminate)::part(control) {
+      background: var(--wa-form-control-activated-color);
+      color: var(--wa-color-brand-on-loud);
+      box-shadow: var(--vsa-shadow-press), var(--vsa-shadow-glow);
+    }
+    wa-radio:not([appearance='button']):state(checked)::part(control) {
+      color: var(--wa-form-control-activated-color);
+    }
+
+    /* Carved: tracks */
+    wa-slider::part(track),
+    wa-progress-bar::part(progress-bar) {
+      background: var(--wa-color-surface-lowered);
+      box-shadow: var(--vsa-shadow-carve);
+    }
+    wa-slider::part(indicator),
+    wa-progress-bar::part(indicator) {
+      background: var(--wa-color-brand-fill-loud);
+      box-shadow: var(--vsa-shadow-glow);
+    }
+    wa-slider::part(thumb) {
+      background: var(--vsa-gradient-knob);
+      box-shadow: var(--vsa-shadow-knob);
+      border: none;
+    }
+
+    /* House class: a dial is wa-progress-ring.vsa-dial, a deep carved channel with a raised center and a glow.
+       Only documented parts and properties of wa-progress-ring. Its track is SVG, so the channel is drawn on the
+       progress-ring part behind it. The SVG viewport clips a filter at its edge, so the transparent track is wider
+       than the indicator: the indicator sits 3 % inside the edge, and its glow fits in the viewport.
+       Size: --size. Color: a Web Awesome variant class (wa-success, wa-warning, wa-danger). */
+    wa-progress-ring.vsa-dial {
+      --size: 8.5em;
+      --track-width: calc(var(--size) * 0.16);
+      --indicator-width: calc(var(--size) * 0.1);
+      --track-color: transparent;
+      --indicator-color: var(--wa-color-brand-fill-loud);
+      /* The hole starts after the track (10 %) and a gap (5 %). A percent, so the label font size has no effect. */
+      --vsa-dial-hole-inset: 15%;
+    }
+    wa-progress-ring.vsa-dial:is(.wa-brand, .wa-success, .wa-warning, .wa-danger) {
+      --indicator-color: var(--wa-color-fill-loud);
+    }
+    wa-progress-ring.vsa-dial::part(progress-ring) {
+      border-radius: var(--wa-border-radius-circle);
+      background: var(--wa-color-surface-lowered);
+      box-shadow: var(--vsa-shadow-dial);
+    }
+    wa-progress-ring.vsa-dial::part(indicator) {
+      filter: drop-shadow(0 0 calc(var(--size) * 0.03) color-mix(in oklab, var(--indicator-color) 55%, transparent));
+    }
+    wa-progress-ring.vsa-dial::part(label) {
+      inset: var(--vsa-dial-hole-inset);
+      width: auto;
+      height: auto;
+      border-radius: var(--wa-border-radius-circle);
+      background: var(--vsa-gradient-hole);
+      box-shadow: var(--vsa-shadow-hole);
+      font-weight: var(--wa-font-weight-semibold);
+      font-size: calc(var(--size) * 0.17);
+    }
+    /* The small dial: a shallow carve, for lists and table rows. */
+    wa-progress-ring.vsa-dial.vsa-dial-s {
+      --size: 2.5em;
+      --track-width: calc(var(--size) * 0.14);
+      --indicator-width: var(--track-width);
+      --vsa-dial-hole-inset: 17%;
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(progress-ring) {
+      box-shadow: var(--vsa-shadow-carve);
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(indicator) {
+      filter: none;
+    }
+    wa-progress-ring.vsa-dial.vsa-dial-s::part(label) {
+      box-shadow: var(--wa-shadow-s);
+      font-size: calc(var(--size) * 0.3);
+    }
+  }
+}

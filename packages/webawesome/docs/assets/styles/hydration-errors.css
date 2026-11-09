@@ -1,0 +1,65 @@
+/** TODO: This should probably get abstracted into an actual package. */
+.diff-dialog-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.diff-debugger {
+  position: relative;
+  border: 4px solid red;
+}
+.diff-grid {
+  display: grid;
+  max-height: 80vh;
+  gap: 16px;
+}
+.diff-grid > * {
+  height: 100%;
+}
+.diff-dialog {
+  &::part(dialog) {
+    max-width: 90vw;
+    width: 90vw;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.diff-dialog ins {
+  text-decoration: none;
+  background: green;
+  color: white;
+  position: relative;
+
+  &:before {
+    content: '+';
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50%, -15%);
+  }
+}
+.diff-dialog pre {
+  border: 1px solid transparent;
+  height: 100%;
+  max-height: calc(100% - 2em);
+}
+.diff-dialog code {
+  height: 100%;
+}
+.diff-dialog del {
+  text-decoration: none;
+  background: red;
+  color: white;
+  position: relative;
+
+  &:before {
+    content: '-';
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50%, -15%);
+  }
+}

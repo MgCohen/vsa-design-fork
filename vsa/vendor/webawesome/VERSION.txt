@@ -1,0 +1,2 @@
+Web Awesome 3.14.0, built from packages/webawesome by vsa/scripts/vendor-webawesome.mjs.
+Do not edit these files. Change the source, then run the script again.

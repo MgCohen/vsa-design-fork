@@ -1,0 +1,4 @@
+Font Awesome Free 7.3.0 icons, from the npm package @fortawesome/fontawesome-free@7.3.0 (svgs/).
+Icons: CC BY 4.0. All free icons are here, in the same folders as the package: solid, regular and brands.
+The published docs page includes only the icons that its pages use.
+To update: copy svgs/ of the new package version over svgs/ here.

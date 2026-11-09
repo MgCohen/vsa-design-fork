@@ -1,0 +1,394 @@
+import { aTimeout, expect, waitUntil } from '@open-wc/testing';
+import { sendKeys } from '@web/test-runner-commands';
+import { html } from 'lit';
+import { expectEvent } from '../../internal/test/expect-event.js';
+import { fixtures } from '../../internal/test/fixture.js';
+import { clickOnElement, outsideOf } from '../../internal/test/pointer-utilities.js';
+import type WaDialog from './dialog.js';
+
+describe('<wa-dialog>', () => {
+  for (const fixture of fixtures) {
+    describe(`with "${fixture.type}" rendering`, () => {
+      describe('accessibility', () => {
+        it('should be hidden when closed', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog>Content</wa-dialog>`);
+          expect(getComputedStyle(el).display).to.equal('none');
+        });
+
+        it('should be visible when open', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(getComputedStyle(el).display).to.not.equal('none');
+        });
+
+        it('should focus the element with autofocus when opened', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog><wa-input autofocus></wa-input></wa-dialog>`);
+          const input = el.querySelector('wa-input')!;
+
+          el.open = true;
+          await aTimeout(250);
+
+          expect(document.activeElement).to.equal(input);
+        });
+
+        it('should name the dialog from its label', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog label="Settings" open>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector('[part~="dialog"]')!;
+          const title = el.shadowRoot!.getElementById('title')!;
+
+          expect(dialog.getAttribute('aria-labelledby')).to.equal(title.id);
+          expect(title.textContent!.trim()).to.equal('Settings');
+        });
+
+        it('should name the dialog from a slotted label', async () => {
+          const el = await fixture<WaDialog>(
+            html`<wa-dialog open><span slot="label">Settings</span>Content</wa-dialog>`,
+          );
+          const dialog = el.shadowRoot!.querySelector('[part~="dialog"]')!;
+
+          expect(dialog.getAttribute('aria-labelledby')).to.equal('title');
+        });
+
+        it('should name the dialog from a slotted label before hydration when with-label is set', async () => {
+          const el = await fixture<WaDialog>(
+            html`<wa-dialog open with-label><span slot="label">Settings</span>Content</wa-dialog>`,
+          );
+          const dialog = el.shadowRoot!.querySelector('[part~="dialog"]')!;
+
+          expect(dialog.getAttribute('aria-labelledby')).to.equal('title');
+        });
+
+        it('should leave the dialog unnamed when it has no label', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector('[part~="dialog"]')!;
+
+          expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
+          expect(dialog.hasAttribute('aria-label')).to.be.false;
+        });
+
+        it('should name the dialog from its label when the header is hidden', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog label="Settings" without-header open>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector('[part~="dialog"]')!;
+
+          expect(dialog.getAttribute('aria-label')).to.equal('Settings');
+          expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
+        });
+
+        it('should not create duplicate landmarks when the page has its own header and footer', async () => {
+          const el = await fixture(html`
+            <div>
+              <header>Site header</header>
+              <wa-dialog label="Test dialog" open>
+                Dialog content
+                <div slot="footer">Dialog footer</div>
+              </wa-dialog>
+              <footer>Site footer</footer>
+            </div>
+          `);
+          await el.querySelector<WaDialog>('wa-dialog')!.updateComplete;
+          await expect(el).to.be.accessible();
+        });
+      });
+
+      describe('properties', () => {
+        it('should default open to false', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog>Content</wa-dialog>`);
+          expect(el.open).to.be.false;
+        });
+
+        it('should reflect open attribute', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.open).to.be.true;
+          expect(el.hasAttribute('open')).to.be.true;
+        });
+
+        it('should set label text in the header', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open label="Test Label">Content</wa-dialog>`);
+          const title = el.shadowRoot!.querySelector('[part="title"]')!;
+          expect(title.textContent).to.contain('Test Label');
+        });
+
+        it('should hide the header when without-header is set', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open without-header>Content</wa-dialog>`);
+          const header = el.shadowRoot!.querySelector('[part="header"]');
+          expect(header).to.be.null;
+        });
+
+        it('should show the header by default', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          const header = el.shadowRoot!.querySelector('[part="header"]');
+          expect(header).to.not.be.null;
+        });
+
+        it('should default lightDismiss to false', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog>Content</wa-dialog>`);
+          expect(el.lightDismiss).to.be.false;
+        });
+      });
+
+      describe('events', () => {
+        it('should emit wa-show and wa-after-show when setting open = true', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog>Content</wa-dialog>`);
+
+          await expectEvent(el, ['wa-show', 'wa-after-show'], () => {
+            el.open = true;
+          });
+
+          expect(el.open).to.be.true;
+          expect(getComputedStyle(el).display).to.not.equal('none');
+        });
+
+        it('should emit wa-hide and wa-after-hide when setting open = false', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+
+          await expectEvent(el, ['wa-hide', 'wa-after-hide'], () => {
+            el.open = false;
+          });
+
+          expect(el.open).to.be.false;
+          expect(getComputedStyle(el).display).to.equal('none');
+        });
+
+        it('should not close when wa-hide is prevented', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+
+          el.addEventListener('wa-hide', event => {
+            event.preventDefault();
+          });
+
+          await clickOnElement(el);
+          await sendKeys({ press: 'Escape' });
+          await aTimeout(250);
+
+          expect(el.open).to.be.true;
+        });
+
+        it('should include source in wa-hide event detail', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+
+          const [hideEvent] = await expectEvent(el, 'wa-hide', async () => {
+            await clickOnElement(el);
+            await sendKeys({ press: 'Escape' });
+          });
+
+          expect((hideEvent as CustomEvent).detail.source).to.exist;
+        });
+      });
+
+      describe('slots', () => {
+        it('should render the default slot content', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Dialog body content</wa-dialog>`);
+          const body = el.shadowRoot!.querySelector('[part="body"]')!;
+          expect(body).to.not.be.null;
+        });
+
+        it('should render the label slot', async () => {
+          const el = await fixture<WaDialog>(html`
+            <wa-dialog open>
+              <span slot="label">Custom Label</span>
+              Content
+            </wa-dialog>
+          `);
+          const labelSlot = el.shadowRoot!.querySelector('slot[name="label"]') as HTMLSlotElement;
+          expect(labelSlot).to.not.be.null;
+        });
+
+        it('should render the header-actions slot', async () => {
+          const el = await fixture<WaDialog>(html`
+            <wa-dialog open>
+              <wa-button slot="header-actions">Action</wa-button>
+              Content
+            </wa-dialog>
+          `);
+          const headerActionsSlot = el.shadowRoot!.querySelector('slot[name="header-actions"]') as HTMLSlotElement;
+          expect(headerActionsSlot).to.not.be.null;
+        });
+
+        it('should render the footer slot', async () => {
+          const el = await fixture<WaDialog>(html`
+            <wa-dialog open>
+              Content
+              <wa-button slot="footer">OK</wa-button>
+            </wa-dialog>
+          `);
+          // Trigger a re-render so the HasSlotController detects the footer
+          el.requestUpdate();
+          await el.updateComplete;
+          const footer = el.shadowRoot!.querySelector('[part="footer"]');
+          expect(footer).to.not.be.null;
+        });
+      });
+
+      describe('keyboard navigation', () => {
+        it('should close when pressing Escape', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+
+          await expectEvent(el, 'wa-after-hide', async () => {
+            await clickOnElement(el);
+            await sendKeys({ press: 'Escape' });
+          });
+
+          expect(el.open).to.be.false;
+        });
+
+        it('should not close when a bubbled cancel event originates from within the dialog', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open><input type="file" /></wa-dialog>`);
+          const input = el.querySelector('input')!;
+
+          const cancelEvent = new Event('cancel', { bubbles: true });
+          input.dispatchEvent(cancelEvent);
+          await aTimeout(250);
+
+          expect(el.open).to.be.true;
+        });
+      });
+
+      describe('light dismiss', () => {
+        it('should not close when clicking the backdrop by default', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;
+
+          // Simulate a backdrop click by dispatching pointerdown with the dialog as the target
+          dialog.dispatchEvent(
+            new PointerEvent('pointerdown', { bubbles: true, composed: true, ...outsideOf(dialog) }),
+          );
+          await aTimeout(250);
+
+          expect(el.open).to.be.true;
+        });
+
+        it('should close when clicking the backdrop when light-dismiss is enabled', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open light-dismiss>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;
+
+          await expectEvent(el, 'wa-after-hide', () => {
+            // Simulate a backdrop click by dispatching pointerdown with the dialog as the target
+            dialog.dispatchEvent(
+              new PointerEvent('pointerdown', { bubbles: true, composed: true, ...outsideOf(dialog) }),
+            );
+          });
+
+          expect(el.open).to.be.false;
+        });
+
+        it('should not close when a pointerdown targets the dialog with a point inside its box', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open light-dismiss>Content</wa-dialog>`);
+          const dialog = el.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;
+          const rect = dialog.getBoundingClientRect();
+
+          // A scrollbar hit targets the dialog element, just like the backdrop, but the point is inside its box
+          dialog.dispatchEvent(
+            new PointerEvent('pointerdown', {
+              bubbles: true,
+              composed: true,
+              clientX: rect.right - 2,
+              clientY: rect.top + rect.height / 2,
+            }),
+          );
+          await aTimeout(250);
+
+          expect(el.open).to.be.true;
+        });
+
+        it('should not close when clicking inside the dialog even when light-dismiss is enabled', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open light-dismiss>Content</wa-dialog>`);
+          const body = el.shadowRoot!.querySelector<HTMLElement>('[part="body"]')!;
+
+          // pointerdown originates from the body, not the backdrop, so it should not dismiss
+          body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+          await aTimeout(250);
+
+          expect(el.open).to.be.true;
+        });
+      });
+
+      describe('CSS parts and states', () => {
+        it('should expose the dialog part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="dialog"]')).to.not.be.null;
+        });
+
+        it('should expose the header part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="header"]')).to.not.be.null;
+        });
+
+        it('should expose the title part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="title"]')).to.not.be.null;
+        });
+
+        it('should expose the header-actions part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="header-actions"]')).to.not.be.null;
+        });
+
+        it('should expose the close-button part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="close-button"]')).to.not.be.null;
+        });
+
+        it('should expose the body part', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open>Content</wa-dialog>`);
+          expect(el.shadowRoot!.querySelector('[part="body"]')).to.not.be.null;
+        });
+
+        it('should expose the footer part when footer slot is used', async () => {
+          const el = await fixture<WaDialog>(html`
+            <wa-dialog open>
+              Content
+              <wa-button slot="footer">OK</wa-button>
+            </wa-dialog>
+          `);
+          el.requestUpdate();
+          await el.updateComplete;
+          expect(el.shadowRoot!.querySelector('[part="footer"]')).to.not.be.null;
+        });
+      });
+
+      describe('hidden by third-party styles', () => {
+        it('should suspend the modal when hidden while open and resume it when rendered again', async () => {
+          const el = await fixture<WaDialog>(html`<wa-dialog open label="Dialog">Content</wa-dialog>`);
+
+          expect(document.documentElement.classList.contains('wa-scroll-lock')).to.be.true;
+
+          // Simulate a content blocker hiding the dialog with a cosmetic filter
+          el.style.setProperty('display', 'none', 'important');
+          await waitUntil(() => !document.documentElement.classList.contains('wa-scroll-lock'));
+
+          // The native dialog is closed so the page isn't inert, but the component stays logically open
+          expect(el.dialog.open).to.be.false;
+          expect(el.open).to.be.true;
+
+          // Unhide it and the modal should resume
+          el.style.removeProperty('display');
+          await waitUntil(() => document.documentElement.classList.contains('wa-scroll-lock'));
+
+          expect(el.dialog.open).to.be.true;
+          expect(el.open).to.be.true;
+        });
+
+        it('should not keep the page scroll locked when the dialog is already hidden before it opens', async () => {
+          // Simulate an extension stylesheet injected before the dialog opens
+          const style = document.createElement('style');
+          style.textContent = 'wa-dialog { display: none !important; }';
+          document.head.append(style);
+
+          try {
+            const el = await fixture<WaDialog>(html`<wa-dialog open label="Dialog">Content</wa-dialog>`);
+
+            await waitUntil(() => !document.documentElement.classList.contains('wa-scroll-lock'));
+            expect(el.dialog.open).to.be.false;
+            expect(el.open).to.be.true;
+
+            // Removing the stylesheet should resume the modal
+            style.remove();
+            await waitUntil(() => document.documentElement.classList.contains('wa-scroll-lock'));
+            expect(el.dialog.open).to.be.true;
+          } finally {
+            style.remove();
+          }
+        });
+      });
+    });
+  }
+});

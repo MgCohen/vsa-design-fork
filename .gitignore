@@ -1,0 +1,16 @@
+_site
+.cache
+.DS_Store
+dist/
+dist-cdn/
+node_modules
+packages/**/*/src/react
+cdn/
+yarn.lock
+_bundle_
+/packages/webawesome-pro
+/packages/webawesome-app
+custom-elements.json
+!vsa/components/custom-elements.json
+.claude/settings.local.json
+**/.claude/scheduled_tasks.lock

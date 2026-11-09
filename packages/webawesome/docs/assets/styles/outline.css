@@ -1,0 +1,74 @@
+#outline {
+  margin-block: var(--wa-space-xl);
+}
+
+#outline h2 > a {
+  font-weight: inherit;
+  color: inherit;
+}
+
+#outline [data-level='3'] {
+  margin-inline-start: var(--wa-space-m);
+}
+
+/* Outline-only link state colors. The shared docs-nav block in utils.css
+ * keeps sidebar links at text-normal; outlines opt down to text-quiet
+ * with a text-normal hover/current treatment for the TOC reading rhythm. */
+:is(#outline, #outline-expandable) {
+  li a {
+    color: var(--wa-color-text-quiet);
+
+    &:hover {
+      color: var(--wa-color-text-normal);
+    }
+  }
+
+  .current {
+    color: var(--wa-color-text-normal);
+  }
+}
+
+/* Mobile-first: the expandable outline shows; the desktop aside is hidden. */
+#outline,
+#outline-standard {
+  display: none;
+}
+
+#outline-expandable {
+  display: block;
+  margin-block-end: var(--wa-space-xl);
+}
+
+#outline-expandable wa-details::part(content) {
+  font-size: var(--wa-font-size-s);
+  padding-block-start: 0;
+}
+
+#outline-expandable ul {
+  --min-column-size: 25ch;
+  margin: 0;
+  border-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+#outline-expandable li + li {
+  margin-block-start: 0;
+}
+
+/* Desktop: swap to the standard sticky outline in the aside slot. */
+@media screen and (min-width: 75rem) {
+  #outline,
+  #outline-standard {
+    display: block;
+  }
+
+  #outline-standard {
+    position: sticky;
+    inset-block-start: calc(var(--docs-header-height) + 3.5rem);
+    inline-size: 15rem;
+  }
+
+  #outline-expandable {
+    display: none;
+  }
+}
