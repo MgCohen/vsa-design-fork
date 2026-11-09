@@ -121,6 +121,12 @@
       }
 
       /* Content */
+      /* A grid item is as wide as its widest content by default. A wide example then makes the page wider than the
+         screen. With no minimum width, the example scrolls in its own box. */
+      main,
+      wa-page::part(main) {
+        min-inline-size: 0;
+      }
       main {
         max-inline-size: 68rem;
       }
@@ -144,6 +150,25 @@
       }
       .example pre.vsa-code {
         margin: 0;
+      }
+      /* A wide example scrolls in its box. The box clips, so it has room around the example for the shadows. */
+      .preview {
+        overflow-x: auto;
+        padding: var(--wa-space-m);
+        margin: calc(-1 * var(--wa-space-m));
+      }
+      .gallery {
+        --min-column-size: 18rem;
+      }
+      /* The width of an example card comes from the page, not from the example. Before the components load, an
+         example can be very wide, and a phone then makes the whole page wider. */
+      .gallery-card,
+      .example {
+        min-inline-size: 0;
+        contain: inline-size;
+      }
+      .gallery-card a[slot='header'] {
+        font-weight: var(--wa-font-weight-semibold);
       }
 
       /* Tables */
@@ -231,6 +256,11 @@
   </head>
   <body>
     <wa-page mobile-breakpoint="920">
+      <script>
+        // wa-page starts in the desktop view and measures its width after it loads. On a phone, a slow page then
+        // shows the desktop layout for a moment, and the phone makes the page wider. The first view comes from here.
+        document.currentScript.parentElement.setAttribute('view', innerWidth < 920 ? 'mobile' : 'desktop');
+      </script>
       <header slot="header" class="mobile-header wa-split wa-mobile-only">
         <a class="brand" href="#/">VSA Design System</a>
         <wa-button data-toggle-nav appearance="outlined" size="s">
@@ -258,16 +288,25 @@
       const MANIFEST_URL = '../vendor/webawesome/custom-elements.json';
       const VSA_MANIFEST_URL = '../components/custom-elements.json';
       const DOCS_ROOT = '../docs/';
+      // The Web Awesome component docs pages, copied by vsa/scripts/vendor-webawesome.mjs. Paths that start with "wa/".
+      const WA_DOCS_ROOT = '../vendor/webawesome/docs/';
       const esc = s =>
         String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
       async function loadText(path) {
-        if (window.VSA_FILES && path in window.VSA_FILES) return window.VSA_FILES[path];
-        const r = await fetch(DOCS_ROOT + path, { cache: 'no-cache' });
+        // The published page is one file with all docs files in VSA_FILES. A file that is not there does not exist.
+        if (window.VSA_FILES) {
+          if (path in window.VSA_FILES) return window.VSA_FILES[path];
+          throw new Error(path + ': not found');
+        }
+        const url = path.startsWith('wa/') ? WA_DOCS_ROOT + path.slice(3) : DOCS_ROOT + path;
+        const r = await fetch(url, { cache: 'no-cache' });
         if (!r.ok) throw new Error(path + ': ' + r.status);
         return r.text();
       }
       let manifestPromise;
+      // The tag names of our build. An example with another wa-* tag (a Pro component) shows only its code.
+      let knownTags = new Set();
       function manifest() {
         const load = (bundled, url) =>
           bundled ? Promise.resolve(bundled) : fetch(url, { cache: 'no-cache' }).then(r => r.json());
@@ -276,6 +315,7 @@
           load(window.VSA_MANIFEST, VSA_MANIFEST_URL),
         ]).then(manifests => {
           const list = manifests.flatMap(m => m.modules.flatMap(x => x.declarations || [])).filter(d => d.tagName);
+          knownTags = new Set(list.map(d => d.tagName));
           return new Map(
             list.sort((a, b) => a.tagName.localeCompare(b.tagName)).map(d => [d.tagName.replace(/^(wa|vsa)-/, ''), d]),
           );
@@ -435,11 +475,83 @@
             const lang = (info || '').trim();
             if (lang === 'html preview')
               return `<wa-card class="example"><div class="preview wa-cluster wa-gap-m wa-align-items-center">${code}</div><wa-details slot="footer" appearance="plain" summary="Code">${codeBlock(code, 'html')}</wa-details></wa-card>`;
+            if (/^html\s*\{[^}]*\.example/.test(lang)) return waExample(code);
             if (lang.startsWith('tokens ')) return `<div data-tokens="${esc(lang.slice(7).trim())}"></div>`;
             return codeBlock(code, lang.split(/\s+/)[0]);
           },
         },
       });
+      /* The Web Awesome docs pages. Their examples are 'html {.example}' blocks. They show live, with the VSA theme, when
+         they need no outside file. An Unsplash photo becomes a local placeholder. Other examples show only their code. */
+      const PLACEHOLDER =
+        'data:image/svg+xml,' +
+        encodeURIComponent(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect width='400' height='300' fill='gray'/><path d='M0 300 140 150l80 80 60-50 120 120z' fill='dimgray'/><circle cx='300' cy='80' r='30' fill='silver'/></svg>",
+        );
+      function liveCode(code) {
+        const live = code.replace(/(=")https:\/\/images\.unsplash\.com[^"]*"/g, `$1${PLACEHOLDER}"`);
+        const outside = /\b(src|srcset|poster|image)="(https?:|\/)|<link\b|<wa-include\b|\bimport\b|fetch\(/.test(live);
+        // A srcdoc with a script: the example shows a blocked script, which is a console error on our page.
+        const scriptFrame = /srcdoc="[^"]*<script/.test(live);
+        const pro = [...live.matchAll(/<(wa-[a-z-]+)/g)].some(m => !knownTags.has(m[1]));
+        return outside || scriptFrame || pro || /\{%|\{\{/.test(live) ? null : live;
+      }
+      function waExample(code) {
+        const live = liveCode(code);
+        const source = codeBlock(code, 'html');
+        if (!live) return source;
+        return `<wa-card class="example"><div class="preview">${live}</div><wa-details slot="footer" appearance="plain" summary="Code">${source}</wa-details></wa-card>`;
+      }
+      function waDoc(md, name) {
+        const CALLOUT = { info: 'brand', warning: 'warning', new: 'success' };
+        return md
+          .replace(/\r\n/g, '\n')
+          .replace(/^---\n[\s\S]*?\n---\n/, '')
+          .replace(/\{\{\s*site\.siblings\.fontAwesome\.name\s*\}\}/g, 'Font Awesome')
+          .replace(
+            /^:::(\w+)[^\n]*\n([\s\S]*?)\n:::[ \t]*$/gm,
+            (_, kind, body) => `<wa-callout variant="${CALLOUT[kind] || 'neutral'}">\n\n${body}\n\n</wa-callout>`,
+          )
+          .replace(/\]\(\/docs\/components\/([\w-]+)\/?(#[^)]*)?\)/g, '](#/components/$1)')
+          .replace(/\]\(\/docs\//g, '](https://webawesome.com/docs/')
+          .replace(/href="\/docs\//g, 'target="_blank" href="https://webawesome.com/docs/')
+          .replace(/\]\(#[^/)][^)]*\)/g, `](#/components/${name})`);
+      }
+      /* The first live example of a component, for the gallery: a VSA "html preview" block, else a Web Awesome example. */
+      async function firstExample(name, documented) {
+        if (documented) {
+          const m = (await loadText('components/' + name + '.md')).match(/```html preview\r?\n([\s\S]*?)\r?\n```/);
+          if (m) return m[1];
+        }
+        const md = await loadText('wa/components/' + name + '.md').catch(() => '');
+        for (const m of md.matchAll(/```html\s*\{[^}]*\.example[^}]*\}\r?\n([\s\S]*?)\r?\n```/g)) {
+          const live = liveCode(m[1]);
+          if (live) return live;
+        }
+        return null;
+      }
+      async function galleryCards() {
+        const [ix, all] = await Promise.all([docsIndex(), manifest()]);
+        const documented = new Set(ix.components.map(c => c.name));
+        const names = [...new Set([...all.keys(), ...documented])];
+        const groups = await Promise.all(
+          ix.categoryOrder.map(async cat => {
+            const list = names.filter(n => (ix.categories[n] || 'Helpers') === cat).sort();
+            const cards = await Promise.all(
+              list.map(async n => {
+                const code = await firstExample(n, documented.has(n));
+                const title = ix.components.find(c => c.name === n)?.title || titleOf(n);
+                const body = code
+                  ? `<div class="preview">${code}</div>`
+                  : '<p class="empty">No live example. Open the page.</p>';
+                return `<wa-card class="gallery-card"><a slot="header" href="#/components/${n}">${esc(title)}</a>${body}</wa-card>`;
+              }),
+            );
+            return `<h2>${esc(cat)}</h2><div class="wa-grid gallery">${cards.join('')}</div>`;
+          }),
+        );
+        return groups.join('');
+      }
       /* Code blocks: dark, as in an IDE, with highlight.js colors. The text scales down until the longest line fits. */
       function codeBlock(code, lang) {
         const language = lang && window.hljs?.getLanguage(lang) ? lang : '';
@@ -643,6 +755,14 @@
     <div class="meta wa-cluster wa-gap-xs wa-align-items-center">${d ? `<code>&lt;${esc(d.tagName)}&gt;</code>${d.tagName.startsWith('vsa-') ? '<wa-badge variant="brand" appearance="filled">VSA component</wa-badge>' : `<wa-badge variant="neutral" appearance="filled">${esc(d.status || '')}</wa-badge>`}${d.documentation ? `<a href="${esc(d.documentation)}" target="_blank" rel="noopener">Web Awesome docs</a>` : ''}` : ''}
     ${doc ? '<wa-badge variant="brand">VSA usage page</wa-badge>' : '<wa-badge variant="warning" appearance="filled">No VSA usage page yet</wa-badge>'}</div>`;
         if (doc) page.append(renderMarkdown(await loadText('components/' + name + '.md')));
+        const wa = await loadText('wa/components/' + name + '.md').catch(() => null);
+        if (wa) {
+          page.insertAdjacentHTML(
+            'beforeend',
+            `<h2>Web Awesome examples</h2><p>The examples of the Web Awesome docs, with the VSA theme. An example that needs an outside file shows only its code.</p>`,
+          );
+          page.append(renderMarkdown(waDoc(wa, name)));
+        }
         if (d) page.insertAdjacentHTML('beforeend', apiTables(d));
         return page;
       }
@@ -664,13 +784,17 @@
           page = document.createElement('div');
           page.innerHTML = `<h1>Not found</h1><p class="empty">${esc(e.message)}</p>`;
         }
+        for (const el of page.querySelectorAll('[data-gallery]')) el.outerHTML = await galleryCards();
         page.querySelectorAll('[data-tokens]').forEach(el => {
           el.outerHTML = tokenTable(el.dataset.tokens);
         });
         main.replaceChildren(...page.childNodes);
-        // A script in an "html preview" block runs, so that an example can be interactive. innerHTML does not run it.
-        main.querySelectorAll('.example .preview script').forEach(old => {
+        // A script in an example runs, so that the example can be interactive. innerHTML does not run it. Each script is a
+        // module, so that the top-level names of two examples on one page do not collide.
+        // A script with another type is data, for example the markdown of a wa-markdown example, and stays as it is.
+        main.querySelectorAll('.preview script:not([type]), .preview script[type="module"]').forEach(old => {
           const script = document.createElement('script');
+          script.type = 'module';
           script.textContent = old.textContent;
           old.replaceWith(script);
         });

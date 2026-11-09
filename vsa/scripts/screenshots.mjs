@@ -72,8 +72,19 @@ try {
         await page.waitForTimeout(800);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         const width = await page.evaluate(() => window.innerWidth);
-        if (width !== viewport.viewport.width)
-          problems.push(`${viewportName}: the screen is ${width} px, not ${viewport.viewport.width} px`);
+        if (width !== viewport.viewport.width) {
+          // A phone makes the screen as wide as the widest content. Name the elements that are wider than the screen.
+          const wide = await page.evaluate(max => {
+            const all = [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > max + 1);
+            return all
+              .filter(e => !all.includes(e.parentElement))
+              .slice(0, 5)
+              .map(e => `${e.tagName.toLowerCase()} (right edge ${Math.round(e.getBoundingClientRect().right)})`);
+          }, viewport.viewport.width);
+          problems.push(
+            `${viewportName} ${scheme} ${route}: the screen is ${width} px, not ${viewport.viewport.width} px. Wide: ${wide.join(', ')}`,
+          );
+        }
         if (overflow > 1)
           problems.push(`${viewportName} ${scheme} ${route}: the page is ${overflow} px wider than the screen`);
         const name = `${viewportName}-${scheme}-${route.replace(/^\/$/, 'overview').replace(/^\//, '').replace(/\//g, '-')}.png`;

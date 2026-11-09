@@ -106,13 +106,22 @@ const files = {};
     else files[posix(path.relative(docs, full))] = fs.readFileSync(full, 'utf8');
   }
 })(docs);
-// The vendored icons as data URLs, for vsa/setup.js. The page is one file, so it has no icon folder.
+// The Web Awesome component docs pages, under "wa/". The site shows their examples.
+const waDocs = path.join(vsa, 'vendor', 'webawesome', 'docs', 'components');
+for (const name of fs.readdirSync(waDocs))
+  files[`wa/components/${name}`] = fs.readFileSync(path.join(waDocs, name), 'utf8');
+// The vendored icons as data URLs, for vsa/setup.js. The page is one file, so it has no icon folder. It includes only
+// the icons that a docs page or the site names, in all three folders, because the folder depends on the attributes.
 const iconRoot = path.join(vsa, 'vendor', 'icons', 'svgs');
+const text = Object.values(files).join('\n') + html;
+const used = new Set([...text.matchAll(/\bname="([a-z0-9-]+)"/g)].map(m => m[1]));
 const icons = {};
 for (const folder of fs.readdirSync(iconRoot)) {
   for (const file of fs.readdirSync(path.join(iconRoot, folder))) {
+    const name = file.replace(/\.svg$/, '');
+    if (!used.has(name)) continue;
     const svg = fs.readFileSync(path.join(iconRoot, folder, file), 'utf8');
-    icons[`${folder}/${file.replace(/\.svg$/, '')}`] = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    icons[`${folder}/${name}`] = `data:image/svg+xml,${encodeURIComponent(svg)}`;
   }
 }
 const waManifest = fromSite(html.match(/const MANIFEST_URL = '([^']+)'/)[1]);
@@ -138,5 +147,5 @@ fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
 console.log(
   `wrote ${out}: ${(html.length / 1024).toFixed(0)} KB, ${Object.keys(files).length} docs files, ` +
-    `${imports.length} modules bundled (${(bundled.length / 1024).toFixed(0)} KB)`,
+    `${Object.keys(icons).length} icons, ${imports.length} modules bundled (${(bundled.length / 1024).toFixed(0)} KB)`,
 );
