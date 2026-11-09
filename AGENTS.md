@@ -36,10 +36,10 @@ An agent that does not load skills by itself can read the files: `.claude/skills
 
 ## Upstream
 
-`origin` is this fork. `upstream` is `shoelace-style/webawesome`. The default branch is `vsa`.
+`origin` is this fork. `upstream` is `shoelace-style/webawesome`. The default branch is `main`. Work on `main`. The branch `vsa` is the old name and has the same history.
 
 1. Run `git fetch upstream --tags`.
-2. Merge only the fixes or the release that we want into `vsa`.
+2. Merge only the fixes or the release that we want into `main`.
 3. Update the skills to the same version, as described in the next section.
 
 ## Update the skills
