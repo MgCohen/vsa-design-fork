@@ -22,7 +22,6 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 | `scripts/screenshots.mjs` | Screenshots of the published page: mobile and desktop, light and dark |
 | `docs/index.json` | The menu: the foundations pages and the components that have a usage page |
 | `decisions/` | Design decisions |
-| `reference/custom-design/` | Our first design system, before the fork: tokens, atoms, gallery and decisions `0001` to `0004`. Use it as a reference for the look and the gallery |
 | `DESIGN.md` | The design brief for agents, in the form that Web Awesome recommends |
 | `docs/overview.md` | The first page |
 | `docs/foundations/*.md` | Color, typography, spacing, radius, elevation, motion, code |
@@ -74,4 +73,4 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 
 ## Run it
 
-Serve the `vsa/` folder with any static web server. Then open `/site/index.html`.
+Serve the repo root with any static web server. Then open `/vsa/site/index.html`. The site reads the Web Awesome docs pages from `packages/webawesome/`, so the server must include that folder.

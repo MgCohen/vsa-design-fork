@@ -81,7 +81,7 @@ The script uses only local files. It puts these items into one HTML file:
 | All components, bundled with esbuild | `vsa/vendor/webawesome/`, `vsa/setup.js`, `vsa/components/` |
 | `marked` and `highlight.js` | `vsa/vendor/` |
 | The docs pages, the icons and the two API manifests | `vsa/docs/`, `vsa/vendor/icons/` (only the icons that a page names), the two `custom-elements.json` files |
-| The Web Awesome component docs pages. Each component page and the gallery show their examples live | `vsa/vendor/webawesome/docs/components/`, copied by `vendor-webawesome.mjs` |
+| The Web Awesome component docs pages. Each component page and the gallery show their examples live | `packages/webawesome/docs/docs/components/`, the Web Awesome source |
 
 The only outside link is Google Fonts. The script stops if the page links any other outside file.
 

@@ -52,9 +52,7 @@ All files are Web Awesome originals, unchanged, except the files in "Changes to 
 | `scripts/` | Ours | Build, check, screenshots, vendor scripts |
 | `decisions/` | Ours | Decision records |
 | `DESIGN.md`, `README.md` | Ours | Brief for agents; overview |
-| `reference/custom-design/` | Ours | The design system from before the fork |
 | `vendor/webawesome/` | WA, generated | Runtime files of our Web Awesome build |
-| `vendor/webawesome/docs/components/` | WA | A copy of `packages/webawesome/docs/docs/components/` |
 | `vendor/icons/` | Third party | Font Awesome Free icons, with `LICENSE.txt` |
 | `vendor/marked/`, `vendor/highlight.js/` | Third party | Markdown and code colors for the docs site |
 
