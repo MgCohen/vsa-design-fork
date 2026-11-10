@@ -4,7 +4,7 @@ Instructions for AI coding agents (and humans) that work in this repository. Thi
 
 ## Project
 
-VSA Design is the design system of VSA apps. It owns a build of Web Awesome (MIT) from the `v3.14.0` release, with the source unchanged. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0005-fork-web-awesome.md` and `0006-theme-and-palette.md`.
+VSA Design is the design system of VSA apps. Its source starts from the Web Awesome `v3.14.0` release (MIT), and we change it step by step. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0005-our-source-from-web-awesome.md` and `0006-theme-and-palette.md`.
 
 | Path | Content | Owner |
 |---|---|---|
