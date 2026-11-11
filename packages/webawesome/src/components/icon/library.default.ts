@@ -1,4 +1,4 @@
-import { getIconPath, getKitCode } from '../../utilities/base-path.js';
+import { getBasePath, getIconPath, getKitCode } from '../../utilities/base-path.js';
 import type { IconLibrary } from './library.js';
 
 const FA_VERSION = '7.3.0';
@@ -149,11 +149,13 @@ function getIconUrl(name: string, family: string, variant: string) {
   }
 
   const kitCode = getKitCode();
-  const isPro = kitCode.length > 0;
 
-  return isPro
-    ? `https://ka-p.fontawesome.com/releases/v${FA_VERSION}/svgs/${folder}/${name}.svg?token=${encodeURIComponent(kitCode)}`
-    : `https://ka-f.fontawesome.com/releases/v${FA_VERSION}/svgs/${folder}/${name}.svg`;
+  if (kitCode) {
+    return `https://ka-p.fontawesome.com/releases/v${FA_VERSION}/svgs/${folder}/${name}.svg?token=${encodeURIComponent(kitCode)}`;
+  }
+
+  // VSA decision 0009: the free icons ship next to the build, so no request goes to the Font Awesome servers.
+  return getBasePath(`icons/svgs/${folder}/${name}.svg`);
 }
 
 const library: IconLibrary = {

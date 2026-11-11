@@ -11,7 +11,6 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 | `theme/palette.css` | `.wa-palette-vsa`: the hue tints. The only file with hex colors |
 | `theme/theme.css` | `.wa-theme-vsa`: roles to tints for light and dark, fonts, scale controls, shadows |
 | `theme/looks.css` | Project tokens (`--vsa-*`), and the raised and carved looks with documented `::part()` rules |
-| `setup.js` | Registers the vendored icons as the default icon library. Load it before the Web Awesome loader |
 | `vendor/` | Our build of Web Awesome (`vendor/webawesome`, made by `scripts/vendor-webawesome.mjs`), the icons, `marked` and `highlight.js`. Do not edit these files |
 | `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
@@ -41,12 +40,25 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 1. `theme/fonts.css`: the font files from Google Fonts.
 2. `vendor/webawesome/styles/themes/default.css`, `utilities.css` and `native.css`: the Web Awesome defaults, the utilities and the native element styles, in cascade layers.
 3. `theme/palette.css`, `theme/theme.css`, `theme/looks.css`, `theme/code.css`: the VSA palette, theme and looks, in the Web Awesome cascade layers.
-4. `setup.js`: the icon library.
-5. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it.
-6. `components/vsa-table.js`: it defines `<vsa-table>`.
-7. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
+4. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it. The icons come from `vendor/webawesome/icons/svgs/` (decision `0009`).
+5. `components/vsa-table.js`: it defines `<vsa-table>`.
+6. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
 
-The published page is one file. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
+The published page is one file. `scripts/artifact-icons.js` gives it the icons with no requests, because the claude.ai frame blocks them. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
+
+## Use it in an app
+
+1. Serve the `vsa/` folder, or copy `theme/` and `vendor/webawesome/` into the app.
+2. Load the stylesheets in the order of "How the site loads", steps 1 to 3.
+3. Load the loader. The icons need no setting:
+
+```html
+<script type="module" src="/vsa/vendor/webawesome/webawesome.loader.js" data-webawesome="/vsa/vendor/webawesome"></script>
+```
+
+4. If the app needs a different icon folder, add `data-webawesome-icons="<folder>"` to the loader tag.
+
+Use only this Web Awesome build. Do not also load Web Awesome from npm or a CDN.
 
 ## Add a usage page
 

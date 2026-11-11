@@ -1,6 +1,6 @@
 # Design system: VSA on Web Awesome
 
-**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0005`). `setup.js` registers our vendored icons, then the Web Awesome loader runs. No CDN, no Font Awesome kit. Google Fonts is the one outside link.
+**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0005`). The Font Awesome Free icons are part of the build, in `vendor/webawesome/icons/` (decision `0009`). No CDN, no Font Awesome kit. Google Fonts is the one outside link.
 
 **Theme.** The VSA style is a Web Awesome theme and palette (decision `0006`). On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, and `wa-light` or `wa-dark` from a System / Light / Dark switch.
 

@@ -1,6 +1,6 @@
 # 0009: Our icons are the default icons
 
-**Status:** proposed.
+**Status:** accepted on 2026-11-11.
 
 **Decision:** Our Web Awesome build loads the default icons from our own files, next to the build. An app loads Web Awesome as usual and sets nothing for icons. An app that needs another icon folder sets the attribute `data-webawesome-icons`. `vsa/setup.js` is deleted.
 

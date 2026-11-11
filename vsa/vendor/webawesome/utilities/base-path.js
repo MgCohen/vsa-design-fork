@@ -6,7 +6,7 @@ import {
   setBasePath,
   setIconPath,
   setKitCode
-} from "../chunks/chunk.HGBRCPUS.js";
+} from "../chunks/chunk.DWSV7OZJ.js";
 import "../chunks/chunk.JHZRD2LV.js";
 export {
   getBasePath,

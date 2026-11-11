@@ -3,6 +3,7 @@ import { emulateMedia } from '@web/test-runner-commands';
 import { html } from 'lit';
 import { expectEvent } from '../../internal/test/expect-event.js';
 import { fixtures } from '../../internal/test/fixture.js';
+import { getBasePath, setIconPath } from '../../utilities/base-path.js';
 
 // Make sure this is `dist-cdn/` otherwise you will get an error.
 import { registerIconLibrary } from '../../../dist-cdn/webawesome.js';
@@ -127,6 +128,36 @@ describe('<wa-icon>', () => {
 
   // The system library embeds Font Awesome SVGs as strings, and not all of them include a fill attribute, so its
   // mutator applies the same fallback as the default library.
+  describe('default library URL', () => {
+    const resolve = () => defaultLibrary.resolver('house', 'classic', 'solid') as string;
+
+    afterEach(() => {
+      setIconPath('');
+      document.querySelectorAll('[data-webawesome-icons]').forEach(el => el.remove());
+    });
+
+    it('loads the icons from <base path>/icons/svgs by default', () => {
+      expect(resolve()).to.equal(getBasePath('icons/svgs/solid/house.svg'));
+    });
+
+    it('loads the icons from the data-webawesome-icons attribute', () => {
+      const el = document.createElement('div');
+      el.setAttribute('data-webawesome-icons', '/custom/icons/');
+      document.body.append(el);
+
+      expect(resolve()).to.equal(`${location.origin}/custom/icons/solid/house.svg`);
+    });
+
+    it('prefers setIconPath() to the attribute', () => {
+      const el = document.createElement('div');
+      el.setAttribute('data-webawesome-icons', '/custom/icons');
+      document.body.append(el);
+      setIconPath('/api/icons');
+
+      expect(resolve()).to.equal('/api/icons/solid/house.svg');
+    });
+  });
+
   describe('system library fill handling', () => {
     it('adds fill="currentColor" to icons that do not specify a fill', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

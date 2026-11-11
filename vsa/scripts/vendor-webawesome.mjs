@@ -1,7 +1,7 @@
 // Builds Web Awesome from packages/webawesome and copies the runtime files into vsa/vendor/webawesome/.
 // Usage: node vsa/scripts/vendor-webawesome.mjs [--no-build]
 // --no-build copies the output of the last build. The site and the apps load Web Awesome only from the vendor folder.
-// Decision records: 0005 (own build) and 0007 (the build fix for Windows).
+// Decision records: 0005 (own build), 0007 (the build fix for Windows) and 0009 (the icons next to the build).
 
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -40,7 +40,12 @@ if (!process.argv.includes('--no-build')) {
 }
 
 const version = JSON.parse(fs.readFileSync(path.join(pkg, 'package.json'), 'utf8')).version;
-fs.rmSync(to, { recursive: true, force: true });
+// The build output is replaced. The icons folder stays: it is not a build output (decision 0009).
+const OWN = new Set(['icons']);
+fs.mkdirSync(to, { recursive: true });
+for (const name of fs.readdirSync(to)) {
+  if (!OWN.has(name)) fs.rmSync(path.join(to, name), { recursive: true, force: true });
+}
 let count = 0;
 const copy = (src, dst) => {
   if (fs.statSync(src).isDirectory()) {
