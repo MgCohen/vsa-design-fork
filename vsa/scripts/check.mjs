@@ -1,7 +1,7 @@
 // Checks our files against the Web Awesome design guidelines and the VSA rules.
 // Usage: node vsa/scripts/check.mjs
 // It runs the searches of the webawesome-design skill ("Verify before you finish") and the rules of AGENTS.md and
-// vsa/decisions/0006. Each finding names the file, the line and the rule. The exit code is 1 when there is a finding.
+// vsa/decisions/0002. Each finding names the file, the line and the rule. The exit code is 1 when there is a finding.
 // Not checked: vsa/vendor (built files), vsa/reference (the old system), vsa/dist (build output).
 
 import fs from 'node:fs';
@@ -31,7 +31,7 @@ const RULES = [
     name: 'hex color',
     applies: f => rel(f) !== 'theme/palette.css' && !f.endsWith('.md'),
     test: line => /#[0-9a-fA-F]{3,8}\b/.test(line) && !/&#\d+;|#\/|href="#|url\(#/.test(line),
-    why: 'Hex colors only in theme/palette.css (AGENTS.md, 0006). Use a palette tint or a role.',
+    why: 'Hex colors only in theme/palette.css (AGENTS.md, 0002). Use a palette tint or a role.',
   },
   {
     name: 'px size',
@@ -62,7 +62,7 @@ const RULES = [
     name: '--wa-* token set outside the theme',
     applies: f => !['theme/palette.css', 'theme/theme.css'].includes(rel(f)) && /\.(css|html)$/.test(f),
     test: line => /(^|[{;])\s*--wa-[a-z0-9-]+\s*:/.test(line),
-    why: 'Set --wa-* tokens only in theme/theme.css, hues only in theme/palette.css (AGENTS.md, 0006).',
+    why: 'Set --wa-* tokens only in theme/theme.css, hues only in theme/palette.css (AGENTS.md, 0002).',
   },
   {
     name: 'hand-written flex or grid',
@@ -75,7 +75,7 @@ const RULES = [
     applies: f => f.endsWith('.html'),
     test: line =>
       /(href|src)="https?:\/\//.test(line) && !/fonts\.googleapis\.com/.test(line) && !/target="_blank"/.test(line),
-    why: 'We own every file we ship (0005). Load from vsa/vendor. Google Fonts is the one exception.',
+    why: 'We own every file we ship (0001). Load from vsa/vendor. Google Fonts is the one exception.',
   },
 ];
 

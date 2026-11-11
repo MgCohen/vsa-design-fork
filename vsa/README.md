@@ -1,8 +1,8 @@
 # VSA Design
 
-VSA Design is the design system of VSA apps. It owns a build of Web Awesome 3.14.0 (MIT). The Web Awesome source is in `packages/`, and we do not change its components. Our work is in this `vsa/` folder: a Web Awesome theme and palette, the looks, our own components, the vendored files and the docs site.
+VSA Design is the design system of VSA apps. Its source is in `packages/webawesome/`: it starts from Web Awesome 3.14.0 (MIT), and we change it step by step. This `vsa/` folder holds our style (a named theme, a palette and the looks), our own components, the build of our source, the docs site and the decisions.
 
-See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and palette, `0007` Windows build fix, `0008` dial test), and [DESIGN.md](DESIGN.md) for the brief for agents.
+See [decisions/](decisions/) for the reasons (`0001` our source, `0002` theme and palette, `0003` dial), and [DESIGN.md](DESIGN.md) for the brief for agents.
 
 ## Files
 
@@ -22,7 +22,6 @@ See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and
 | `scripts/screenshots.mjs` | Screenshots of the published page: mobile and desktop, light and dark |
 | `docs/index.json` | The menu: the foundations pages and the components that have a usage page |
 | `decisions/` | Design decisions |
-| `reference/custom-design/` | Our first design system, before the fork: tokens, atoms, gallery and decisions `0001` to `0004`. Use it as a reference for the look and the gallery |
 | `DESIGN.md` | The design brief for agents, in the form that Web Awesome recommends |
 | `docs/overview.md` | The first page |
 | `docs/foundations/*.md` | Color, typography, spacing, radius, elevation, motion, code |
@@ -67,7 +66,6 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 
 ## Open questions
 
-- The site loads the prebuilt Web Awesome 3.14.0 files from the CDN. Change it to the files that this repo builds.
 - Two-way binding in Blazor needs a thin Razor wrapper for each form control. Nobody has tested Blazor yet.
 - The badge default color is the brand color. Decide if the VSA default is neutral.
 - The dots have no Web Awesome component. Write them as a VSA component, as the dial.
@@ -75,4 +73,4 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 
 ## Run it
 
-Serve the `vsa/` folder with any static web server. Then open `/site/index.html`.
+Serve the repo root with any static web server. Then open `/vsa/site/index.html`. The site reads the Web Awesome docs pages from `packages/webawesome/`, so the server must include that folder.

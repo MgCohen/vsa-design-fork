@@ -4,14 +4,18 @@ Instructions for AI coding agents (and humans) that work in this repository. Thi
 
 ## Project
 
-VSA Design is the design system of VSA apps. It owns a build of Web Awesome (MIT) from the `v3.14.0` release, with the source unchanged. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0005-fork-web-awesome.md` and `0006-theme-and-palette.md`.
+VSA Design is the design system of VSA apps: components, behaviors, style, docs and agent skills. It starts from a copy of Web Awesome `v3.14.0` (MIT). We own all of it, and we change it step by step. The changes include our style, and later our own behaviors and ways of working. Until a decision record says otherwise, we keep the Web Awesome system: names, cascade layers, the theme model and the component API pattern, because the skills depend on it. See `vsa/decisions/0001-our-source-from-web-awesome.md`.
 
-| Path | Content | Owner |
+Today, our style is a named theme over the default theme (`vsa/decisions/0002-theme-and-palette.md`). Each part of the repo and its origin is in `INVENTORY.md`.
+
+| Path | Content | Origin |
 |---|---|---|
-| `packages/webawesome/` | The Web Awesome source: components, themes, build, tests. We build it, but we do not change it without a decision record | Upstream, unchanged |
-| `vsa/` | Our work: the theme, the looks, `vsa-*` components, the docs site, decisions. See `vsa/README.md` | Us |
-| `vsa/DESIGN.md` | The design brief: the vocabulary, the conventions, the don'ts | Us |
-| `.claude/skills/` | The Web Awesome agent skills, `webawesome` and `webawesome-design` | Upstream, copied |
+| `packages/webawesome/` | Our source: components, themes, build, tests | Started from Web Awesome 3.14.0 |
+| `vsa/` | Our style, our `vsa-*` components, the docs site, the decisions. See `vsa/README.md` | Ours |
+| `vsa/DESIGN.md` | The design brief: the vocabulary, the conventions, the don'ts | Ours |
+| `.claude/skills/` | The agent skills `webawesome` and `webawesome-design` | Generated from our source |
+
+The default branch is `main`.
 
 ## Read first
 
@@ -19,41 +23,36 @@ VSA Design is the design system of VSA apps. It owns a build of Web Awesome (MIT
 2. The skill for the task:
    - `webawesome`: the API of one component, for example its attributes, slots, events and parts.
    - `webawesome-design`: layout, theming, tokens and composition.
-3. `packages/webawesome/CLAUDE.md`, if you change a Web Awesome component.
+3. `packages/webawesome/CLAUDE.md`, if you change a component in our source.
+4. `INVENTORY.md`, before you change a file whose origin you do not know.
 
 An agent that does not load skills by itself can read the files: `.claude/skills/<skill>/SKILL.md`, then the files in its `references/` folder.
 
 ## Rules
 
-- Put hex colors only in `vsa/theme/palette.css`. A role in `vsa/theme/theme.css` refers to a palette tint.
-- In this repo, set `--wa-*` tokens only in `vsa/theme/theme.css`, and sizes only through the scale controls. See `0006`. An app sets its own values in its own stylesheet, with no cascade layer.
-- Do not change `packages/webawesome/src` without a decision record.
+- A change to the system needs a decision record: a token name, a cascade layer, the theme model, a component API (attribute, slot, part, custom state, event), or the guideline source `packages/webawesome/scripts/design-skill/`. A change inside a component needs no record. See `0001`.
+- In `vsa/`, put hex colors only in `vsa/theme/palette.css`. A role in `vsa/theme/theme.css` refers to a palette tint.
+- In `vsa/`, set `--wa-*` tokens only in `vsa/theme/theme.css`, and only if the value differs from the default theme. Set sizes through the scale controls. The exceptions are the shadows and the focus ring. See `0002`.
+- An app sets its own values in its own stylesheet, with no cascade layer.
 - Make a `--vsa-*` token only for an idea that Web Awesome has no token for.
 - An own component uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
 - Use the sizes `s`, `m` and `l`. Do not use `::part(base)`.
-- Use only the MIT core. Do not copy Pro components or Pro themes.
-- Keep `LICENSE.md` and the Web Awesome copyright notice.
-
-## Upstream
-
-`origin` is this fork. `upstream` is `shoelace-style/webawesome`. The default branch is `main`. Work on `main`. The branch `vsa` is the old name and has the same history.
-
-1. Run `git fetch upstream --tags`.
-2. Merge only the fixes or the release that we want into `main`.
-3. Update the skills to the same version, as described in the next section.
+- Do not edit `.claude/skills/` by hand. Build it from our source (see "Update the skills"). Put our rules in `vsa/DESIGN.md`.
+- Use no Web Awesome Pro code. Keep `LICENSE.md` and the Web Awesome copyright notice.
 
 ## Update the skills
 
-The skills must have the same version as the Web Awesome code in this repo.
+The skills are build output of our source. They describe our components only after a build and a copy.
 
-- **Before the first build:** copy `dist-cdn/skills/` of the release from the CDN, for example `https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.14.0/dist-cdn/skills/`.
-- **After the build works:** run `npm run build` in `packages/webawesome/`, then copy `packages/webawesome/dist/skills/webawesome/` and `packages/webawesome/dist/skills/webawesome-design/` to `.claude/skills/`. Then the `webawesome` skill describes our components, not the upstream ones.
-
-Do not edit the files in `.claude/skills/` by hand. The next update writes over them. Put our rules in `vsa/DESIGN.md`.
+1. Run `npm run build` in `packages/webawesome/`.
+2. Copy `packages/webawesome/dist/skills/webawesome/` and `packages/webawesome/dist/skills/webawesome-design/` to `.claude/skills/`.
+3. Commit the changed skill files with the source change that caused them.
 
 ## Verify a change
 
 Check each visible change on mobile and on desktop, in light and in dark. A change that looks correct on one screen size can break the other.
+
+In a new clone, run `npm ci` in the repo root first. The scripts need `esbuild` and `playwright`.
 
 1. Run `node vsa/scripts/check.mjs`. It checks the Web Awesome design rules and our rules: hex colors only in the palette, `--wa-*` tokens only in the theme, no px, no `::part(base)`, no visual host rules, no hand-written flex or grid, no outside links. Fix each finding.
 2. Run `node vsa/scripts/build-artifact.mjs`.
@@ -79,13 +78,16 @@ The script uses only local files. It puts these items into one HTML file:
 | All components, bundled with esbuild | `vsa/vendor/webawesome/`, `vsa/setup.js`, `vsa/components/` |
 | `marked` and `highlight.js` | `vsa/vendor/` |
 | The docs pages, the icons and the two API manifests | `vsa/docs/`, `vsa/vendor/icons/` (only the icons that a page names), the two `custom-elements.json` files |
-| The Web Awesome component docs pages. Each component page and the gallery show their examples live | `vsa/vendor/webawesome/docs/components/`, copied by `vendor-webawesome.mjs` |
+| The Web Awesome component docs pages. Each component page and the gallery show their examples live | `packages/webawesome/docs/docs/components/`, our source |
 
 The only outside link is Google Fonts. The script stops if the page links any other outside file.
 
-## Update Web Awesome
+## Change our source
 
-1. Merge the upstream release into `packages/webawesome` (see "Upstream").
-2. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the package and copies the runtime files to `vsa/vendor/webawesome`.
-3. Compare our theme with the new `styles/themes/default.css`, region by region, for new or renamed tokens.
-4. Run the checks in "Verify a change".
+1. If the change is a system change, write its decision record first (see "Rules").
+2. Change `packages/webawesome/src`. Follow `packages/webawesome/CLAUDE.md`.
+3. In `packages/webawesome/`, run the tests of the component: `npm run test:component -- --group <name>`.
+4. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the source and copies the runtime files to `vsa/vendor/webawesome`.
+5. Update the skills (see "Update the skills").
+6. If the change adds or renames a token, compare `vsa/theme/theme.css` with `styles/themes/default.css`.
+7. Run the checks in "Verify a change".
