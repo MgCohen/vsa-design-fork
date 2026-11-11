@@ -53,7 +53,7 @@ export function getBasePath(subpath = '') {
 
 /**
  * Sets the path where the default icon library resolves SVG icons from. When set, the default icon library will load
- * icons from this path instead of the Font Awesome CDN. The expected directory structure mirrors the Font Awesome SVG
+ * icons from this path instead of <base path>/icons/svgs. The expected directory structure mirrors the Font Awesome SVG
  * download, e.g. `{path}/solid/house.svg` or `{path}/brands/github.svg`.
  *
  * This should be called before Web Awesome components are loaded.
@@ -63,10 +63,25 @@ export function setIconPath(path: string) {
 }
 
 /**
- * Gets the path where the default icon library resolves SVG icons from. When set, the default icon library will load
- * icons from this path instead of the Font Awesome CDN.
+ * Gets the path where the default icon library resolves SVG icons from, or an empty string if none is set.
+ *
+ * The path comes from setIconPath(). If that was not called, it comes from the data-webawesome-icons attribute on any
+ * element of the page, resolved from the page URL:
+ *
+ *   <script src="webawesome.loader.js" data-webawesome-icons="/custom/icons/svgs"></script>
+ *
+ * With no path, the default icon library loads the icons from <base path>/icons/svgs (VSA decision 0004).
  */
 export function getIconPath() {
+  if (!iconPath && typeof document !== 'undefined') {
+    const el = document.querySelector('[data-webawesome-icons]');
+    const value = el?.getAttribute('data-webawesome-icons');
+
+    if (value) {
+      setIconPath(new URL(value, window.location.href).href);
+    }
+  }
+
   return iconPath.replace(/\/$/, '');
 }
 

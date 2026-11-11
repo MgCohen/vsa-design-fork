@@ -46,14 +46,13 @@ This repo is VSA Design. Its source starts from Web Awesome 3.14.0 (MIT), and ou
 |---|---|---|
 | `theme/` | Ours | Palette, theme, looks, code block, fonts |
 | `components/` | Ours | The `vsa-*` components and their API file |
-| `setup.js` | Ours | Registers the vendored icons |
 | `site/index.html` | Ours | The docs site |
 | `docs/` | Ours | Usage pages, foundations, tokens, gallery, menu |
 | `scripts/` | Ours | Build, check, screenshots, vendor scripts |
 | `decisions/` | Ours | Decision records |
 | `DESIGN.md`, `README.md` | Ours | Brief for agents; overview |
 | `vendor/webawesome/` | Generated | Runtime files of our Web Awesome build |
-| `vendor/icons/` | Third party | Font Awesome Free icons, with `LICENSE.txt` |
+| `vendor/webawesome/icons/` | Third party | Font Awesome Free icons, with `LICENSE.txt`. The default icons of our build (`0004`). `vendor-webawesome.mjs` keeps this folder |
 | `vendor/marked/`, `vendor/highlight.js/` | Third party | Markdown and code colors for the docs site |
 
 ## Open questions

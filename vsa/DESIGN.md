@@ -1,6 +1,6 @@
 # Design system: VSA on Web Awesome
 
-**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0001`). `setup.js` registers our vendored icons, then the Web Awesome loader runs. No CDN, no Font Awesome kit. Google Fonts is the one outside link.
+**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0001`). The Font Awesome Free icons are part of the build, in `vendor/webawesome/icons/` (decision `0004`). No CDN, no Font Awesome kit. Google Fonts is the one outside link.
 
 **Theme.** The VSA style is a Web Awesome theme and palette (decision `0002`). On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, and `wa-light` or `wa-dark` from a System / Light / Dark switch.
 
@@ -14,7 +14,7 @@
 
 **How to change it.** Replace values, keep the structure. For which kind of change goes where, use the Web Awesome design skill: `theming.md` (palette, brand, roles, light and dark), `your-design-system.md` sections 2 and 3 (where a customization lives, how to extend), and `composition.md` "Styling components" (one component). The table above gives our file for each level.
 
-**Project tokens.** `--vsa-*` tokens are only for ideas that Web Awesome has no token for: the carved, knob, press, glow, dial and hole shadows (`--vsa-shadow-*`), the surface gradients (`--vsa-gradient-*`), the letter spacing (`--vsa-letter-spacing-*`), the code colors (`--vsa-color-code-*`) and the smallest code size (`--vsa-font-size-code-min`). The raised look uses `--wa-shadow-m` and `--wa-shadow-s`. Do not make a `--vsa-*` name for an idea that a `--wa-*` token has. The page background is `--wa-color-surface-default`, and the card surface is `--wa-color-surface-raised`.
+**Project tokens.** `--vsa-*` tokens are only for ideas that Web Awesome has no token for: the carved, knob, press, glow, dial and hole shadows (`--vsa-shadow-*`), the surface gradients (`--vsa-gradient-*`), the letter spacing (`--vsa-letter-spacing-*`), the code colors (`--vsa-color-code-*`), the smallest code size (`--vsa-font-size-code-min`) and the hole inset of the dial (`--vsa-dial-hole-inset`). The raised look uses `--wa-shadow-m` and `--wa-shadow-s`. Do not make a `--vsa-*` name for an idea that a `--wa-*` token has. The page background is `--wa-color-surface-default`, and the card surface is `--wa-color-surface-raised`.
 
 **Looks.** Each surface is raised or carved. The looks are for the `wa-*` components only, not for native buttons and inputs. `theme/looks.css` gives the looks to Web Awesome components with documented parts and states, in the `wa-theme-dimension` layer, as Web Awesome's own Awesome theme does:
 
@@ -46,7 +46,7 @@
 | `<vsa-table>` | Own element around a native `<table>`: Web Awesome has no narrow table layout | Each data table. In a narrow container, each row shows as a block | `components/vsa-table.js` |
 | `pre.vsa-code` | `<pre>` | A code sample, dark in both schemes | `theme/code.css` |
 
-**Conventions.** Main action: `variant="brand"`, one on each screen. Sizes: `s`, `m`, `l`. Status colors: `variant="success"`, `"warning"`, `"danger"`. An own element uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
+**Conventions.** Main action: `variant="brand"`, one on each screen. Sizes: `s`, `m`, `l`. Status colors: `variant="success"`, `"warning"`, `"danger"`. A component with no `variant` attribute, for example the dial, uses the Web Awesome classes `wa-success`, `wa-warning`, `wa-danger`. An own element uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.
 
 **Don't.**
 - Do not use `size="small"`, `"medium"` or `"large"`. They are deprecated. Use `s`, `m`, `l`.

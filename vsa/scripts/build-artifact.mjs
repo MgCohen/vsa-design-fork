@@ -110,9 +110,10 @@ const files = {};
 const waDocs = path.join(vsa, '..', 'packages', 'webawesome', 'docs', 'docs', 'components');
 for (const name of fs.readdirSync(waDocs).filter(n => n.endsWith('.md')))
   files[`wa/components/${name}`] = fs.readFileSync(path.join(waDocs, name), 'utf8');
-// The vendored icons as data URLs, for vsa/setup.js. The page is one file, so it has no icon folder. It includes only
-// the icons that a docs page or the site names, in all three folders, because the folder depends on the attributes.
-const iconRoot = path.join(vsa, 'vendor', 'icons', 'svgs');
+// The default icons (decision 0004), as SVG text for scripts/artifact-icons.js. The page is one file, so it has no
+// icon folder. It includes only the icons that a docs page or the site names, in all three folders, because the
+// folder depends on the attributes.
+const iconRoot = path.join(vendor, 'icons', 'svgs');
 const text = Object.values(files).join('\n') + html;
 const used = new Set([...text.matchAll(/\bname="([a-z0-9-]+)"/g)].map(m => m[1]));
 const icons = {};
@@ -121,12 +122,13 @@ for (const folder of fs.readdirSync(iconRoot)) {
     const name = file.replace(/\.svg$/, '');
     if (!used.has(name)) continue;
     const svg = fs.readFileSync(path.join(iconRoot, folder, file), 'utf8');
-    icons[`${folder}/${name}`] = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    icons[`${folder}/${name}`] = svg;
   }
 }
 const waManifest = fromSite(html.match(/const MANIFEST_URL = '([^']+)'/)[1]);
 const data = `<script>
 window.VSA_ICONS = ${scriptSafe(JSON.stringify(icons))};
+${scriptSafe(fs.readFileSync(path.join(vsa, 'scripts', 'artifact-icons.js'), 'utf8'))}
 window.VSA_FILES = ${scriptSafe(JSON.stringify(files))};
 window.VSA_MANIFEST = ${scriptSafe(fs.readFileSync(path.join(vsa, 'components', 'custom-elements.json'), 'utf8'))};
 window.WA_MANIFEST = ${scriptSafe(fs.readFileSync(waManifest, 'utf8'))};

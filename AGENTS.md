@@ -75,9 +75,9 @@ The script uses only local files. It puts these items into one HTML file:
 | Item | Source |
 |---|---|
 | All CSS, with its imports | `vsa/theme/`, `vsa/vendor/webawesome/styles/` |
-| All components, bundled with esbuild | `vsa/vendor/webawesome/`, `vsa/setup.js`, `vsa/components/` |
+| All components, bundled with esbuild | `vsa/vendor/webawesome/`, `vsa/components/` |
 | `marked` and `highlight.js` | `vsa/vendor/` |
-| The docs pages, the icons and the two API manifests | `vsa/docs/`, `vsa/vendor/icons/` (only the icons that a page names), the two `custom-elements.json` files |
+| The docs pages, the icons and the two API manifests | `vsa/docs/`, `vsa/vendor/webawesome/icons/` (only the icons that a page names, served by `vsa/scripts/artifact-icons.js`), the two `custom-elements.json` files |
 | The Web Awesome component docs pages. Each component page and the gallery show their examples live | `packages/webawesome/docs/docs/components/`, our source |
 
 The only outside link is Google Fonts. The script stops if the page links any other outside file.

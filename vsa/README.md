@@ -2,7 +2,7 @@
 
 VSA Design is the design system of VSA apps. Its source is in `packages/webawesome/`: it starts from Web Awesome 3.14.0 (MIT), and we change it step by step. This `vsa/` folder holds our style (a named theme, a palette and the looks), our own components, the build of our source, the docs site and the decisions.
 
-See [decisions/](decisions/) for the reasons (`0001` our source, `0002` theme and palette, `0003` dial), and [DESIGN.md](DESIGN.md) for the brief for agents.
+See [decisions/](decisions/) for the reasons (`0001` our source, `0002` theme and palette, `0003` dial, `0004` icons), and [DESIGN.md](DESIGN.md) for the brief for agents.
 
 ## Files
 
@@ -11,7 +11,6 @@ See [decisions/](decisions/) for the reasons (`0001` our source, `0002` theme an
 | `theme/palette.css` | `.wa-palette-vsa`: the hue tints. The only file with hex colors |
 | `theme/theme.css` | `.wa-theme-vsa`: roles to tints for light and dark, fonts, scale controls, shadows |
 | `theme/looks.css` | Project tokens (`--vsa-*`), and the raised and carved looks with documented `::part()` rules |
-| `setup.js` | Registers the vendored icons as the default icon library. Load it before the Web Awesome loader |
 | `vendor/` | Our build of Web Awesome (`vendor/webawesome`, made by `scripts/vendor-webawesome.mjs`), the icons, `marked` and `highlight.js`. Do not edit these files |
 | `components/vsa-<name>.js` | A VSA component: a custom element with shadow DOM, plain JavaScript, no build. Now: `vsa-table` |
 | `components/custom-elements.json` | The API of the VSA components, in the Custom Elements Manifest format. The site makes the API tables from it |
@@ -40,17 +39,30 @@ See [decisions/](decisions/) for the reasons (`0001` our source, `0002` theme an
 1. `theme/fonts.css`: the font files from Google Fonts.
 2. `vendor/webawesome/styles/themes/default.css`, `utilities.css` and `native.css`: the Web Awesome defaults, the utilities and the native element styles, in cascade layers.
 3. `theme/palette.css`, `theme/theme.css`, `theme/looks.css`, `theme/code.css`: the VSA palette, theme and looks, in the Web Awesome cascade layers.
-4. `setup.js`: the icon library.
-5. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it.
-6. `components/vsa-table.js`: it defines `<vsa-table>`.
-7. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
+4. `vendor/webawesome/webawesome.loader.js`: it loads each component when the page uses it. The icons come from `vendor/webawesome/icons/svgs/` (decision `0004`).
+5. `components/vsa-table.js`: it defines `<vsa-table>`.
+6. `vendor/marked` and `vendor/highlight.js`: Markdown to HTML, and the code colors.
 
-The published page is one file. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
+The published page is one file. `scripts/artifact-icons.js` gives it the icons with no requests, because the claude.ai frame blocks them. `scripts/build-artifact.mjs` bundles the components and puts the CSS, the docs and the icons in it.
+
+## Use it in an app
+
+1. Serve the `vsa/` folder, or copy `theme/` and `vendor/webawesome/` into the app.
+2. Load the stylesheets in the order of "How the site loads", steps 1 to 3.
+3. Load the loader. The icons need no setting:
+
+```html
+<script type="module" src="/vsa/vendor/webawesome/webawesome.loader.js" data-webawesome="/vsa/vendor/webawesome"></script>
+```
+
+4. If the app needs a different icon folder, add `data-webawesome-icons="<folder>"` to the loader tag.
+
+Use only this Web Awesome build. Do not also load Web Awesome from npm or a CDN.
 
 ## Add a usage page
 
 1. Write `docs/components/<name>.md`. Use `<name>` without `wa-`, for example `switch`.
-2. Start with "When to use it". Then write "Look", "Variants" and "VSA tokens and looks".
+2. Start with "When to use it". Then write "Look", "Variants" and "Tokens and looks".
 3. Add the component to `components` in `docs/index.json`.
 
 ## Add a VSA component
@@ -68,7 +80,7 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 
 - Two-way binding in Blazor needs a thin Razor wrapper for each form control. Nobody has tested Blazor yet.
 - The badge default color is the brand color. Decide if the VSA default is neutral.
-- The dots have no Web Awesome component. Write them as a VSA component, as the dial.
+- The dots have no Web Awesome component. Write them as a VSA component, as the table.
 - The Runner reference shows a ring with more than one color: done, pending and failed. Decide if it is a `segments` API of the dial or a separate component.
 
 ## Run it
