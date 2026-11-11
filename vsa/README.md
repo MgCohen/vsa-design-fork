@@ -2,7 +2,7 @@
 
 VSA Design is the design system of VSA apps. It owns a build of Web Awesome 3.14.0 (MIT). The Web Awesome source is in `packages/`, and we do not change its components. Our work is in this `vsa/` folder: a Web Awesome theme and palette, the looks, our own components, the vendored files and the docs site.
 
-See [decisions/](decisions/) for the reasons (`0005` our source, `0006` theme and palette, `0008` dial test), and [DESIGN.md](DESIGN.md) for the brief for agents.
+See [decisions/](decisions/) for the reasons (`0005` our source, `0006` theme and palette, `0008` dial), and [DESIGN.md](DESIGN.md) for the brief for agents.
 
 ## Files
 
