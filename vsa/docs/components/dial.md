@@ -38,7 +38,7 @@ Move the slider to change the value.
 
 ### Colors
 
-Add a Web Awesome variant class for a state color. The default is the brand color.
+Add a Web Awesome variant class for a state color: `wa-success`, `wa-warning` or `wa-danger`. The default is the brand color, also with `wa-brand`. The dial has no neutral color: `wa-neutral` shows the brand color.
 
 ```html preview
 <wa-progress-ring class="vsa-dial wa-success" value="90" label="Done">90%</wa-progress-ring>
@@ -80,4 +80,4 @@ The class is in `theme/looks.css`. It uses only the documented parts and propert
 | Indicator | `--indicator-color` (default `--wa-color-brand-fill-loud`). A variant class sets it to the variant fill. The glow is the same color |
 | Center | The `label` part: `--vsa-gradient-hole` and `--vsa-shadow-hole`. The small dial uses `--wa-shadow-s` |
 
-The glow needs room inside the ring. Keep `--track-width` wider than `--indicator-width`: the class sets 16 % and 10 % of `--size`.
+The glow needs room inside the ring. Keep `--track-width` wider than `--indicator-width`: the class sets 16 % and 10 % of `--size`. The small dial has no glow, so its track and indicator have the same width, 14 % of `--size`.

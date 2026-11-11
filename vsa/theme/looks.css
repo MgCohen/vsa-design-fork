@@ -196,7 +196,8 @@
       --indicator-width: calc(var(--size) * 0.1);
       --track-color: transparent;
       --indicator-color: var(--wa-color-brand-fill-loud);
-      /* The hole starts after the track (10 %) and a gap (5 %). A percent, so the label font size has no effect. */
+      /* The indicator covers 3 % to 13 % of --size from the edge. The hole starts at 15 %, after a gap of 2 %.
+         A percent, so the label font size has no effect. */
       --vsa-dial-hole-inset: 15%;
     }
     wa-progress-ring.vsa-dial:is(.wa-brand, .wa-success, .wa-warning, .wa-danger) {
@@ -210,6 +211,8 @@
     wa-progress-ring.vsa-dial::part(indicator) {
       filter: drop-shadow(0 0 calc(var(--size) * 0.03) color-mix(in oklab, var(--indicator-color) 55%, transparent));
     }
+    /* The label part is documented, but its position (absolute, top 0, left 0, width and height 100 %) is internal
+       to progress-ring.styles.ts. Check inset, width and height at each Web Awesome update. */
     wa-progress-ring.vsa-dial::part(label) {
       inset: var(--vsa-dial-hole-inset);
       width: auto;

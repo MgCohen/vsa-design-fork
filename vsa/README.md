@@ -2,7 +2,7 @@
 
 VSA Design is the design system of VSA apps. It owns a build of Web Awesome 3.14.0 (MIT). The Web Awesome source is in `packages/`, and we do not change its components. Our work is in this `vsa/` folder: a Web Awesome theme and palette, the looks, our own components, the vendored files and the docs site.
 
-See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and palette, `0007` Windows build fix, `0008` dial test), and [DESIGN.md](DESIGN.md) for the brief for agents.
+See [decisions/](decisions/) for the reasons (`0005` own build, `0006` theme and palette, `0007` Windows build fix, `0008` dial as a progress ring), and [DESIGN.md](DESIGN.md) for the brief for agents.
 
 ## Files
 
@@ -51,7 +51,7 @@ The published page is one file. `scripts/build-artifact.mjs` bundles the compone
 ## Add a usage page
 
 1. Write `docs/components/<name>.md`. Use `<name>` without `wa-`, for example `switch`.
-2. Start with "When to use it". Then write "Look", "Variants" and "VSA tokens and looks".
+2. Start with "When to use it". Then write "Look", "Variants" and "Tokens and looks".
 3. Add the component to `components` in `docs/index.json`.
 
 ## Add a VSA component
@@ -70,7 +70,7 @@ Do this only for behavior that no Web Awesome component has. For a new look on a
 - The site loads the prebuilt Web Awesome 3.14.0 files from the CDN. Change it to the files that this repo builds.
 - Two-way binding in Blazor needs a thin Razor wrapper for each form control. Nobody has tested Blazor yet.
 - The badge default color is the brand color. Decide if the VSA default is neutral.
-- The dots have no Web Awesome component. Write them as a VSA component, as the dial.
+- The dots have no Web Awesome component. Write them as a VSA component, as the table.
 - The Runner reference shows a ring with more than one color: done, pending and failed. Decide if it is a `segments` API of the dial or a separate component.
 
 ## Run it

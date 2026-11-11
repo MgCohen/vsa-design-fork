@@ -69,7 +69,7 @@ The switch sends `input` and then `change` when the user changes it. Read the st
 </script>
 ```
 
-## VSA tokens and looks
+## Tokens and looks
 
 | Item | Value |
 |---|---|
