@@ -1,32 +1,50 @@
-# 0006: Our style is a Web Awesome theme and palette
+# 0006: Our style is a named theme over the default theme
 
-**Decision:** The VSA style is a Web Awesome palette (`.wa-palette-vsa`) and a Web Awesome theme (`.wa-theme-vsa`), made the same way as Web Awesome's own themes. We replace values. We do not change how Web Awesome organizes its tokens.
+**Decision:** The VSA style is a named Web Awesome theme (`wa-theme-vsa`) with its own palette, a brand class and looks. It sits over the default theme of our source, the same way that the Web Awesome themes Awesome and Shoelace do. The VSA theme sets only the tokens that differ from the default theme. Each other token, including each size formula, comes from the default theme.
 
-| Level | File | Cascade layer | Holds |
-|---|---|---|---|
-| Palette | `vsa/theme/palette.css` | `wa-color-palette` | 11 tints for each hue. The only file with hex colors |
-| Brand | `wa-brand-orange` on `<html>` | `wa-color-variant` | Which hue is the brand |
-| Theme | `vsa/theme/theme.css` | `wa-theme` | Roles to tints, light and dark, fonts, scale controls |
-| Looks | `vsa/theme/looks.css` | `wa-theme` (tokens), `wa-theme-dimension` (rules) | Project tokens, and documented `::part()` rules for the raised and carved looks. Web Awesome's own Awesome theme puts its component looks in `wa-theme-dimension` too |
-| Code block | `vsa/theme/code.css` | `wa-theme`, `wa-theme-dimension` | The code colors and the look of `pre.vsa-code` |
-| App variation | The app's own stylesheet | No layer | The app's values, in the three scopes: both schemes, light, dark. A stylesheet with no layer wins over every Web Awesome layer, also `wa-theme-overrides`, which themes use |
+```
+themes/default.css          the default theme and the ground: all tokens and formulas, applies with no class
+   ↑ over it
+vsa/theme/theme.css         .wa-theme-vsa: only the values that differ
+   ↑ over it
+app stylesheet              no cascade layer: the values of one app
+```
 
 On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange` plus `wa-light` or `wa-dark`.
 
+| Level | File | Cascade layer | Holds |
+|---|---|---|---|
+| Default theme | `packages/webawesome/src/styles/themes/default.css` | `wa-theme` | All tokens and the size formulas. Selectors `:where(:root)`, `.wa-light`, `.wa-dark` |
+| Palette | `vsa/theme/palette.css` | `wa-color-palette` | 11 tints for gray, orange, green, yellow and red. The other hues come from the default palette. The only hex colors |
+| Brand | `wa-brand-orange` on `<html>` | `wa-color-variant` | Which hue is the brand |
+| Theme | `vsa/theme/theme.css` | `wa-theme` | Roles to tints for light and dark, fonts, scale controls, shadows |
+| Looks | `vsa/theme/looks.css` | `wa-theme` (tokens), `wa-theme-dimension` (rules) | Project tokens, and documented `::part()` rules for the raised and carved looks. The Awesome theme also puts its component looks in `wa-theme-dimension` |
+| Code block | `vsa/theme/code.css` | `wa-theme`, `wa-theme-dimension` | The code colors and the look of `pre.vsa-code` |
+| App variation | The app stylesheet | No layer | The values of one app, in three scopes: both schemes, light, dark. A stylesheet with no layer wins over each Web Awesome layer, also `wa-theme-overrides` |
+
 ## Rules
 
-- A role refers to a role tint, for example `--wa-color-surface-lowered: var(--wa-color-neutral-80)`, never to a hue or a hex value. Then `wa-brand-*` and `wa-neutral-*` change the theme.
-- Sizes use the Web Awesome formulas. The theme sets only the scale controls: `--wa-font-size-scale: 0.875` (14 px body) and `--wa-border-radius-scale: 2`. Space keeps the Web Awesome scale.
-- One exception: the shadows. The raised look has several layers, and Web Awesome's shadow steps have one. So the theme sets `--wa-shadow-s`, `-m` and `-l` directly, and the shadow scale controls (offset, blur, spread) have no effect. The drop layers read `--wa-color-shadow`.
-- An app variation is not a new theme. It is a stylesheet with no cascade layer, as the Web Awesome design skill shows (`your-design-system.md`, section 2).
-- For how to make each kind of change, use the Web Awesome design skill: `theming.md`, `your-design-system.md` sections 2 and 3, and `composition.md` "Styling components".
+- Set a token in `theme.css` only if its value differs from the default theme. Status: `theme.css` sets 23 values that are the same as the default theme, for example `--wa-color-text-normal`. The review of `theme.css` deletes them.
+- A role refers to a role tint, for example `--wa-color-surface-lowered: var(--wa-color-neutral-80)`. It never refers to a hue or a hex value. Then `wa-brand-*` and `wa-neutral-*` change the theme.
+- Sizes use the formulas of the default theme. The theme sets the scale controls: `--wa-font-size-scale: 0.875` (14 px body) and `--wa-border-radius-scale: 2`. Space keeps the default scale.
+- Two kinds of sizes are set directly:
+  - The shadows. The raised look has several layers, and the shadow steps of the default theme have one. So the theme sets `--wa-shadow-s`, `-m` and `-l`, and the shadow scale controls have no effect. The drop layers read `--wa-color-shadow`.
+  - The focus ring: `--wa-focus-ring-width` and `--wa-focus-ring-offset`.
+- An app variation is not a new theme. It is a stylesheet with no cascade layer (`webawesome-design` skill, `your-design-system.md`, section 2).
+- For how to make each kind of change, use the `webawesome-design` skill:
+  - `theming.md`
+  - `your-design-system.md`, sections 2 and 3
+  - `composition.md`, "Styling components & CSS parts"
 
 ## Reason
 
-This is how Web Awesome packages a complete look, for example the Awesome and Shoelace themes. With the same structure, every Web Awesome control works on our base: `wa-brand-*`, `wa-invert`, the scale controls and palette changes. Before, `vsa.css` held 147 hex values directly on the roles, outside any cascade layer. An app could not change the base without a fight over load order.
+A named theme over the default theme is how Web Awesome organizes its own themes. With the same structure, each Web Awesome control works on our style: `wa-brand-*`, `wa-invert`, the scale controls and palette changes. A theme that sets only the differences shows clearly what VSA changes, and it copies no formula.
 
 ## Cost
 
-- The looks use `:state(checked)` on `wa-switch`. The switch sets that state, but its reference does not list it. Check it at each Web Awesome update.
+- The looks use `:state(checked)` on `wa-switch`. The switch sets that state (`switch.ts`), but its reference does not list it.
+- A change to a default token that the VSA theme does not set also changes the VSA style.
 
-- The type and radius steps follow the Web Awesome ratios. Headings are larger, and the small text is 1 px smaller than before.
+## Non-goals
+
+- No change to the values of the default theme now. Reason: we change only the VSA theme. The default theme can change later, with its own decision record.
