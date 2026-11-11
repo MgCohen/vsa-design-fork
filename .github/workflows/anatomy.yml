@@ -5,9 +5,9 @@ name: Anatomy
 
 on:
   push:
-    branches: [next]
+    branches: [main]
   pull_request:
-    branches: [next]
+    branches: [main]
   workflow_dispatch:
 
 jobs:

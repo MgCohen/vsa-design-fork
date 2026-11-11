@@ -89,3 +89,4 @@ The only outside link is Google Fonts. The script stops if the page links any ot
 4. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the source, copies the runtime files to `vsa/vendor/webawesome`, and updates the skills.
 5. If the change adds or renames a token, compare `vsa/theme/theme.css` with `styles/themes/default.css`.
 6. Run the checks in "Verify a change".
+7. Before the merge, run the full check of the source in `packages/webawesome/`: `npm run verify`. It runs prettier, the CSS parts and anatomy tests, the build, the skills check and all component tests. The workflows in `.github/workflows/` run the same tests on each PR to `main`.
