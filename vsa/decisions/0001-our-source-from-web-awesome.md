@@ -1,4 +1,4 @@
-# 0005: Our source starts from Web Awesome
+# 0001: Our source starts from Web Awesome
 
 **Decision:** `packages/webawesome/` is our source. It starts from the Web Awesome `v3.14.0` release (MIT), and we change it step by step. We do not follow an upstream. We keep the Web Awesome system, because the agent skills and our docs work only with it.
 

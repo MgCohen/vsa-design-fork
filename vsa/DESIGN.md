@@ -1,8 +1,8 @@
 # Design system: VSA on Web Awesome
 
-**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0005`). `setup.js` registers our vendored icons, then the Web Awesome loader runs. No CDN, no Font Awesome kit. Google Fonts is the one outside link.
+**Foundation.** Our own build of Web Awesome 3.14.0, vendored in `vendor/webawesome/` (decision `0001`). `setup.js` registers our vendored icons, then the Web Awesome loader runs. No CDN, no Font Awesome kit. Google Fonts is the one outside link.
 
-**Theme.** The VSA style is a Web Awesome theme and palette (decision `0006`). On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, and `wa-light` or `wa-dark` from a System / Light / Dark switch.
+**Theme.** The VSA style is a Web Awesome theme and palette (decision `0002`). On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, and `wa-light` or `wa-dark` from a System / Light / Dark switch.
 
 | Level | File | Cascade layer | Holds |
 |---|---|---|---|
@@ -42,7 +42,7 @@
 
 | Name | Built from | Use for | Defined in |
 |---|---|---|---|
-| `wa-progress-ring.vsa-dial` | House class on `wa-progress-ring` (decision `0008`) | One value of a whole, the main number of a card. `vsa-dial-s` for lists and rows | `theme/looks.css` |
+| `wa-progress-ring.vsa-dial` | House class on `wa-progress-ring` (decision `0003`) | One value of a whole, the main number of a card. `vsa-dial-s` for lists and rows | `theme/looks.css` |
 | `<vsa-table>` | Own element around a native `<table>`: Web Awesome has no narrow table layout | Each data table. In a narrow container, each row shows as a block | `components/vsa-table.js` |
 | `pre.vsa-code` | `<pre>` | A code sample, dark in both schemes | `theme/code.css` |
 

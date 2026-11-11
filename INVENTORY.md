@@ -1,12 +1,12 @@
 # Inventory: what is Web Awesome and what is ours
 
-This repo is VSA Design. Its source starts from Web Awesome 3.14.0 (MIT), and our design system is on top of it (decision `vsa/decisions/0005-our-source-from-web-awesome.md`). This file lists each part of the repo, where it comes from, and the rule for changes. The origin is the Web Awesome release tag `v3.14.0`. The list of changes to the origin is the git history: `git diff v3.14.0 -- packages/webawesome`.
+This repo is VSA Design. Its source starts from Web Awesome 3.14.0 (MIT), and our design system is on top of it (decision `vsa/decisions/0001-our-source-from-web-awesome.md`). This file lists each part of the repo, where it comes from, and the rule for changes. The origin is the Web Awesome release tag `v3.14.0`. The list of changes to the origin is the git history: `git diff v3.14.0 -- packages/webawesome`.
 
 ## Origins
 
 | Origin | Meaning | Rule |
 |---|---|---|
-| WA origin | Our source. It starts as a Web Awesome file | Edit it. A change to the system needs a decision record (`0005`) |
+| WA origin | Our source. It starts as a Web Awesome file | Edit it. A change to the system needs a decision record (`0001`) |
 | WA system | A guideline or a convention that the skills depend on | Change only with a decision record |
 | Generated | Build output of our source | Never edit by hand. Build it again |
 | WA project | A Web Awesome project file that we did not review yet | Do not edit until the root review |

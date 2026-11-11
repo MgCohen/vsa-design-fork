@@ -1,4 +1,4 @@
-# 0008: The dial is a house class on wa-progress-ring
+# 0003: The dial is a house class on wa-progress-ring
 
 **Decision:** The dial is `<wa-progress-ring class="vsa-dial">`, a house class in `vsa/theme/looks.css`. Web Awesome gives the behavior: the value, the `progressbar` role, the label and the transition of the indicator. The house class gives only the VSA look.
 

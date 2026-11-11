@@ -3,7 +3,7 @@
   Use: class="wa-theme-vsa wa-palette-vsa wa-brand-orange" on <html>, plus wa-light or wa-dark.
   Load after Web Awesome styles/themes/default.css. A token that this file does not set keeps its default value.
   Rules: a role refers to a role tint (brand, neutral, success, warning, danger), never to a hex color. Sizes come
-  from the Web Awesome formulas and the scale controls. Decision record: vsa/decisions/0006-theme-and-palette.md.
+  from the Web Awesome formulas and the scale controls. Decision record: vsa/decisions/0002-theme-and-palette.md.
 */
 
 @layer wa-theme {
@@ -89,7 +89,7 @@
 
     /* #region Shadows (Light) ~~~~~~~~~~~~~~~~~~~~ */
     /* Raised: a light top edge and a soft drop, in several layers. Web Awesome's shadow steps have one layer, so
-       the theme sets the steps directly (decision 0006). The drop layers read --wa-color-shadow.
+       the theme sets the steps directly (decision 0002). The drop layers read --wa-color-shadow.
        -s for small parts, -m for surfaces, -l for popups. */
     --wa-shadow-s:
       inset 0 0.0625rem 0 color-mix(in oklab, white 63%, transparent),

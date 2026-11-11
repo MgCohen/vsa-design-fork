@@ -1,6 +1,6 @@
 # Theme and palette
 
-The VSA look is a Web Awesome theme and palette. On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, plus `wa-light` or `wa-dark`. See decision `0006`.
+The VSA look is a Web Awesome theme and palette. On `<html>`: `wa-theme-vsa wa-palette-vsa wa-brand-orange`, plus `wa-light` or `wa-dark`. See decision `0002`.
 
 | File | Class | Cascade layer | Content |
 |---|---|---|---|

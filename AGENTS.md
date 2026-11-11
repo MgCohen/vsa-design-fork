@@ -4,7 +4,7 @@ Instructions for AI coding agents (and humans) that work in this repository. Thi
 
 ## Project
 
-VSA Design is the design system of VSA apps. Its source starts from the Web Awesome `v3.14.0` release (MIT), and we change it step by step. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0005-our-source-from-web-awesome.md` and `0006-theme-and-palette.md`.
+VSA Design is the design system of VSA apps. Its source starts from the Web Awesome `v3.14.0` release (MIT), and we change it step by step. Our style is a Web Awesome theme and palette, and each app adjusts it the Web Awesome way. See `vsa/decisions/0001-our-source-from-web-awesome.md` and `0002-theme-and-palette.md`.
 
 | Path | Content | Owner |
 |---|---|---|
@@ -26,7 +26,7 @@ An agent that does not load skills by itself can read the files: `.claude/skills
 ## Rules
 
 - Put hex colors only in `vsa/theme/palette.css`. A role in `vsa/theme/theme.css` refers to a palette tint.
-- In this repo, set `--wa-*` tokens only in `vsa/theme/theme.css`, and sizes only through the scale controls. See `0006`. An app sets its own values in its own stylesheet, with no cascade layer.
+- In this repo, set `--wa-*` tokens only in `vsa/theme/theme.css`, and sizes only through the scale controls. See `0002`. An app sets its own values in its own stylesheet, with no cascade layer.
 - Do not change `packages/webawesome/src` without a decision record.
 - Make a `--vsa-*` token only for an idea that Web Awesome has no token for.
 - An own component uses the `vsa-` prefix, reads `--wa-*` tokens, and uses the custom property names of the nearest Web Awesome component.

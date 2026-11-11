@@ -1,4 +1,4 @@
-# 0006: Our style is a named theme over the default theme
+# 0002: Our style is a named theme over the default theme
 
 **Decision:** The VSA style is a named Web Awesome theme (`wa-theme-vsa`) with its own palette, a brand class and looks. It sits over the default theme of our source, the same way that the Web Awesome themes Awesome and Shoelace do. The VSA theme sets only the tokens that differ from the default theme. Each other token, including each size formula, comes from the default theme.
 
