@@ -43,7 +43,7 @@ We own the source so that each file we ship is ours, with no outside service at 
 ## Cost
 
 - We get no Web Awesome fixes. Each fix is our work.
-- A build step: Node, npm and esbuild. The build on Windows needs the fix in `0007`.
+- A build step: Node, npm and esbuild. The build on Windows needs the path fix in `packages/webawesome/custom-elements-manifest.js`.
 - The skills describe our source only after a build and a copy.
 
 ## Open questions

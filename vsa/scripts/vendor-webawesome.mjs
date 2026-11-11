@@ -1,7 +1,7 @@
 // Builds Web Awesome from packages/webawesome and copies the runtime files into vsa/vendor/webawesome/.
 // Usage: node vsa/scripts/vendor-webawesome.mjs [--no-build]
 // --no-build copies the output of the last build. The site and the apps load Web Awesome only from the vendor folder.
-// Decision records: 0005 (our source) and 0007 (the build fix for Windows).
+// Decision record: 0005 (our source).
 
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
