@@ -2,14 +2,14 @@
 // Usage: node vsa/scripts/check.mjs
 // It runs the searches of the webawesome-design skill ("Verify before you finish") and the rules of AGENTS.md and
 // vsa/decisions/0002. Each finding names the file, the line and the rule. The exit code is 1 when there is a finding.
-// Not checked: vsa/vendor (built files), vsa/reference (the old system), vsa/dist (build output).
+// Not checked: vsa/vendor (built files), vsa/dist (build output), vsa/scripts and vsa/decisions.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const vsa = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SKIP = new Set(['vendor', 'reference', 'dist', 'scripts', 'decisions']);
+const SKIP = new Set(['vendor', 'dist', 'scripts', 'decisions']);
 const EXT = /\.(css|js|html|md)$/;
 
 const files = [];
