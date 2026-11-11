@@ -70,7 +70,7 @@ export function setIconPath(path: string) {
  *
  *   <script src="webawesome.loader.js" data-webawesome-icons="/custom/icons/svgs"></script>
  *
- * With no path, the default icon library loads the icons from <base path>/icons/svgs (VSA decision 0009).
+ * With no path, the default icon library loads the icons from <base path>/icons/svgs (VSA decision 0004).
  */
 export function getIconPath() {
   if (!iconPath && typeof document !== 'undefined') {

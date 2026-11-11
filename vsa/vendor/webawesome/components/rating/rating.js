@@ -1,7 +1,7 @@
 /*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */
 import {
   WaRating
-} from "../../chunks/chunk.RXATNCKH.js";
+} from "../../chunks/chunk.ZUFZ3LUB.js";
 import "../../chunks/chunk.XW6BKGGI.js";
 import "../../chunks/chunk.QG644JIK.js";
 import "../../chunks/chunk.2BXLTQVW.js";
@@ -11,8 +11,8 @@ import "../../chunks/chunk.5VKLVAP2.js";
 import "../../chunks/chunk.VC3BPUZJ.js";
 import "../../chunks/chunk.RPQJAXXR.js";
 import "../../chunks/chunk.JB5Y2AN3.js";
-import "../../chunks/chunk.BQNDCXAL.js";
 import "../../chunks/chunk.KWDPKKFO.js";
+import "../../chunks/chunk.BQNDCXAL.js";
 import "../../chunks/chunk.JQJAUIVM.js";
 import "../../chunks/chunk.MEATLWHD.js";
 import "../../chunks/chunk.YDQCS2HK.js";

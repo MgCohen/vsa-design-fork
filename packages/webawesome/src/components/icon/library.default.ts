@@ -154,7 +154,7 @@ function getIconUrl(name: string, family: string, variant: string) {
     return `https://ka-p.fontawesome.com/releases/v${FA_VERSION}/svgs/${folder}/${name}.svg?token=${encodeURIComponent(kitCode)}`;
   }
 
-  // VSA decision 0009: the free icons ship next to the build, so no request goes to the Font Awesome servers.
+  // VSA decision 0004: the free icons ship next to the build, so no request goes to the Font Awesome servers.
   return getBasePath(`icons/svgs/${folder}/${name}.svg`);
 }
 

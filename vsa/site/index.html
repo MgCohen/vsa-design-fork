@@ -287,8 +287,9 @@
       const MANIFEST_URL = '../vendor/webawesome/custom-elements.json';
       const VSA_MANIFEST_URL = '../components/custom-elements.json';
       const DOCS_ROOT = '../docs/';
-      // The Web Awesome component docs pages, copied by vsa/scripts/vendor-webawesome.mjs. Paths that start with "wa/".
-      const WA_DOCS_ROOT = '../vendor/webawesome/docs/';
+      // The Web Awesome component docs pages, read from the Web Awesome source. Paths that start with "wa/".
+      // Serve the repo root, so that this path is inside the server.
+      const WA_DOCS_ROOT = '../../packages/webawesome/docs/docs/';
       const esc = s =>
         String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 

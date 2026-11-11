@@ -2,7 +2,7 @@
 // The page has no icon files, and the Content-Security-Policy of the frame blocks fetch() of data: URLs.
 // So this script answers two kinds of icon requests without the network:
 // - data:image/svg+xml URLs: the Web Awesome system icons.
-// - <base path>/icons/svgs/<folder>/<name>.svg: the default icons (decision 0009), from window.VSA_ICONS.
+// - <base path>/icons/svgs/<folder>/<name>.svg: the default icons (decision 0004), from window.VSA_ICONS.
 (() => {
   if (window.fetch.vsaIcons) return;
   const nativeFetch = window.fetch.bind(window);

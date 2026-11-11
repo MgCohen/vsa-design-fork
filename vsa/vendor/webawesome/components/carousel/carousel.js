@@ -1,15 +1,15 @@
 /*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */
 import {
   WaCarousel
-} from "../../chunks/chunk.V3B4FDYO.js";
+} from "../../chunks/chunk.7CVKIWZN.js";
 import "../../chunks/chunk.EF25YJJE.js";
 import "../../chunks/chunk.O6IZ4I7T.js";
 import "../../chunks/chunk.6SNQOYNK.js";
 import "../../chunks/chunk.UUEMMZG6.js";
-import "../../chunks/chunk.BQNDCXAL.js";
 import "../../chunks/chunk.F25QOBDY.js";
 import "../../chunks/chunk.L6CIKOFQ.js";
 import "../../chunks/chunk.KWDPKKFO.js";
+import "../../chunks/chunk.BQNDCXAL.js";
 import "../../chunks/chunk.JQJAUIVM.js";
 import "../../chunks/chunk.MEATLWHD.js";
 import "../../chunks/chunk.YDQCS2HK.js";

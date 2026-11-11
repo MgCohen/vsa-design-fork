@@ -5,7 +5,7 @@
   pick a readable text color on that hue (--wa-color-{hue}-on). The key is the most colorful tint, as in the Web
   Awesome palettes. The theme picks other tints for its roles.
   Not set here: cyan, blue, indigo, purple and pink. They come from the Web Awesome default palette.
-  Decision record: vsa/decisions/0006-theme-and-palette.md.
+  Decision record: vsa/decisions/0002-theme-and-palette.md.
 */
 
 @layer wa-color-palette {

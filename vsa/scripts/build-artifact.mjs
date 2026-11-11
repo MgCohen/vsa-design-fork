@@ -106,11 +106,11 @@ const files = {};
     else files[posix(path.relative(docs, full))] = fs.readFileSync(full, 'utf8');
   }
 })(docs);
-// The Web Awesome component docs pages, under "wa/". The site shows their examples.
-const waDocs = path.join(vsa, 'vendor', 'webawesome', 'docs', 'components');
-for (const name of fs.readdirSync(waDocs))
+// The Web Awesome component docs pages, from the Web Awesome source, under "wa/". The site shows their examples.
+const waDocs = path.join(vsa, '..', 'packages', 'webawesome', 'docs', 'docs', 'components');
+for (const name of fs.readdirSync(waDocs).filter(n => n.endsWith('.md')))
   files[`wa/components/${name}`] = fs.readFileSync(path.join(waDocs, name), 'utf8');
-// The default icons (decision 0009), as SVG text for scripts/artifact-icons.js. The page is one file, so it has no
+// The default icons (decision 0004), as SVG text for scripts/artifact-icons.js. The page is one file, so it has no
 // icon folder. It includes only the icons that a docs page or the site names, in all three folders, because the
 // folder depends on the attributes.
 const iconRoot = path.join(vendor, 'icons', 'svgs');
