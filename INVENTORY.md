@@ -61,3 +61,4 @@ This repo is VSA Design. Its source starts from Web Awesome 3.14.0 (MIT), and ou
 - `.github/`, `vercel.*`, `VERSIONS.txt`: do the Web Awesome workflows and deploy files stay?
 - `vsa/vendor/webawesome/`: keep the build output in git, or build it on demand. This depends on how apps get the files.
 - Each item under `vsa/`: review it one by one.
+- Names: when the review is complete, the docs are correct and everything works, which names that say "Web Awesome" or "vendor" do we change? Paths and files (`vendor-webawesome.mjs`, `vsa/vendor/webawesome/`, `packages/webawesome/`) are a normal change. System names (`wa-*`, `--wa-*`, `wa-theme-*`, the skill names) need a decision record (`0001`), because the skills, the docs and the apps depend on them.
