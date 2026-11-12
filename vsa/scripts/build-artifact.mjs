@@ -1,8 +1,9 @@
 // Makes the docs site into one HTML file that can be published as a claude.ai artifact.
 // Usage: node vsa/scripts/build-artifact.mjs [output]
 // The default output is vsa/dist/vsa-design.html. Git ignores the dist/ folder.
-// It uses only local files: vsa/ and the vendored Web Awesome build in vsa/vendor/. The only outside link is
-// Google Fonts. Run vsa/scripts/vendor-webawesome.mjs first if vsa/vendor/webawesome is missing.
+// It uses only local files: vsa/, the build of our source in vsa/vendor/webawesome/, and the component docs pages
+// in packages/webawesome/docs/. The only outside link is Google Fonts. Run vsa/scripts/vendor-webawesome.mjs first
+// if vsa/vendor/webawesome is missing.
 
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -106,7 +107,7 @@ const files = {};
     else files[posix(path.relative(docs, full))] = fs.readFileSync(full, 'utf8');
   }
 })(docs);
-// The Web Awesome component docs pages, from the Web Awesome source, under "wa/". The site shows their examples.
+// The component docs pages of our source, under "wa/". The site shows their examples.
 const waDocs = path.join(vsa, '..', 'packages', 'webawesome', 'docs', 'docs', 'components');
 for (const name of fs.readdirSync(waDocs).filter(n => n.endsWith('.md')))
   files[`wa/components/${name}`] = fs.readFileSync(path.join(waDocs, name), 'utf8');

@@ -44,9 +44,8 @@ An agent that does not load skills by itself can read the files: `.claude/skills
 
 The skills are build output of our source. They describe our components only after a build and a copy.
 
-1. Run `npm run build` in `packages/webawesome/`.
-2. Copy `packages/webawesome/dist/skills/webawesome/` and `packages/webawesome/dist/skills/webawesome-design/` to `.claude/skills/`.
-3. Commit the changed skill files with the source change that caused them.
+1. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the source and replaces `.claude/skills/webawesome/` and `.claude/skills/webawesome-design/` with the build output.
+2. Commit the changed skill files with the source change that caused them.
 
 ## Verify a change
 
@@ -87,7 +86,7 @@ The only outside link is Google Fonts. The script stops if the page links any ot
 1. If the change is a system change, write its decision record first (see "Rules").
 2. Change `packages/webawesome/src`. Follow `packages/webawesome/CLAUDE.md`.
 3. In `packages/webawesome/`, run the tests of the component: `npm run test:component -- --group <name>`.
-4. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the source and copies the runtime files to `vsa/vendor/webawesome`.
-5. Update the skills (see "Update the skills").
-6. If the change adds or renames a token, compare `vsa/theme/theme.css` with `styles/themes/default.css`.
-7. Run the checks in "Verify a change".
+4. Run `node vsa/scripts/vendor-webawesome.mjs`. It builds the source, copies the runtime files to `vsa/vendor/webawesome`, and updates the skills.
+5. If the change adds or renames a token, compare `vsa/theme/theme.css` with `styles/themes/default.css`.
+6. Run the checks in "Verify a change".
+7. Before the merge, run the full check of the source in `packages/webawesome/`: `npm run verify`. It runs prettier, the CSS parts and anatomy tests, the build, the skills check and all component tests. The workflows in `.github/workflows/` run the same tests on each PR to `main`.

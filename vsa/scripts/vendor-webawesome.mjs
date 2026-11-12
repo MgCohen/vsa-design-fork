@@ -1,4 +1,5 @@
-// Builds Web Awesome from packages/webawesome and copies the runtime files into vsa/vendor/webawesome/.
+// Builds our source in packages/webawesome. Copies the runtime files into vsa/vendor/webawesome/ and the agent
+// skills into .claude/skills/.
 // Usage: node vsa/scripts/vendor-webawesome.mjs [--no-build]
 // --no-build copies the output of the last build. The site and the apps load Web Awesome only from the vendor folder.
 // Decision records: 0001 (our source) and 0004 (the icons next to the build).
@@ -18,7 +19,6 @@ const KEEP = [
   'chunks',
   'components',
   'events',
-  'internal',
   'styles',
   'translations',
   'utilities',
@@ -62,3 +62,12 @@ fs.writeFileSync(
   `Web Awesome ${version}, built from packages/webawesome by vsa/scripts/vendor-webawesome.mjs.\nDo not edit these files. Change the source, then run the script again.\n`,
 );
 console.log(`copied ${count} files of Web Awesome ${version} to ${to}`);
+
+// The agent skills are build output of our source. Replace each skill folder, so that a deleted reference file goes too.
+const skillsFrom = path.join(pkg, 'dist', 'skills');
+const skillsTo = path.join(root, '.claude', 'skills');
+for (const name of ['webawesome', 'webawesome-design']) {
+  fs.rmSync(path.join(skillsTo, name), { recursive: true, force: true });
+  copy(path.join(skillsFrom, name), path.join(skillsTo, name));
+}
+console.log(`copied the skills webawesome and webawesome-design to ${skillsTo}`);
